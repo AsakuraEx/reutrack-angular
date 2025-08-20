@@ -1,0 +1,40 @@
+<div class="flex justify-center items-center h-screen">
+
+    <div class="bg-purple-50 shadow-lg w-96 flex flex-col gap-2 p-4">
+
+        <img src="images/Logo-reutrack-fondo-blanco.svg" alt="logo-reutrack">
+
+        <form>
+            <mat-form-field class="w-full">
+                <mat-label>Correo electrónico</mat-label>
+                <input type="email" matInput>
+            </mat-form-field>
+
+            <mat-form-field class="w-full">
+                <mat-label>Contraseña</mat-label>
+                <input type="password" matInput>
+            </mat-form-field>
+
+            <button mat-flat-button routerLink="/" class="w-full" type="button">Entrar</button>
+        
+        </form>
+
+        <br>
+
+        <div class="bg-purple-200 py-2 rounded-lg">
+            <h1 class="text-center font-bold">¿Tienes un código de reunión?</h1>
+            <h1 class="text-center">👇 Ingresalo aquí</h1>
+        </div>
+
+        <form class="mt-4">
+            <mat-form-field class="w-full">
+                <mat-label>Código de la reunión</mat-label>
+                <input type="text" matInput>
+            </mat-form-field>
+
+            <button mat-button routerLink="/" class="w-full">Registrar mi asistencia</button>
+        
+        </form>
+
+    </div>
+</div>

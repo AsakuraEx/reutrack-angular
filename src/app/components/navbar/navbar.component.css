@@ -1,0 +1,9 @@
+a {
+  text-decoration: none;
+  color: black; /* color normal */
+}
+
+a.active {
+  color: red; /* cuando está activo */
+  font-weight: bold; /* opcional: remarcar */
+}
