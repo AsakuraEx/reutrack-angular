@@ -1,26 +1,30 @@
   <div class="h-screen flex flex-col">
 
     @if(!isLoginPage){
-      <div class="fixed top-0 left-0 w-full bg-white shadow-md z-10 px-4 flex justify-between">
-        <button matButton (click)="sidenav.toggle()">Toggle</button>
+      <div class="fixed top-0 left-0 w-full bg-white shadow-md z-10 px-4 flex justify-between items-center">
+        <button mat-icon-button (click)="sidenav.toggle()">
+          <mat-icon>menu</mat-icon>
+        </button>
         <img src="images/Logo-reutrack-fondo-blanco.svg" alt="reutrack-logo" class="h-12">
-        <button matButton routerLink="/login">Salir</button>
+        <button mat-icon-button routerLink="/login">
+          <mat-icon>settings</mat-icon>
+        </button>
       </div>
     }
   
     <mat-sidenav-container class="h-screen">
   
-      <mat-sidenav #sidenav mode="side" closed>
+      <mat-sidenav #sidenav mode="over" closed>
         
         @if(!isLoginPage){
           <app-navbar></app-navbar>
         }
     
-        </mat-sidenav>
+      </mat-sidenav>
   
       <mat-sidenav-content>
         
-        <main [class]="!isLoginPage ? 'mt-16 ml-4':''">
+        <main [class]="!isLoginPage ? 'mt-16':''">
 
           <router-outlet />
         

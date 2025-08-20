@@ -1,1 +1,56 @@
-<h1 class="text-2xl">Bienvenido usuario Francisco Josue Escobar Quintanilla</h1>
+
+<div class="container mx-auto py-12 px-4">
+    
+    <picture class="flex gap-4 justify-center items-center py-2 px-4 border border-purple-500 rounded-xl bg-purple-100 w-full">
+
+        <img 
+            [src]="`/images/frases/reu-${dia}.svg`" 
+            alt="Reulito diario"
+            class="aspect-square object-cover max-w-36"
+        >
+        <div class="text-center">
+            <h1 class="text-2xl">Bienvenido de nuevo, Francisco Josue Escobar Quintanilla</h1>
+            <span class="text-2xl font-bold">
+                {{ frase }}
+            </span>
+        </div>
+    
+    </picture>
+    <div class="flex mt-2">
+
+        <div class="w-1/2 px-4">
+            
+            <div class="bg-purple-700 text-white rounded-full mt-12">
+                <h1 class="text-xl font-bold text-center">Reuniones en progreso</h1>
+            </div>
+
+            <mat-form-field class="w-full mt-2">
+                <mat-label>Buscar reuniones en progreso</mat-label>
+                <input matInput placeholder="Busca por cualquier campo de la tabla..." #input>
+            </mat-form-field>
+
+        </div>
+
+        <div class="w-1/2 px-4">
+            
+            <div class="flex justify-end">
+                <button mat-flat-button class="mb-2">
+                    <mat-icon>add</mat-icon>
+                    Crear una nueva reunión
+                </button>
+            </div>
+
+            <div class="bg-purple-700 text-white rounded-full">
+                <h1 class="text-xl font-bold text-center">Ultimas reuniones finalizadas</h1>
+            </div>
+
+            <mat-form-field class="w-full mt-2">
+                <mat-label>Buscar reuniones finalizadas</mat-label>
+                <input matInput placeholder="Busca por cualquier campo de la tabla..." #input>
+            </mat-form-field>
+
+        </div>
+    </div>
+    
+
+</div>
