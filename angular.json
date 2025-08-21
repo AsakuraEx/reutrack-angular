@@ -28,6 +28,7 @@
               }
             ],
             "styles": [
+              "@ngxpert/hot-toast/styles.css",
               "src/custom-theme.scss",
               "src/styles.css"
             ],
@@ -87,6 +88,7 @@
               }
             ],
             "styles": [
+              "@ngxpert/hot-toast/styles.css",
               "@angular/material/prebuilt-themes/magenta-violet.css",
               "src/styles.css"
             ],

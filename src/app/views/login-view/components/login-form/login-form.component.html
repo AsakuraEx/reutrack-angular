@@ -1,0 +1,35 @@
+<form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
+
+    @if (loginForm.controls['email'].hasError('required') && (loginForm.controls['email'].dirty || loginForm.controls['email'].touched)) {
+        <p class="text-red-700 text-xs">El campo correo electrónico es requerido </p>
+    }
+    @if (loginForm.controls['email'].hasError('email') && (loginForm.controls['email'].dirty || loginForm.controls['email'].touched)) {
+        <p class="text-red-700 text-xs">Debe escribir un email válido.</p>
+    }
+
+    <mat-form-field class="w-full">
+        <mat-label>Correo electrónico</mat-label>
+        <input id="email" type="email" matInput formControlName="email">
+    </mat-form-field>
+    
+    @if (loginForm.controls['password'].hasError('required') && (loginForm.controls['password'].dirty || loginForm.controls['password'].touched)) {
+        <p class="text-red-700 text-xs">El campo contraseña es requerido </p>
+    }
+    <mat-form-field class="w-full">
+        <mat-label>Contraseña</mat-label>
+        <input id="password" type="password" matInput formControlName="password">
+    </mat-form-field>
+
+    <button mat-flat-button class="w-full" type="submit" [disabled]="isSubmitting">
+        @if (isSubmitting) {
+            <mat-spinner diameter="20" strokeWidth="2"></mat-spinner>
+        }@else {
+            Entrar
+        }
+    </button>
+
+</form>
+
+<br>
+
+<app-reunion-code></app-reunion-code>

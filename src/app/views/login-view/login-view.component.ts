@@ -1,16 +1,20 @@
 import { Component } from '@angular/core';
-import {MatButtonModule} from '@angular/material/button';
-import { RouterLink } from '@angular/router';
-import {MatInputModule} from '@angular/material/input';
-import {MatFormFieldModule} from '@angular/material/form-field';
-import {MatDividerModule} from '@angular/material/divider';
+import { LoginFormComponent } from "./components/login-form/login-form.component";
+import { AuthFormComponent } from './components/auth-form/auth-form.component';
+
 
 @Component({
   selector: 'app-login-view',
-  imports: [MatButtonModule, RouterLink, MatInputModule, MatFormFieldModule, MatDividerModule],
+  imports: [LoginFormComponent, AuthFormComponent],
   templateUrl: './login-view.component.html',
   styleUrl: './login-view.component.css'
 })
 export class LoginViewComponent {
+  
+  autenticacionExitosa = false;
+
+  validarCredenciales(esValido: boolean){
+    this.autenticacionExitosa = esValido;
+  }
 
 }

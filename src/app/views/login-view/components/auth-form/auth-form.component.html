@@ -1,0 +1,28 @@
+<div class="bg-purple-200 py-2 rounded-lg">
+    <h1 class="text-center font-bold">Se envío un código de autenticación al correo electrónico asociado.</h1>
+    <h1 class="text-center">👇 Ingresalo aquí</h1>
+</div>
+
+<form class="mt-4" [formGroup]="authForm" (ngSubmit)="onSubmit()">
+
+    @if (authForm.controls['code'].hasError('required') && (authForm.controls['code'].dirty || authForm.controls['code'].touched)) {
+        <p class="text-red-700 text-xs">El código es requerido </p>
+    }
+
+    <mat-form-field class="w-full">
+        <mat-label>Código de doble factor de autenticación</mat-label>
+        <input type="text" matInput formControlName="code">
+    </mat-form-field>
+
+    <div class="space-y-2">
+        <button mat-flat-button type="submit" class="w-full" [disabled]="isSubmitting">
+            @if (isSubmitting) {
+                <mat-spinner diameter="20" strokeWidth="2"></mat-spinner>
+            }@else {
+                Validar código
+            }
+        </button>
+        <button mat-stroked-button (click)="cancelar()" class="w-full">Cancelar</button>
+    </div>
+
+</form>
