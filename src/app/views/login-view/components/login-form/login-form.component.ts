@@ -82,6 +82,7 @@ export class LoginFormComponent {
         },
         error: (error) => {
           console.error('Ocurrio un error inesperado: ' + error)
+          this.isSubmitting = false;
         },
         complete: () => {
           this.isSubmitting = false;

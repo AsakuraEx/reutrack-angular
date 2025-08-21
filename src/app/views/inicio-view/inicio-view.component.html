@@ -9,7 +9,7 @@
             class="aspect-square object-cover max-w-36"
         >
         <div class="text-center">
-            <h1 class="text-2xl">Bienvenido de nuevo, Francisco Josue Escobar Quintanilla</h1>
+            <h1 class="text-2xl">Bienvenido de nuevo, {{ usuario.nombre }}</h1>
             <span class="text-2xl font-bold">
                 {{ frase }}
             </span>
@@ -28,6 +28,23 @@
                 <mat-label>Buscar reuniones en progreso</mat-label>
                 <input matInput placeholder="Busca por cualquier campo de la tabla..." #input>
             </mat-form-field>
+
+            <table mat-table [dataSource]="dataSource">
+
+                <ng-container matColumnDef="nombre">
+                    <th mat-header-cell *matHeaderCellDef>Nombre</th>
+                    <td mat-cell *matCellDef="let reunion">{{ reunion.nombre }}</td>
+                </ng-container>
+
+                <ng-container matColumnDef="lugar">
+                    <th mat-header-cell *matHeaderCellDef>Lugar</th>
+                    <td mat-cell *matCellDef="let reunion">{{ reunion.lugar }}</td>
+                </ng-container>
+
+                <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+                <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+
+            </table>
 
         </div>
 
@@ -48,6 +65,23 @@
                 <mat-label>Buscar reuniones finalizadas</mat-label>
                 <input matInput placeholder="Busca por cualquier campo de la tabla..." #input>
             </mat-form-field>
+
+            <table mat-table [dataSource]="dataSource">
+
+                <ng-container matColumnDef="nombre">
+                    <th mat-header-cell *matHeaderCellDef>Nombre</th>
+                    <td mat-cell *matCellDef="let reunion">{{ reunion.nombre }}</td>
+                </ng-container>
+
+                <ng-container matColumnDef="lugar">
+                    <th mat-header-cell *matHeaderCellDef>Lugar</th>
+                    <td mat-cell *matCellDef="let reunion">{{ reunion.lugar }}</td>
+                </ng-container>
+
+                <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+                <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+
+            </table>
 
         </div>
     </div>

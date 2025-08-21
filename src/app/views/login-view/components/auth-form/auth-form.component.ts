@@ -47,6 +47,7 @@ export class AuthFormComponent {
           if(response.token){
 
             localStorage.setItem('token', response.token)
+            sessionStorage.removeItem('email')
             this.router.navigate(['/'])
 
           }else{

@@ -2,13 +2,15 @@
 
     @if(!isLoginPage){
       <div class="fixed top-0 left-0 w-full bg-white shadow-md z-10 px-4 flex justify-between items-center">
+      
         <button mat-icon-button (click)="sidenav.toggle()">
           <mat-icon>menu</mat-icon>
         </button>
+      
         <img src="images/Logo-reutrack-fondo-blanco.svg" alt="reutrack-logo" class="h-12">
-        <button mat-icon-button routerLink="/login">
-          <mat-icon>settings</mat-icon>
-        </button>
+        
+        <app-menu-opciones></app-menu-opciones>
+
       </div>
     }
   
