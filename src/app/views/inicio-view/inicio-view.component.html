@@ -16,72 +16,25 @@
         </div>
     
     </picture>
-    <div class="flex mt-2">
+
+    <div class="w-full text-end mt-4">
+        <button mat-flat-button>
+            <mat-icon>add</mat-icon>
+            Iniciar nueva reunión
+        </button>
+    </div>
+
+    <div class="flex mt-4">
 
         <div class="w-1/2 px-4">
             
-            <div class="bg-purple-700 text-white rounded-full mt-12">
-                <h1 class="text-xl font-bold text-center">Reuniones en progreso</h1>
-            </div>
-
-            <mat-form-field class="w-full mt-2">
-                <mat-label>Buscar reuniones en progreso</mat-label>
-                <input matInput placeholder="Busca por cualquier campo de la tabla..." #input>
-            </mat-form-field>
-
-            <table mat-table [dataSource]="dataSource">
-
-                <ng-container matColumnDef="nombre">
-                    <th mat-header-cell *matHeaderCellDef>Nombre</th>
-                    <td mat-cell *matCellDef="let reunion">{{ reunion.nombre }}</td>
-                </ng-container>
-
-                <ng-container matColumnDef="lugar">
-                    <th mat-header-cell *matHeaderCellDef>Lugar</th>
-                    <td mat-cell *matCellDef="let reunion">{{ reunion.lugar }}</td>
-                </ng-container>
-
-                <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-                <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
-
-            </table>
+            <app-reuniones-progreso [usuario]="usuario"></app-reuniones-progreso>
 
         </div>
 
         <div class="w-1/2 px-4">
             
-            <div class="flex justify-end">
-                <button mat-flat-button class="mb-2">
-                    <mat-icon>add</mat-icon>
-                    Crear una nueva reunión
-                </button>
-            </div>
-
-            <div class="bg-purple-700 text-white rounded-full">
-                <h1 class="text-xl font-bold text-center">Ultimas reuniones finalizadas</h1>
-            </div>
-
-            <mat-form-field class="w-full mt-2">
-                <mat-label>Buscar reuniones finalizadas</mat-label>
-                <input matInput placeholder="Busca por cualquier campo de la tabla..." #input>
-            </mat-form-field>
-
-            <table mat-table [dataSource]="dataSource">
-
-                <ng-container matColumnDef="nombre">
-                    <th mat-header-cell *matHeaderCellDef>Nombre</th>
-                    <td mat-cell *matCellDef="let reunion">{{ reunion.nombre }}</td>
-                </ng-container>
-
-                <ng-container matColumnDef="lugar">
-                    <th mat-header-cell *matHeaderCellDef>Lugar</th>
-                    <td mat-cell *matCellDef="let reunion">{{ reunion.lugar }}</td>
-                </ng-container>
-
-                <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-                <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
-
-            </table>
+            <app-reuniones-finalizada [usuario]="usuario"></app-reuniones-finalizada>
 
         </div>
     </div>
