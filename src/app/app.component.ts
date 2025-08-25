@@ -1,5 +1,5 @@
 import { Component, ViewChild } from '@angular/core';
-import { RouterOutlet, Router, NavigationEnd, RouterLink } from '@angular/router';
+import { RouterOutlet, Router, NavigationEnd } from '@angular/router';
 import {MatSidenav, MatSidenavModule} from '@angular/material/sidenav';
 import {MatToolbarModule} from '@angular/material/toolbar';
 import { MatButtonModule } from '@angular/material/button';
@@ -10,7 +10,7 @@ import { filter } from 'rxjs/operators';
 
 @Component({
   selector: 'app-root',
-  imports: [RouterOutlet, NavbarComponent, MatSidenavModule, MatToolbarModule, RouterLink, MatButtonModule, MatIconModule, MenuOpcionesComponent],
+  imports: [RouterOutlet, NavbarComponent, MatSidenavModule, MatToolbarModule, MatButtonModule, MatIconModule, MenuOpcionesComponent],
   templateUrl: './app.component.html',
   styleUrl: './app.component.css'
 })

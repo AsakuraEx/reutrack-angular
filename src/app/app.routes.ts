@@ -14,8 +14,8 @@ export const routes: Routes = [
         canActivate: [LoginGuard]
     },
     {
-        path: 'about',
-        loadComponent: () => import('./views/acerca-de/acerca-de.component').then(m => m.AcercaDeComponent),
+        path: 'reunion/:codigo',
+        loadComponent: () => import('./views/reuniones-view/reuniones-view.component').then(m => m.ReunionesViewComponent),
         canActivate: [AuthGuard]
     }
 ];

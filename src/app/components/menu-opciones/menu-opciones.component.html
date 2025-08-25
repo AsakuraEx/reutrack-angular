@@ -6,11 +6,26 @@
     <div class="absolute border border-gray-300 rounded-lg bg-white shadow-lg w-56 right-4" id="dropdownMenu">
     
         <div class="flex flex-col gap-2">
-            <a routerLink="/" class="hover:bg-purple-100 px-4 py-3 flex items-center gap-2 text-purple-700">
-                <mat-icon>account_circle</mat-icon>
-                Mi perfil
-            </a>
-            
+            @if(darkMode){
+               <a 
+                type="button" 
+                class="hover:bg-yellow-100 px-4 py-3 flex items-center gap-2 text-yellow-700 cursor-pointer" 
+                (click)="toggleDarkMode()"
+               >
+                    <mat-icon>light_mode</mat-icon>
+                    Modo claro
+                </a>
+            }@else {
+                <a 
+                    type="button" 
+                    class="hover:bg-yellow-100 px-4 py-3 flex items-center gap-2 text-yellow-700 cursor-pointer"
+                    (click)="toggleDarkMode()"
+                >
+                    <mat-icon>dark_mode</mat-icon>
+                    Modo oscuro
+                </a>
+            }
+
             <a routerLink="/" class="hover:bg-purple-100 px-4 py-3 flex items-center gap-2 text-purple-700">
                 <mat-icon>vpn_key</mat-icon>
                 Cambiar contraseña

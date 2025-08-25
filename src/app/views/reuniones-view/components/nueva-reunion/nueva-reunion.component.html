@@ -1,0 +1,50 @@
+<div class="w-full py-4 px-4 border-b border-gray-400">
+    <h1 class="text-2xl font-bold uppercase text-center text-purple-700">Datos principales de la reunión</h1>
+</div>
+
+<div class="w-full px-4 mt-8">
+    <form [formGroup]="reunionForm" (ngSubmit)="crearReunion()">
+        <mat-form-field class="w-full">
+            <mat-label>Nombre de la reunión</mat-label>
+            <input matInput formControlName="nombre">
+        </mat-form-field>
+
+        <mat-form-field class="w-full">
+            <mat-label>Lugar de la reunión</mat-label>
+            <input matInput formControlName="lugar">
+        </mat-form-field>
+
+        <mat-form-field class="w-full">
+            <mat-label>Proyecto</mat-label>
+            <mat-select formControlName="id_proyecto">
+                <mat-option value="1">Proyecto de prueba 1</mat-option>
+                <mat-option value="2">Proyecto de prueba 2</mat-option>
+            </mat-select>
+        </mat-form-field>
+
+        <mat-form-field class="w-full">
+            <mat-label>Versión</mat-label>
+            <mat-select formControlName="id_version">
+                <mat-option value="1">Versión de prueba 1</mat-option>
+                <mat-option value="2">Versión de prueba 2</mat-option>
+            </mat-select>
+        </mat-form-field>
+
+        <div class="text-center space-x-4 mb-4 mt-8">
+            <button mat-flat-button type="submit" [disabled]="isSubmitting">  
+                @if(isSubmitting){
+                    <mat-spinner diameter="20" strokeWidth="2"></mat-spinner>
+                } @else {
+                    <span class="flex items-center gap-2">
+                        <mat-icon>check</mat-icon>
+                        Crear Reunión 
+                    </span>
+                }
+            </button>
+            <button mat-flat-button type="button" class="btn-secondary" (click)="closeDialog(false)">
+                <mat-icon>close</mat-icon>
+                Cancelar
+            </button>
+        </div>
+    </form>
+</div>

@@ -1,32 +1,26 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, inject, OnInit } from '@angular/core';
 import {MatButtonModule} from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
-import {MatFormFieldModule} from '@angular/material/form-field';
-import {MatInputModule} from '@angular/material/input';
-import { MatTableDataSource, MatTableModule } from '@angular/material/table';
-import {MatPaginator, MatPaginatorModule} from '@angular/material/paginator';
 import { FrasesMotivadoras } from '../../assets/frases';
 import { jwtDecode } from 'jwt-decode'
-import { ReunionService } from '../../services/reunion.service';
 import { ReunionesProgresoComponent } from "./components/reuniones-progreso/reuniones-progreso.component";
 import { ReunionesFinalizadaComponent } from "./components/reuniones-finalizada/reuniones-finalizada.component";
-import { forkJoin } from 'rxjs';
+import { MatDialog } from '@angular/material/dialog';
+import { NuevaReunionComponent } from '../reuniones-view/components/nueva-reunion/nueva-reunion.component';
 
 
 @Component({
   selector: 'app-inicio-view',
   imports: [
-    MatButtonModule, MatIconModule, MatFormFieldModule, MatInputModule,
-    MatTableModule, MatPaginatorModule,
-    ReunionesProgresoComponent,
-    ReunionesFinalizadaComponent
+    MatButtonModule, MatIconModule,
+    ReunionesProgresoComponent, ReunionesFinalizadaComponent
 ],
   templateUrl: './inicio-view.component.html',
   styleUrl: './inicio-view.component.css'
 })
 export class InicioViewComponent implements OnInit {
 
-    constructor(private reunionService: ReunionService) {}
+    constructor() {}
 
     frases: any = [];
     frase!: string;
@@ -37,8 +31,21 @@ export class InicioViewComponent implements OnInit {
     reunionesIniciadas!:any;
     reunionesFinalizadas!:any;
 
+    readonly dialog = inject(MatDialog);
 
-    dataSource2 = new MatTableDataSource<any>();
+    openDialog(): void {
+      const dialogRef = this.dialog.open(NuevaReunionComponent, {
+        data: {usuario: this.usuario},
+      });
+
+      dialogRef.afterClosed().subscribe(result => {
+        console.log('Se ha cerrado el dialog');
+        if(result === true) {
+          console.log(result);
+          console.log("Se envio un true")
+        }
+      })
+    }
     
     MostrarFrase(): void {
         const fechaActual = new Date()
@@ -58,42 +65,6 @@ export class InicioViewComponent implements OnInit {
           this.usuario = decoded;
         }
 
-        this.ObtenerReuniones();
-
-    }
-
-    ObtenerReuniones(): void {
-      if(this.usuario.id_rol !== 1){
-        
-        forkJoin({
-          iniciadas: this.reunionService.obtenerReunionesIniciadas(10, this.usuario.id, 1),
-          finalizadas: this.reunionService.obtenerReunionesFinalizadas(10, this.usuario.id, 1)
-        }).subscribe({
-          next: (responses) => {
-            this.reunionesIniciadas = responses.iniciadas;
-            this.reunionesFinalizadas = responses.finalizadas;
-          },
-          error: (err) => {
-            console.log(err);
-          }
-        });
-      
-      }else {
-
-        forkJoin({
-          iniciadas: this.reunionService.obtenerReunionesIniciadas(5, null, 1),
-          finalizadas: this.reunionService.obtenerReunionesFinalizadas(5, null, 1)
-        }).subscribe({
-          next: (responses) => {
-            this.reunionesIniciadas = responses.iniciadas;
-            this.reunionesFinalizadas = responses.finalizadas;
-          },
-          error: (err) => {
-            console.log(err);
-          }
-        });
-
-      }
     }
 
 }

@@ -73,5 +73,15 @@ export class ReunionService {
 
   }
 
+  crearNuevaReunion(data: any): Observable<any> {
+    const url = `${this.BaseUrl}/create`
+    return this.http.post(url, data)
+  }
+
+  obtenerReunionPorCodigo(codigo:string): Observable<any> {
+    const url = `${this.BaseUrl}/reunion-actual/${codigo}`;
+    return this.http.get(url)
+  }
+
 
 }

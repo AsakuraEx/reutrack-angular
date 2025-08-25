@@ -13,6 +13,8 @@ import { jwtDecode } from 'jwt-decode';
 })
 export class MenuOpcionesComponent {
 
+  darkMode: boolean = false;
+
   mostrarMenu = false;
   usuario!: any;
 
@@ -50,6 +52,11 @@ export class MenuOpcionesComponent {
       console.log(err)
     }
    })
+  }
+
+  toggleDarkMode(): void {
+    document.documentElement.classList.toggle('dark-mode');
+    this.darkMode = !this.darkMode;
   }
 
 }
