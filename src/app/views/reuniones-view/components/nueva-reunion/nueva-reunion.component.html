@@ -30,7 +30,7 @@
             </mat-autocomplete>
         </mat-form-field>
 
-        <!-- <mat-form-field class="w-full">
+        <mat-form-field class="w-full">
             <mat-label>Versión</mat-label>
             <input type="text"
                 placeholder="Selecciona una versión"
@@ -38,13 +38,14 @@
                 matInput
                 formControlName="id_versión"
                 [matAutocomplete]="auto"
+                [disabled]="!reunionForm.controls['id_proyecto'].value"
             >
             <mat-autocomplete #auto="matAutocomplete" [displayWith]="displayProyectoNombre">
                 @for (proyecto of proyectosFiltrados | async ; track $index) {
                     <mat-option [value]="proyecto">{{ proyecto.nombre }}</mat-option>
                 }
             </mat-autocomplete>
-        </mat-form-field> -->
+        </mat-form-field>
 
         <div class="text-center space-x-4 mb-4 mt-8">
             <button mat-flat-button type="submit" [disabled]="isSubmitting">  
