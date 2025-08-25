@@ -1,4 +1,5 @@
-import { Component, inject } from '@angular/core';
+import { AsyncPipe } from '@angular/common';
+import { Component, inject, OnInit } from '@angular/core';
 import {MatInputModule} from '@angular/material/input';
 import {MatFormFieldModule} from '@angular/material/form-field';
 import {MatSelectModule} from '@angular/material/select';
@@ -9,24 +10,31 @@ import { FormControl, FormGroup, Validators, ReactiveFormsModule } from '@angula
 import { MatProgressSpinner } from '@angular/material/progress-spinner';
 import { ReunionService } from '../../../../services/reunion.service';
 import { Router } from '@angular/router';
+import { ProyectoService } from '../../../../services/proyecto.service';
+import { MatAutocompleteModule } from '@angular/material/autocomplete';
+import { Observable, startWith, map } from 'rxjs';
 
 @Component({
   selector: 'app-nueva-reunion',
   imports: [
     MatFormFieldModule, MatInputModule, MatSelectModule, MatButtonModule,
-    MatIconModule, ReactiveFormsModule, MatProgressSpinner
+    MatIconModule, ReactiveFormsModule, MatProgressSpinner, MatAutocompleteModule, AsyncPipe
 ],
   templateUrl: './nueva-reunion.component.html',
   styleUrl: './nueva-reunion.component.css'
 })
-export class NuevaReunionComponent {
+export class NuevaReunionComponent implements OnInit{
 
   constructor(
     private reunionService: ReunionService,
+    private proyectoService: ProyectoService,
     private router: Router
   ) {}
 
   isSubmitting = false;
+
+  proyectos: any[] = [];
+  proyectosFiltrados!: Observable<any[]>;
 
   readonly dialogRef = inject(MatDialogRef<NuevaReunionComponent>);
   readonly data = inject(MAT_DIALOG_DATA);
@@ -41,6 +49,12 @@ export class NuevaReunionComponent {
     id_usuario: new FormControl(this.data.usuario.id, [Validators.required]),
     id_estado: new FormControl(1),
   })
+
+  ngOnInit(): void {
+    this.obtenerProyectos();
+    this.configurarAutocomplete();
+
+  }
 
   closeDialog(flag: boolean): void {
     this.dialogRef.close(flag);
@@ -77,5 +91,44 @@ export class NuevaReunionComponent {
       this.dialogRef.close(true)
     }
   }
+
+  obtenerProyectos(): void {
+
+    this.proyectoService.obtenerProyectos(1, null, 1).subscribe({
+      next: (response) => {
+        this.proyectos = response.data;
+        this.configurarAutocomplete();
+      },
+      error: (err) => {
+        console.error('El error: ', err);
+      }
+    })
+
+  }
+
+  displayProyectoNombre(proyecto: any): string {
+    return proyecto && proyecto.nombre ? proyecto.nombre : '';
+  }
+
+  private _filterNombres(name: string): any[] {
+    const filterValue = name.toLowerCase();
+
+    return this.proyectos.filter(option => option.nombre.toLowerCase().includes(filterValue));
+  }
+
+  configurarAutocomplete(): void {
+    this.proyectosFiltrados = this.reunionForm.controls['id_proyecto'].valueChanges.pipe(
+      startWith(''),
+      map(value => {
+        // Si el valor es un string (búsqueda), filtrar
+        if (typeof value === 'string') {
+          return value ? this._filterNombres(value) : this.proyectos.slice();
+        }
+        // Si el valor es un objeto (selección), mostrar todos
+        return this.proyectos.slice();
+      })
+    );
+  }
+
 
 }

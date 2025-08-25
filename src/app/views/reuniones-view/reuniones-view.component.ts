@@ -7,12 +7,13 @@ import {MatFormFieldModule} from '@angular/material/form-field';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ReunionService } from '../../services/reunion.service';
 import { ReunionHeader } from '../../models/reunion-header.model';
+import { MatTableModule} from '@angular/material/table';
+import { ResponsablesComponent } from './components/responsables/responsables.component';
 
 @Component({
   selector: 'app-reuniones-view',
   imports: [
-    MatIconModule, MatButtonModule,
-    MatAutocompleteModule, MatInputModule, MatFormFieldModule, MatButtonModule
+    MatIconModule, MatButtonModule, ResponsablesComponent
   ],
   templateUrl: './reuniones-view.component.html',
   styleUrl: './reuniones-view.component.css'
@@ -27,8 +28,6 @@ export class ReunionesViewComponent implements OnInit {
 
   expandReunionActualState = false;
   reunionActualDetails!: ReunionHeader;
-
-  options: string[] = ['One', 'Two', 'Three'];
 
   ngOnInit(): void {
    
@@ -57,5 +56,7 @@ export class ReunionesViewComponent implements OnInit {
   expandReunionActual (): void {
     this.expandReunionActualState = !this.expandReunionActualState;
   } 
+
+
 
 }

@@ -16,19 +16,35 @@
 
         <mat-form-field class="w-full">
             <mat-label>Proyecto</mat-label>
-            <mat-select formControlName="id_proyecto">
-                <mat-option value="1">Proyecto de prueba 1</mat-option>
-                <mat-option value="2">Proyecto de prueba 2</mat-option>
-            </mat-select>
+            <input type="text"
+                placeholder="Selecciona un proyecto"
+                aria-label="Proyecto"
+                matInput
+                formControlName="id_proyecto"
+                [matAutocomplete]="auto"
+            >
+            <mat-autocomplete #auto="matAutocomplete" [displayWith]="displayProyectoNombre">
+                @for (proyecto of proyectosFiltrados | async ; track $index) {
+                    <mat-option [value]="proyecto">{{ proyecto.nombre }}</mat-option>
+                }
+            </mat-autocomplete>
         </mat-form-field>
 
-        <mat-form-field class="w-full">
+        <!-- <mat-form-field class="w-full">
             <mat-label>Versión</mat-label>
-            <mat-select formControlName="id_version">
-                <mat-option value="1">Versión de prueba 1</mat-option>
-                <mat-option value="2">Versión de prueba 2</mat-option>
-            </mat-select>
-        </mat-form-field>
+            <input type="text"
+                placeholder="Selecciona una versión"
+                aria-label="Versión"
+                matInput
+                formControlName="id_versión"
+                [matAutocomplete]="auto"
+            >
+            <mat-autocomplete #auto="matAutocomplete" [displayWith]="displayProyectoNombre">
+                @for (proyecto of proyectosFiltrados | async ; track $index) {
+                    <mat-option [value]="proyecto">{{ proyecto.nombre }}</mat-option>
+                }
+            </mat-autocomplete>
+        </mat-form-field> -->
 
         <div class="text-center space-x-4 mb-4 mt-8">
             <button mat-flat-button type="submit" [disabled]="isSubmitting">  
