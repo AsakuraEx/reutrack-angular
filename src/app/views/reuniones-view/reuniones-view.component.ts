@@ -1,19 +1,17 @@
 import { Component, OnInit } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
-import {MatAutocompleteModule} from '@angular/material/autocomplete';
-import {MatInputModule} from '@angular/material/input';
-import {MatFormFieldModule} from '@angular/material/form-field';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ReunionService } from '../../services/reunion.service';
 import { ReunionHeader } from '../../models/reunion-header.model';
-import { MatTableModule} from '@angular/material/table';
 import { ResponsablesComponent } from './components/responsables/responsables.component';
+import { ProyectoService } from '../../services/proyecto.service';
+import { AsistenciaComponent } from './components/asistencia/asistencia.component';
 
 @Component({
   selector: 'app-reuniones-view',
   imports: [
-    MatIconModule, MatButtonModule, ResponsablesComponent
+    MatIconModule, MatButtonModule, ResponsablesComponent, AsistenciaComponent
   ],
   templateUrl: './reuniones-view.component.html',
   styleUrl: './reuniones-view.component.css'
@@ -22,12 +20,14 @@ export class ReunionesViewComponent implements OnInit {
 
   constructor(
     private router: Router,
+    private route: ActivatedRoute,
     private reunionService: ReunionService,
-    private route: ActivatedRoute
+    private proyectoService: ProyectoService
   ) {}
 
   expandReunionActualState = false;
   reunionActualDetails!: ReunionHeader;
+  version!: any;
 
   ngOnInit(): void {
    
@@ -46,6 +46,7 @@ export class ReunionesViewComponent implements OnInit {
     this.reunionService.obtenerReunionPorCodigo(codigo).subscribe({
       next: (response) => {
         this.reunionActualDetails = response;
+        this.obtenerInformacionVersion()
       },
       error: (err) => {
         console.error(err);
@@ -57,6 +58,16 @@ export class ReunionesViewComponent implements OnInit {
     this.expandReunionActualState = !this.expandReunionActualState;
   } 
 
+  obtenerInformacionVersion(): void {
+    this.proyectoService.obtenerVersion(this.reunionActualDetails.id_version).subscribe({
+      next: (response) => {
+        this.version = response
+      },
+      error: (error) => {
+        console.error("NO SIRVE" + error);
+      }
+    })
+  }
 
 
 }

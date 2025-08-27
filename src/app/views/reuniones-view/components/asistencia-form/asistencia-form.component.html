@@ -1,0 +1,90 @@
+<div class="p-4 space-y-4">
+    <h1 class="text-purple-700 text-2xl">Registro de asistencia a la reunión</h1>
+
+    <div class="text-right">
+        <mat-slide-toggle 
+            labelPosition="before"
+            [formControl]="registro_manual">
+            ¿Registrarás al participante?
+        </mat-slide-toggle>
+    </div>
+
+    <div class="h-full">
+        @if (registro_manual.value) {
+            <mat-slide-toggle
+                class="mb-4" 
+                [formControl]="participante_extranjero"
+                (change)="AgregarValidador()">
+                ¿El participante es extranjero?
+            </mat-slide-toggle>
+
+            <form [formGroup]="formAsistencia" (submit)="onSubmit()">
+
+                <mat-form-field class="w-full">
+                    <mat-label>Nombre completo</mat-label>
+                    <input matInput formControlName="participante">
+                </mat-form-field>
+                
+                @if(!participante_extranjero.value){
+                    <mat-form-field class="w-full">
+                        <mat-label>Número de DUI</mat-label>
+                        <input matInput formControlName="doc_identidad">
+                    </mat-form-field>
+                }
+                
+                <mat-form-field class="w-full">
+                    <mat-label>Institución</mat-label>
+                    <input matInput formControlName="institucion">
+                </mat-form-field>
+
+                <mat-form-field class="w-full">
+                    <mat-label>Cargo</mat-label>
+                    <input matInput formControlName="cargo">
+                </mat-form-field>
+
+                @if(!participante_extranjero.value){
+                    <mat-form-field class="w-full">
+                        <mat-label>Teléfono</mat-label>
+                        <input matInput formControlName="telefono">
+                    </mat-form-field>
+                }
+
+                <mat-form-field class="w-full">
+                    <mat-label>Correo Electrónico</mat-label>
+                    <input matInput formControlName="correo">
+                </mat-form-field>
+
+                <div class="flex justify-center md:justify-end gap-2">
+                    <button mat-flat-button>
+                        Registrar participante
+                    </button>
+
+                    <button 
+                        mat-flat-button 
+                        class="btn-secondary" 
+                        type="button"
+                        (click)="cerrarModal(false)">
+                        Cancelar
+                    </button>
+                </div>
+
+            </form>
+        }
+        @else {
+            <div class="flex flex-col justify-center items-center mt-14">
+                <img src="images/qr_code_example.png" alt="QR de la reunión">
+
+                <div class="w-full flex justify-center md:justify-end gap-2 mt-4">
+                    <button 
+                        mat-flat-button 
+                        class="btn-secondary" 
+                        type="button"
+                        (click)="cerrarModal(false)">
+                        Cancelar
+                    </button>
+                </div>
+            </div>
+        }
+    </div>
+
+</div>

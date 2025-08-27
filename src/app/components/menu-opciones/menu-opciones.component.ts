@@ -43,8 +43,7 @@ export class MenuOpcionesComponent {
     }
     
    this.authService.cerrarSesion(this.usuario.id).subscribe({
-    next: (response) => {
-      console.log(response);
+    next: () => {
       localStorage.clear();
       this.router.navigate(['/login']);
     },

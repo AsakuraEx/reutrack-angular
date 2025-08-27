@@ -1,7 +1,7 @@
 <div class="container mx-auto">
     <div 
         class="w-full border-2 border-purple-700 rounded-2xl bg-purple-100 overflow-hidden transition-all duration-500 ease-out"
-        [class]="expandReunionActualState ? 'h-[580px] lg:h-52' : 'h-13'"
+        [class]="expandReunionActualState ? 'h-[580px] lg:h-56' : 'h-13'"
     >
 
         <div class="flex justify-between items-center px-4 pt-1">
@@ -21,21 +21,23 @@
         <div class="grid lg:grid-cols-4 gap-4 p-4 items-center">
             @if (reunionActualDetails) {
 
-                <p class="text-lg text-purple-700 font-bold">
-                    Proyecto:
-                </p>
-    
-                <p class="text-md text-purple-700">
-                    Nombre del proyecto
-                </p>
-    
-                <p class="text-lg text-purple-700 font-bold">
-                    Versión:
-                </p>
-    
-                <p class="text-md text-purple-700">
-                    {{ reunionActualDetails.id_version }}
-                </p>
+                @if (version) {
+                    <p class="text-lg text-purple-700 font-bold">
+                        Proyecto:
+                    </p>
+        
+                    <p class="text-md text-purple-700">
+                        {{ version.proyecto.nombre }}
+                    </p>
+        
+                    <p class="text-lg text-purple-700 font-bold">
+                        Versión:
+                    </p>
+        
+                    <p class="text-md text-purple-700">
+                        {{ version.nombre }}
+                    </p>
+                }
 
                 <p class="text-lg text-purple-700 font-bold">
                     Nombre de la reunión:
@@ -73,8 +75,17 @@
     </div>
 
     <div class="mt-4">
+        @if (reunionActualDetails) {
+            <app-responsables 
+                [id_reunion]="reunionActualDetails.id" 
+                [reunion_reactivada]="reunionActualDetails.reactivado"
+                [id_usuario_reunion]="reunionActualDetails.id_usuario">
+            </app-responsables>
 
-        <app-responsables></app-responsables>
+            <app-asistencia
+                [id_reunion]="reunionActualDetails.id">
+            </app-asistencia>
+        }
 
     </div>
 

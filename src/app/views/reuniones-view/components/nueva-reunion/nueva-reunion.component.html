@@ -14,38 +14,65 @@
             <input matInput formControlName="lugar">
         </mat-form-field>
 
-        <mat-form-field class="w-full">
-            <mat-label>Proyecto</mat-label>
-            <input type="text"
-                placeholder="Selecciona un proyecto"
-                aria-label="Proyecto"
-                matInput
-                formControlName="id_proyecto"
-                [matAutocomplete]="auto"
-            >
-            <mat-autocomplete #auto="matAutocomplete" [displayWith]="displayProyectoNombre">
-                @for (proyecto of proyectosFiltrados | async ; track $index) {
-                    <mat-option [value]="proyecto">{{ proyecto.nombre }}</mat-option>
-                }
-            </mat-autocomplete>
-        </mat-form-field>
+        @if(proyectos.length > 0) {
+            <mat-form-field class="w-full">
+                <mat-label>Proyecto</mat-label>
+                <input type="text"
+                    placeholder="Selecciona un proyecto"
+                    aria-label="Proyecto"
+                    matInput
+                    formControlName="id_proyecto"
+                    [matAutocomplete]="auto"
+                >
+                <mat-autocomplete 
+                    #auto="matAutocomplete" 
+                    [displayWith]="displayProyectoNombre"
+                    (optionSelected)="ObtenerVersiones(
+                        reunionForm.controls['id_proyecto'].value?.id ?? 0
+                    )"
+                >
+                    @for (proyecto of proyectosFiltrados | async ; track $index) {
+                        <mat-option [value]="proyecto">{{ proyecto.nombre }}</mat-option>
+                    }
+                </mat-autocomplete>
+            </mat-form-field>
+        }
+
 
         <mat-form-field class="w-full">
             <mat-label>Versión</mat-label>
             <input type="text"
                 placeholder="Selecciona una versión"
-                aria-label="Versión"
+                aria-label="version"
                 matInput
-                formControlName="id_versión"
+                formControlName="id_version"
                 [matAutocomplete]="auto"
-                [disabled]="!reunionForm.controls['id_proyecto'].value"
+                [disabled]="reunionForm.controls['id_proyecto'].value === null"
             >
-            <mat-autocomplete #auto="matAutocomplete" [displayWith]="displayProyectoNombre">
-                @for (proyecto of proyectosFiltrados | async ; track $index) {
-                    <mat-option [value]="proyecto">{{ proyecto.nombre }}</mat-option>
+            <mat-autocomplete 
+                #auto="matAutocomplete" 
+                [displayWith]="displayVersionNombre"
+            >
+                @for (version of versionesFiltradas | async ; track $index) {
+                    <mat-option [value]="version">{{ version.nombre }}</mat-option>
                 }
             </mat-autocomplete>
         </mat-form-field>
+    
+
+        <!-- <mat-form-field class="w-full">
+            <mat-label>Versión</mat-label>
+            <mat-select
+                [disabled]="reunionForm.controls['id_proyecto'].value === null"
+                formControlName="id_version"
+                placeholder="Selecciona una versión"
+            >
+                @for (version of versiones; track $index) {
+                    <mat-option [value]="version.id">{{ version.nombre }}</mat-option>
+                }
+            </mat-select>
+        </mat-form-field> -->
+
 
         <div class="text-center space-x-4 mb-4 mt-8">
             <button mat-flat-button type="submit" [disabled]="isSubmitting">  

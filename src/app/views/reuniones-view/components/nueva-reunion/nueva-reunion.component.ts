@@ -12,7 +12,9 @@ import { ReunionService } from '../../../../services/reunion.service';
 import { Router } from '@angular/router';
 import { ProyectoService } from '../../../../services/proyecto.service';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
-import { Observable, startWith, map } from 'rxjs';
+import { Observable, startWith, map, filter } from 'rxjs';
+import { Proyecto } from '../../../../models/proyecto.model';
+import { jwtDecode } from 'jwt-decode';
 
 @Component({
   selector: 'app-nueva-reunion',
@@ -33,8 +35,11 @@ export class NuevaReunionComponent implements OnInit{
 
   isSubmitting = false;
 
-  proyectos: any[] = [];
-  proyectosFiltrados!: Observable<any[]>;
+  proyectos: Proyecto[] = [];
+  proyectosFiltrados!: Observable<Proyecto[]>;
+
+  versiones: any[] = [];
+  versionesFiltradas!: Observable<any[]>;
 
   readonly dialogRef = inject(MatDialogRef<NuevaReunionComponent>);
   readonly data = inject(MAT_DIALOG_DATA);
@@ -44,8 +49,8 @@ export class NuevaReunionComponent implements OnInit{
     lugar: new FormControl('', [Validators.required, Validators.minLength(5), Validators.maxLength(255)]),
     codigo: new FormControl(''),
     expiracion: new FormControl(new Date('1997-01-28T00:00:00')),
-    id_proyecto: new FormControl(null, [Validators.required]),
-    id_version: new FormControl(null, [Validators.required]),
+    id_proyecto: new FormControl<Proyecto | null>(null, [Validators.required]),
+    id_version: new FormControl<any>(null, [Validators.required]),
     id_usuario: new FormControl(this.data.usuario.id, [Validators.required]),
     id_estado: new FormControl(1),
   })
@@ -53,7 +58,7 @@ export class NuevaReunionComponent implements OnInit{
   ngOnInit(): void {
     this.obtenerProyectos();
     this.configurarAutocomplete();
-
+    
   }
 
   closeDialog(flag: boolean): void {
@@ -77,9 +82,14 @@ export class NuevaReunionComponent implements OnInit{
       const code = this.generarCodigo();
       this.reunionForm.controls['expiracion'].setValue(expiration);
       this.reunionForm.controls['codigo'].setValue(code);
+
+      if(this.reunionForm.controls['id_version'].value){
+        this.reunionForm.controls['id_version'].setValue(this.reunionForm.controls['id_version'].value.id)
+      }
       
       this.reunionService.crearNuevaReunion(this.reunionForm.value).subscribe({
         next: (response) => {
+          this.agregarEncargadoInicial(response.codigo)
           this.router.navigate(['/reunion/'+response.codigo])
         },
         error: (err) => {
@@ -130,5 +140,76 @@ export class NuevaReunionComponent implements OnInit{
     );
   }
 
+  ObtenerVersiones(id_proyecto: number): void {
 
-}
+    this.proyectoService.obtenerVersiones(id_proyecto, 1, null, 1).subscribe({
+      next: (response) => {
+        this.versiones = response.data;
+        this.configurarAutocompleteVersiones()
+      },
+      error: (err) => {
+        console.error('El error: ', err);
+      }
+    })
+
+
+  }
+
+  displayVersionNombre(version: any): string {
+    return version && version.nombre ? version.nombre : '';
+  }
+
+  private _filterVersiones(name: string): any[] {
+    const filterValue = name.toLowerCase();
+
+    return this.versiones.filter(option => option.nombre.toLowerCase().includes(filterValue));
+  }
+
+  configurarAutocompleteVersiones(): void {
+    this.versionesFiltradas = this.reunionForm.controls['id_version'].valueChanges.pipe(
+      startWith(''),
+      map(value => {
+        // Si el valor es un string (búsqueda), filtrar
+        if (typeof value === 'string') {
+          return value ? this._filterVersiones(value) : this.versiones.slice();
+        }
+        // Si el valor es un objeto (selección), mostrar todos
+        return this.versiones.slice();
+      })
+    );
+  }
+
+  agregarEncargadoInicial(codigo: string): void {
+
+    const token = localStorage.getItem('token');
+
+    let id_reunion: number = 0;
+    this.reunionService.obtenerReunionPorCodigo(codigo).subscribe({
+      next: (res) => {
+        id_reunion = res.id
+
+        if(token){
+          const decoded: any = jwtDecode(token);
+          
+          const data: any = {
+            id_usuario: decoded.id,
+            id_reunion: id_reunion,
+            visitante: false
+          }
+
+          this.reunionService.agregarResponsables(data).subscribe({
+            next: (res) => {
+              console.log('Se agregó automáticamente al encargado de la reunión')
+            },
+            error: (err) => {
+              console.log(err)
+            }
+          })
+        }
+      }
+    })
+
+
+    }
+
+  }

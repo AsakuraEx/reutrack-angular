@@ -39,10 +39,8 @@ export class InicioViewComponent implements OnInit {
       });
 
       dialogRef.afterClosed().subscribe(result => {
-        console.log('Se ha cerrado el dialog');
         if(result === true) {
-          console.log(result);
-          console.log("Se envio un true")
+          console.log('Reunión creada');
         }
       })
     }
