@@ -72,6 +72,13 @@
     
             <tr mat-header-row *matHeaderRowDef="columnasMostradas"></tr>
             <tr mat-row *matRowDef="let rows; columns: columnasMostradas"></tr>
+            <tr class="mat-row" *matNoDataRow>
+                <td class="mat-cell" colspan="7">
+                    <p class="font-italic py-4 px-4 text-center">
+                        Ningún personal ha sido agregado a este listado de reunión.
+                    </p>
+                </td>
+            </tr>
     
         </table>
 

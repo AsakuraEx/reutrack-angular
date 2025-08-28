@@ -104,6 +104,11 @@ export class AsistenciaFormComponent {
     if(this.formAsistencia.valid){
       this.reunionService.agregarParticipante(this.formAsistencia.value).subscribe({
         next: response => {
+          this.toastService.success('Se agregó al participante a la lista de asistencia.', {
+            duration: 3000,
+            position: 'top-right'
+          })
+
           this.cerrarModal(true);
         },
         error: err => {

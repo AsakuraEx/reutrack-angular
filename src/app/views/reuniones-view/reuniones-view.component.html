@@ -85,6 +85,48 @@
             <app-asistencia
                 [id_reunion]="reunionActualDetails.id">
             </app-asistencia>
+
+            <app-puntos></app-puntos>
+
+            <div class="w-full border border-purple-700 rounded-2xl p-4 shadow-lg mt-4">
+                
+                <div class="flex flex-col md:flex-row items-center">
+                    <h1 class="text-2xl font-bold text-purple-700">Desarrollo de la reunión</h1>
+                </div>
+
+                <div class="mt-4">
+                    <angular-editor [formControl]="contenido" [config]="editorConfig"></angular-editor>
+                </div>
+
+            </div>
+
+            <app-acuerdos></app-acuerdos>
+
+            <div class="mt-4 flex flew-wrap justify-end items-center gap-2 border border-purple-700 rounded-md p-4 bg-purple-100">                
+                <button 
+                    mat-flat-button 
+                    (click)="finalizarReunion()"
+                >
+                    Finalizar reunión
+                </button>
+    
+                <button 
+                    mat-flat-button 
+                    (click)="finalizarReunion()"
+                    class="btn-tertiary"
+                >
+                    Guardar como borrador
+                </button>
+
+                <button 
+                    mat-flat-button 
+                    (click)="finalizarReunion()"
+                    class="btn-secondary"
+                >
+                    Guardar como borrador y salir
+                </button>
+            </div>
+
         }
 
     </div>

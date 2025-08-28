@@ -35,8 +35,7 @@ export class AsistenciaComponent implements OnInit{
 
   abrirAsistenciaModal(): void {
     const dialogRef = this.dialog.open(AsistenciaFormComponent, {
-      data: { id_reunion: this.id_reunion },
-      minWidth: '560px'
+      data: { id_reunion: this.id_reunion }
     });
 
     dialogRef.afterClosed().subscribe(result => {

@@ -1,3 +1,4 @@
+import { AsyncPipe } from '@angular/common';
 import { Component, Input, OnInit } from '@angular/core';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { MatButtonModule } from '@angular/material/button';
@@ -10,12 +11,13 @@ import { UsuarioService } from '../../../../services/usuario.service';
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { HotToastService } from '@ngxpert/hot-toast';
 import { jwtDecode } from 'jwt-decode';
+import { map, Observable, startWith } from 'rxjs';
 
 @Component({
   selector: 'app-responsables',
   imports: [
     MatAutocompleteModule, MatInputModule, MatFormFieldModule, MatButtonModule, MatTableModule,
-    MatIconModule, ReactiveFormsModule
+    MatIconModule, ReactiveFormsModule, AsyncPipe
   ],
   templateUrl: './responsables.component.html',
   styleUrl: './responsables.component.css'
@@ -34,6 +36,7 @@ export class ResponsablesComponent implements OnInit{
   decoded!: any;
 
   options: any[] = [];
+  filteredOptions!: Observable<any[]>
 
   @Input() id_reunion!: number;
   @Input() reunion_reactivada!: boolean;
@@ -49,6 +52,7 @@ export class ResponsablesComponent implements OnInit{
 
     this.obtenerResponsables(this.id_reunion);
     this.obtenerUsuarios()
+    this.configurarAutocomplete()
 
     const token = localStorage.getItem('token')
     if(token) {
@@ -82,6 +86,24 @@ export class ResponsablesComponent implements OnInit{
   displayNombre(user: any): string {
     return user && user.nombre ? user.nombre : '';
   }
+
+  private _filtrarNombres(nombre: string): any[] {
+    const filterValue = nombre.toLowerCase();
+    return this.options.filter(option => option.nombre.toLowerCase().includes(filterValue))
+  }
+
+  configurarAutocomplete(): void {
+    this.filteredOptions = this.responsableForm.controls['id_usuario'].valueChanges.pipe(
+      startWith(''),
+      map(value => {
+        if (typeof value === 'string'){
+          return value ? this._filtrarNombres(value) : this.options.slice()
+        }
+
+        return this.options.slice()
+      })
+    );
+  } 
 
   onSubmit(reactivada: boolean): void {
 

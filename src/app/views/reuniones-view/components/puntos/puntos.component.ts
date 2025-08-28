@@ -1,11 +1,23 @@
 import { Component } from '@angular/core';
+import { MatButtonModule } from '@angular/material/button';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatInputModule } from '@angular/material/input';
+import { MatIconModule } from '@angular/material/icon';
+import {MatCardModule} from '@angular/material/card';
+
+
 
 @Component({
   selector: 'app-puntos',
-  imports: [],
+  imports: [MatFormFieldModule, MatInputModule, MatButtonModule, MatIconModule, MatCardModule],
   templateUrl: './puntos.component.html',
   styleUrl: './puntos.component.css'
 })
 export class PuntosComponent {
+  expandirPanel = false;
 
+  expandirAcuerdos(): void {
+    this.expandirPanel = !this.expandirPanel
+  }
+  
 }

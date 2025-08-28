@@ -13,13 +13,16 @@
                     matInput
                     [matAutocomplete]="auto">
                 <mat-autocomplete autoActiveFirstOption #auto="matAutocomplete" [displayWith]="displayNombre">
-                @for (option of options; track option) {
+                @for (option of filteredOptions | async ; track option) {
                     <mat-option [value]="option">{{option.nombre}}</mat-option>
                 }
                 </mat-autocomplete>
             </mat-form-field>
 
-            <button mat-flat-button type="submit">Agregar</button>
+            <button mat-flat-button type="submit">
+                <mat-icon>add</mat-icon>
+                Agregar
+            </button>
         </div>
     </form>
 </div>

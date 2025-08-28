@@ -1,7 +1,7 @@
 import { Component, inject, OnInit } from '@angular/core';
 import {MatButtonModule} from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
-import { FrasesMotivadoras } from '../../assets/frases';
+import { FrasesMotivadoras } from '../../../assets/frases';
 import { jwtDecode } from 'jwt-decode'
 import { ReunionesProgresoComponent } from "./components/reuniones-progreso/reuniones-progreso.component";
 import { ReunionesFinalizadaComponent } from "./components/reuniones-finalizada/reuniones-finalizada.component";
