@@ -6,6 +6,7 @@ import {MatInputModule} from '@angular/material/input';
 import { MatTableDataSource, MatTableModule } from '@angular/material/table';
 import {MatPaginator, MatPaginatorModule, PageEvent} from '@angular/material/paginator';
 import { ReunionService } from '../../../../services/reunion.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-reuniones-finalizada',
@@ -18,7 +19,7 @@ import { ReunionService } from '../../../../services/reunion.service';
 })
 export class ReunionesFinalizadaComponent implements AfterViewInit {
 
-    constructor(private reunionService: ReunionService) {}
+    constructor(private reunionService: ReunionService, private router: Router) {}
 
     @Input() usuario: any;
 
@@ -35,6 +36,10 @@ export class ReunionesFinalizadaComponent implements AfterViewInit {
         this.onPageChange(event)
       })
       this.cargarDatos()
+    }
+
+    mostrarDetalleReunion(id: number) {
+      this.router.navigate([`reunion/detalle/${id}`]);
     }
 
     onPageChange(event: PageEvent):void {

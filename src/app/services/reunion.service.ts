@@ -1,13 +1,14 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
+import { environment } from '../../environments/environment';
 
 @Injectable({
   providedIn: 'root'
 })
 export class ReunionService {
 
-  private readonly BaseUrl = 'http://10.168.241.44:3100/api';
+  private readonly BaseUrl = environment.apiURL;
 
   constructor(private http: HttpClient) { }
 
@@ -83,6 +84,29 @@ export class ReunionService {
     return this.http.get(url)
   }
 
+  consultarMinutaReunion(id_reunion:number): Observable<any>{
+    const url = `${this.BaseUrl}/minutareunion/${id_reunion}`;
+    return this.http.get(url);   
+  }
+
+  guardarMinutaReunion(data: any): Observable<any> {
+    const url = `${this.BaseUrl}/minutareunion/create`;
+    return this.http.post(url, data);    
+  }
+
+  actualizarMinutaReunion(id_reunion: number, data: any): Observable<any> {
+    const url = `${this.BaseUrl}/minutareunion/update/${id_reunion}`;
+    return this.http.patch(url, data);
+  }
+
+  finalizarReunion(id_reunion: number): Observable<any> {
+    const url = `${this.BaseUrl}/reuniones/finalizar/${id_reunion}`;
+    return this.http.patch(url, {})
+  }
+
+  // ---------------------------------------------------------------------
+  // Responsables
+
   obtenerResponsablesPorReunion(id_reunion: number): Observable<any> {
     const url = `${this.BaseUrl}/encargados/${id_reunion}`;
     return this.http.get(url)
@@ -98,6 +122,9 @@ export class ReunionService {
     return this.http.delete(url)
   }
 
+  // ---------------------------------------------------------------------
+  // Lista de asistencia
+
   agregarParticipante(data: any): Observable<any> {
     const url = `${this.BaseUrl}/asistencia/create`;
     return this.http.post(url, data)
@@ -112,5 +139,43 @@ export class ReunionService {
     const url = `${this.BaseUrl}/asistencia/delete/${id_participante}`;
     return this.http.delete(url)
   }
+
+  // ---------------------------------------------------------------------
+  // Puntos de reunión
+
+  consultarPuntos(id_reunion: number): Observable<any> {
+    const url = `${this.BaseUrl}/puntoreunion/${id_reunion}`
+    return this.http.get(url)
+  }
+
+  agregarPuntos(data: any): Observable<any> {
+    const url = `${this.BaseUrl}/puntoreunion/create`
+    return this.http.post(url, data)
+  }
+
+  eliminarPunto(id_punto: number): Observable<any> {
+    const url = `${this.BaseUrl}/puntoreunion/delete/${id_punto}`
+    return this.http.delete(url)
+  }
+
+  // ---------------------------------------------------------------------
+  // Acuerdos de reunión
+
+  consultarAcuerdos(id_reunion: number): Observable<any> {
+    const url = `${this.BaseUrl}/acuerdocompromiso/${id_reunion}`
+    return this.http.get(url)
+  }
+
+  agregarAcuerdos(data: any): Observable<any> {
+    const url = `${this.BaseUrl}/acuerdocompromiso/create`
+    return this.http.post(url, data)
+  }
+
+  eliminarAcuerdo(id_punto: number): Observable<any> {
+    const url = `${this.BaseUrl}/acuerdocompromiso/delete/${id_punto}`
+    return this.http.delete(url)
+  }
+
+
 
 }

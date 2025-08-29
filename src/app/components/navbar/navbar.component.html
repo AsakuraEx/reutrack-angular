@@ -3,15 +3,55 @@
       
       @for(option of menuOptions; track option.path){
 
-        <button mat-button 
-          routerLink="{{ option.path }}" 
-          routerLinkActive="active" 
-          [routerLinkActiveOptions]="{ exact: true }" 
-          ariaCurrentWhenActive="page"
-        >
-          <mat-icon>{{ option.icon }}</mat-icon>
-          {{ option.name }}
-        </button>
+        @if(option.desplegable){
+
+          <div 
+            [id]="option.id" 
+            class="w-full text-center max-h-9 overflow-hidden transition-all duration-300 ease-in"
+            (click)="toggleDropDown(option.id)"
+          >
+
+            <div class="flex justify-start items-center py-2 px-4 hover:bg-purple-200 rounded-full cursor-pointer gap-2">
+              <mat-icon 
+                style="color: #7D00FA; font-size: 18px; height: auto;">
+                {{ option.icon }}
+              </mat-icon>
+              <h1 class="text-[#7D00FA] text-sm font-medium">{{ option.name }}</h1>
+              <mat-icon 
+                style="color: #7D00FA; font-size: 18px; height: auto;">
+                keyboard_arrow_down
+              </mat-icon>
+            </div>
+
+            <div class="w-full rounded py-2 px-8">
+              @for(item of option.opciones; track item){
+                <button mat-button 
+                  routerLink="{{ item.path }}" 
+                  routerLinkActive="active" 
+                  [routerLinkActiveOptions]="{ exact: true }" 
+                  ariaCurrentWhenActive="page"
+                  class="w-full btn-tertiary"
+                >
+                  <!-- <mat-icon>{{ item.icon }}</mat-icon> -->
+                  {{ item.name }}
+                </button>
+              }
+            </div>
+
+          </div>
+
+        }
+        @else{
+          <button mat-button 
+            routerLink="{{ option.path }}" 
+            routerLinkActive="active" 
+            [routerLinkActiveOptions]="{ exact: true }" 
+            ariaCurrentWhenActive="page"
+          >
+            <mat-icon>{{ option.icon }}</mat-icon>
+            {{ option.name }}
+          </button>
+        }
 
       }
 

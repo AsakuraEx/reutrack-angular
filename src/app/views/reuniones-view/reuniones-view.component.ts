@@ -14,6 +14,7 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { AngularEditorModule } from '@kolkov/angular-editor';
 import { AngularEditorConfig } from '@kolkov/angular-editor';
 import { FormControl, ReactiveFormsModule, Validators } from '@angular/forms';
+import { HotToastService } from '@ngxpert/hot-toast';
 
 @Component({
   selector: 'app-reuniones-view',
@@ -31,13 +32,15 @@ export class ReunionesViewComponent implements OnInit {
     private router: Router,
     private route: ActivatedRoute,
     private reunionService: ReunionService,
-    private proyectoService: ProyectoService
+    private proyectoService: ProyectoService,
+    private toastService: HotToastService
   ) {}
 
   expandReunionActualState = false;
   reunionActualDetails!: ReunionHeader;
   version!: any;
 
+  minutaReunion:any = '';
   contenido = new FormControl('', [Validators.required, Validators.minLength(20)])
 
   editorConfig: AngularEditorConfig = {
@@ -69,6 +72,7 @@ export class ReunionesViewComponent implements OnInit {
       next: (response) => {
         this.reunionActualDetails = response;
         this.obtenerInformacionVersion()
+        this.consultarDesarrolloDeReunion()
       },
       error: (err) => {
         console.error(err);
@@ -91,8 +95,126 @@ export class ReunionesViewComponent implements OnInit {
     })
   }
 
+  consultarDesarrolloDeReunion(): void {
+
+    this.reunionService.consultarMinutaReunion(this.reunionActualDetails.id).subscribe({
+      next: resp => {
+        this.minutaReunion = resp[0].minuta
+        this.contenido.setValue(this.minutaReunion);
+      },
+      error: err => {
+        console.log(err)
+      }
+    })
+
+  }
+
+  guardarReunion(): void {
+
+    let contador!: number;
+
+    if(this.contenido.value){
+      contador = this.contarLetras(this.contenido.value)
+    }else{
+      contador = 0;
+    }
+
+    if(this.contenido.hasError('minLength') || contador < 20){
+      this.toastService.error('El desarrollo de la reunión debe contener al menos 20 carácteres', {
+        duration: 3000,
+        position: 'top-right'
+      })
+      return
+    }
+
+    const data = {
+      minuta: this.contenido.value,
+      id_reunion: this.reunionActualDetails.id
+    }
+
+    if(!this.minutaReunion){
+
+      this.reunionService.guardarMinutaReunion(data).subscribe({
+        next: () => {
+          this.toastService.success('La información se guardó hasta este punto' + this.transformarFecha(), {
+            position: 'top-right',
+            duration: 3000
+          })
+        },
+        error: err => {
+          this.toastService.error(err, {
+            position: 'top-right',
+            duration: 3000
+          })
+        }
+      })
+
+    }
+
+    else{
+      this.reunionService.actualizarMinutaReunion(this.reunionActualDetails.id, data).subscribe({
+        next: resp => {
+          this.toastService.success('La información se actualizó hasta este punto ' + this.transformarFecha(), {
+            position: 'top-right',
+            duration: 3000
+          })
+        },
+        error: err => {
+          this.toastService.error(err, {
+            position: 'top-right',
+            duration: 3000
+          })
+        }
+      })
+    }
+
+  }
+
   finalizarReunion(): void {
-    console.log(this.contenido.value)
+    this.reunionService.finalizarReunion(this.reunionActualDetails.id).subscribe({
+      next: () => {
+        this.guardarReunion();
+        this.toastService.success('La reunión ha finalizado, se cierra el acceso a registro de lista de asistencia', {
+          duration: 5000,
+          position: 'top-right'
+        });
+        this.router.navigate(['/historial']);
+      },
+      error: (err) => {
+        this.toastService.error(err, {
+          duration: 5000,
+          position: 'top-right'
+        })
+      }
+    })
+  }
+
+  guardarReunionYSalir(): void {
+    this.guardarReunion();
+    this.consultarDesarrolloDeReunion()
+    this.router.navigate(['/'])
+  }
+
+  contarLetras(contenido: string): number {
+      let texto = contenido.toString().replace(/(<([^>]+)>)/ig, '')
+      return texto.length
+  }
+
+  transformarFecha(): string  {
+      
+      const nuevaFecha = new Date()
+
+      const fechaFormateada = nuevaFecha.toLocaleString('es-ES', {
+          day: '2-digit',
+          month: '2-digit',
+          year: 'numeric',
+          hour: '2-digit',   // Hora en formato de dos dígitos
+          minute: '2-digit', // Minutos en formato de dos dígitos
+          second: '2-digit', // Segundos en formato de dos dígitos
+          hour12: true
+      });
+
+      return fechaFormateada
   }
 
 }

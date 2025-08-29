@@ -19,14 +19,13 @@ export class AppComponent {
 
   @ViewChild('sidenav') sidenav!: MatSidenav;
   isLoginPage = false;
+
   constructor(private router: Router) {
     this.router.events.pipe(
       filter(event => event instanceof NavigationEnd)
     ).subscribe((event: NavigationEnd) => {
       this.isLoginPage = event.urlAfterRedirects === '/login' || event.urlAfterRedirects.startsWith('/login');
-      if(this.isLoginPage){
-        this.sidenav.close();
-      }
+      this.sidenav.close();
     });
   }
 

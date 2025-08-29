@@ -6,6 +6,7 @@ import {MatInputModule} from '@angular/material/input';
 import { MatTableDataSource, MatTableModule } from '@angular/material/table';
 import {MatPaginator, MatPaginatorModule, PageEvent} from '@angular/material/paginator';
 import { ReunionService } from '../../../../services/reunion.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-reuniones-progreso',
@@ -18,7 +19,7 @@ import { ReunionService } from '../../../../services/reunion.service';
 })
 export class ReunionesProgresoComponent implements AfterViewInit {
 
-    constructor(private reunionService: ReunionService) {}
+    constructor(private reunionService: ReunionService, private router: Router) {}
 
     @Input() usuario: any;
 
@@ -74,6 +75,10 @@ export class ReunionesProgresoComponent implements AfterViewInit {
 
       }
 
+    }
+
+    verReunionEnProgreso(codigo: string): void {
+      this.router.navigate([`/reunion/${codigo}`])
     }
 
 }

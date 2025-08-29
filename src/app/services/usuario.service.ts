@@ -1,6 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
+import { environment } from '../../environments/environment';
 
 @Injectable({
   providedIn: 'root'
@@ -9,7 +10,7 @@ export class UsuarioService {
 
   constructor(private http: HttpClient) { }
 
-  readonly BaseUrl = 'http://10.168.241.44:3100/api';
+  readonly BaseUrl = environment.apiURL;
 
   obtenerUsuarios(estado: any, limit: any, page: number): Observable<any> {
 

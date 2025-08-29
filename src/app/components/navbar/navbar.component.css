@@ -7,3 +7,19 @@ a.active {
   color: red; /* cuando está activo */
   font-weight: bold; /* opcional: remarcar */
 }
+
+.btn-tertiary {
+  color: var(--mat-sys-tertiary) !important;
+}
+
+.btn-tertiary:hover {
+  background-color: rgb(255, 215, 255) !important;
+  color: var(--mat-sys-tertiary) !important;
+}
+
+.mat-mdc-button,
+.mat-mdc-raised-button,
+.mat-mdc-flat-button {
+  justify-content: flex-start !important; /* texto a la izquierda */
+  padding-left: calc(var(--spacing) * 6) !important; 
+}

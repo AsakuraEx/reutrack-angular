@@ -1,6 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
+import { environment } from '../../environments/environment';
 
 @Injectable({
   providedIn: 'root'
@@ -9,7 +10,7 @@ export class ProyectoService {
 
   constructor(private http: HttpClient) { }
 
-  readonly BaseURL = 'http://10.168.241.44:3100/api';
+  readonly BaseURL = environment.apiURL;
 
   obtenerProyectos(estado: any, limit: any, page: number): Observable<any> {
     

@@ -19,4 +19,13 @@ export class NavbarComponent {
     this.navbarVisible = !this.navbarVisible;
   }
 
+  toggleDropDown(id:string) {
+    const dropdown = document.getElementById(id);
+
+    if(!dropdown) return;
+
+    dropdown.classList.toggle('max-h-10');
+    dropdown.classList.toggle('max-h-96');
+  }
+
 }
