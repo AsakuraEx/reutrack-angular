@@ -17,7 +17,7 @@
     </div>
 
     <div class="mt-4 flex flex-col md:flex-row gap-2">
-        <form class="w-full md:w-1/2" [formGroup]="acuerdoForm" (click)="agregarAcuerdoDeReunion()">
+        <form class="w-full md:w-1/2" [formGroup]="acuerdoForm" (submit)="agregarAcuerdoDeReunion()">
             <div class="flex flex-col md:flex-row gap-4">
                 <mat-form-field class="w-full h-fit">
                     <mat-label>Acuerdos de la reunión</mat-label>

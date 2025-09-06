@@ -171,6 +171,23 @@ export class ReunionesViewComponent implements OnInit {
   }
 
   finalizarReunion(): void {
+
+    let contador!: number;
+
+    if(this.contenido.value){
+      contador = this.contarLetras(this.contenido.value)
+    }else{
+      contador = 0;
+    }
+
+    if(this.contenido.hasError('minLength') || contador < 20){
+      this.toastService.error('El desarrollo de la reunión debe contener al menos 20 carácteres', {
+        duration: 3000,
+        position: 'top-right'
+      })
+      return
+    }
+
     this.reunionService.finalizarReunion(this.reunionActualDetails.id).subscribe({
       next: () => {
         this.guardarReunion();
@@ -190,6 +207,23 @@ export class ReunionesViewComponent implements OnInit {
   }
 
   guardarReunionYSalir(): void {
+
+    let contador!: number;
+
+    if(this.contenido.value){
+      contador = this.contarLetras(this.contenido.value)
+    }else{
+      contador = 0;
+    }
+
+    if(this.contenido.hasError('minLength') || contador < 20){
+      this.toastService.error('El desarrollo de la reunión debe contener al menos 20 carácteres', {
+        duration: 3000,
+        position: 'top-right'
+      })
+      return
+    }
+
     this.guardarReunion();
     this.consultarDesarrolloDeReunion()
     this.router.navigate(['/'])

@@ -81,6 +81,7 @@ export class AcuerdosComponent implements OnInit{
       })
 
     }
+    this.acuerdoForm.reset()
 
   }
 

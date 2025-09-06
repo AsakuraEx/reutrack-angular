@@ -104,6 +104,11 @@ export class ReunionService {
     return this.http.patch(url, {})
   }
 
+  obtenerDetalleReunion(id_reunion: number): Observable<any> {
+    const url = `${this.BaseUrl}/reuniones/detalle/${id_reunion}`;
+    return this.http.get(url)
+  }
+
   // ---------------------------------------------------------------------
   // Responsables
 
@@ -176,6 +181,14 @@ export class ReunionService {
     return this.http.delete(url)
   }
 
+  //---------------------------------------------------------------------------------------
+  // PDF
 
+  generarPDF(id_reunion: number): Observable<any> {
+    const url = `${this.BaseUrl}/reuniones/pdf/${id_reunion}`
+    return this.http.get(url, {
+      responseType: 'blob'
+    })
+  }
 
 }
