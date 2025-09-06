@@ -44,6 +44,14 @@
         <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
         <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
 
+        <tr class="mat-row" *matNoDataRow>
+            <td class="mat-cell" colspan="4">
+                <p class="font-italic py-2 px-4 text-center">
+                    No hay reuniones finalizadas.
+                </p>
+            </td>
+        </tr>
+
     </table>
 
     <mat-paginator 

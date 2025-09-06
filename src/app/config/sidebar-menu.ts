@@ -16,11 +16,11 @@ export const options = [
         icon: 'article',
         opciones: [
             {
-                path: '/proyectos',
+                path: '/reportes/reactivados',
                 name: 'Proyectos reactivados',
             },
             {
-                path: '/usuarios',
+                path: '/reportes/eliminados',
                 name: 'Proyectos eliminados',    
             },
 

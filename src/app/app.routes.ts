@@ -28,4 +28,14 @@ export const routes: Routes = [
         loadComponent: () => import('./views/detalle-view/detalle-view.component').then(m => m.DetalleViewComponent),
         canActivate: [AuthGuard]
     },
+    {
+        path: 'proyectos',
+        loadComponent: () => import('./views/gestion-proyectos/proyectos-view/proyectos-view.component').then(m => m.ProyectosViewComponent),
+        canActivate: [AuthGuard]
+    },
+        {
+        path: 'versiones',
+        loadComponent: () => import('./views/gestion-proyectos/versiones-view/versiones-view.component').then(m => m.VersionesViewComponent),
+        canActivate: [AuthGuard]
+    },
 ];

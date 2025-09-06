@@ -1,0 +1,38 @@
+<div class="w-full p-4">
+    <h1 class="text-xl font-bold text-purple-700">
+        Agrega un nuevo proyecto
+    </h1>
+
+    <form class="mt-8" [formGroup]="formProyectos" (submit)="onSubmit()">
+
+        <mat-form-field class="w-full">
+            <mat-label>Nombre del proyecto</mat-label>
+            <input matInput formControlName="nombre">
+        </mat-form-field>
+
+        @if (formProyectos.controls['nombre'].hasError('required') && (formProyectos.controls['nombre'].touched || formProyectos.controls['nombre'].dirty)) {
+            <p class="text-red-700 pb-4 text-center">El nombre del proyecto es requerido.</p>
+        }
+
+        @if (formProyectos.controls['nombre'].hasError('maxlength') && (formProyectos.controls['nombre'].touched || formProyectos.controls['nombre'].dirty)) {
+            <p class="text-red-700 pb-4 text-center">El campo solamente acepta 200 caracteres.</p>
+        }
+
+        <div class="space-x-2 text-center">
+            <button 
+                mat-flat-button 
+                type="submit"
+                [disabled]="formProyectos.controls['nombre'].invalid">
+                Agregar
+            </button>
+            <button 
+                mat-flat-button 
+                type="button" 
+                class="btn-secondary"
+                (click)="cerrarModal(false)">
+                Cancelar
+            </button>
+        </div>
+
+    </form>
+</div>

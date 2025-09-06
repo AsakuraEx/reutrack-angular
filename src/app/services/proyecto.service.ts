@@ -28,6 +28,15 @@ export class ProyectoService {
     return this.http.get(url)
   }
 
+  crearProyectos(data: any): Observable<any> {
+    let url = this.BaseURL + '/proyectos/create';
+    return this.http.post(url, data)
+  }
+
+
+  // -----------------------------------------------------------------------------------------------------------
+  // VERSIONES -------------------------------------------------------------------------------------------------
+
   obtenerVersiones(id_proyecto: number, estado: any, limit: any, page: number): Observable<any>  {
 
     let url = `${this.BaseURL}/versiones?`;

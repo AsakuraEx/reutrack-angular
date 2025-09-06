@@ -1,7 +1,7 @@
   <div class="bg-purple-100 h-[100dvh] border-r border-purple-300 overflow-y-hidden pt-16">
     <div class="flex flex-col justify-center">
       
-      @for(option of menuOptions; track option.path){
+      @for(option of menuOptions; track $index){
 
         @if(option.desplegable){
 

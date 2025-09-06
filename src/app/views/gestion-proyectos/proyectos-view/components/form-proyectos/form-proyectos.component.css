@@ -1,0 +1,21 @@
+.btn-secondary {
+  background-color: var(--mat-sys-secondary);
+  color: white;
+}
+
+.btn-secondary:disabled {
+  background-color: #D8CFE4; /* gris claro */
+  color: #918A98;            /* texto gris */
+  cursor: not-allowed;
+}
+
+.btn-tertiary {
+  background-color: var(--mat-sys-tertiary);
+  color: white;
+}
+
+.btn-tertiary:disabled {
+  background-color: #D8CFE4; 
+  color: #918A98;            
+  cursor: not-allowed;
+}
