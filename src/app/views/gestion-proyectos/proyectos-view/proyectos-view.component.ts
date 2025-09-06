@@ -3,7 +3,7 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { MatTableModule } from '@angular/material/table';
 import {MatTooltipModule} from '@angular/material/tooltip';
-import { RouterLink } from '@angular/router';
+import { Router, RouterLink } from '@angular/router';
 import { ProyectoService } from '../../../services/proyecto.service';
 import { MatDialog } from '@angular/material/dialog';
 import { FormProyectosComponent } from './components/form-proyectos/form-proyectos.component';
@@ -16,7 +16,8 @@ import { FormControl, ReactiveFormsModule } from '@angular/forms';
   selector: 'app-proyectos-view',
   imports: [
     MatButtonModule, MatIconModule, MatTableModule, MatTooltipModule,
-    RouterLink, MatFormFieldModule, MatInputModule, ReactiveFormsModule
+    MatFormFieldModule, MatInputModule, ReactiveFormsModule,
+    RouterLink
 ],
   templateUrl: './proyectos-view.component.html',
   styleUrl: './proyectos-view.component.css'
@@ -24,7 +25,8 @@ import { FormControl, ReactiveFormsModule } from '@angular/forms';
 export class ProyectosViewComponent implements OnInit{
 
   constructor(
-    private proyectoService: ProyectoService
+    private proyectoService: ProyectoService,
+    private router: Router
   ){}
 
   proyectos: any = [];

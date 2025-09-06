@@ -34,7 +34,7 @@ export const routes: Routes = [
         canActivate: [AuthGuard]
     },
         {
-        path: 'versiones',
+        path: 'versiones/:id_proyecto',
         loadComponent: () => import('./views/gestion-proyectos/versiones-view/versiones-view.component').then(m => m.VersionesViewComponent),
         canActivate: [AuthGuard]
     },

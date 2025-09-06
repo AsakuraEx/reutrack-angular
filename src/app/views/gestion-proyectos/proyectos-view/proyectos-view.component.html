@@ -66,7 +66,7 @@
                     <button 
                         mat-icon-button
                         matTooltip="Versiones"
-                        routerLink="/versiones"
+                        [routerLink]="['/versiones', proyecto.id]"
                         type="button">
                         <mat-icon style="color: blue;">visibility</mat-icon>
                     </button>
