@@ -1,6 +1,10 @@
 <div class="w-full p-4">
     <h1 class="text-xl font-bold text-purple-700">
-        Agrega un nuevo proyecto
+        @if(data){
+            Actualiza un proyecto
+        } @else {
+            Agrega un nuevo proyecto
+        }
     </h1>
 
     <form class="mt-8" [formGroup]="formProyectos" (submit)="onSubmit()">
@@ -23,7 +27,11 @@
                 mat-flat-button 
                 type="submit"
                 [disabled]="formProyectos.controls['nombre'].invalid">
-                Agregar
+                @if(data){
+                    Actualizar
+                }@else {
+                    Agregar
+                }
             </button>
             <button 
                 mat-flat-button 

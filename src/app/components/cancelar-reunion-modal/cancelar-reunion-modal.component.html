@@ -1,0 +1,32 @@
+<div class="w-full h-full bg-red-50">
+    <div class="p-4">
+        <h3 class="text-red-700 font-bold text-xl flex items-center gap-2 mb-4">
+            <mat-icon>warning</mat-icon>
+            ¿Realmente deseas cancelar la reunión {{ data.nombre }}?
+        </h3>
+        <p class="text-red-700 text-justify">
+            Si confirma esta acción perderá todo el progreso de la reunión, esta acción no se puede deshacer.
+        </p>
+
+        <div class="text-end space-x-2 mt-4">
+            <button 
+                mat-flat-button
+                class="btn-aceptar"
+                (click)="cancelarReunion()"
+            >
+                <mat-icon>check</mat-icon>
+                Si, deseo cancelar la reunión
+            </button>
+
+            <button 
+                mat-flat-button
+                class="btn-cancelar"
+                (click)="cerrarModal(false)"
+            >
+                <mat-icon>block</mat-icon>
+                No, cancelar
+            </button>
+        </div>
+
+    </div>
+</div>

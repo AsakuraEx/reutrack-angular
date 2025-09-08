@@ -4,25 +4,107 @@
         <h1 class="text-purple-700 font-bold text-2xl">Historial de reuniones</h1>
     </div>
 
-    <div class="flex">
-
-        <!-- Filtros de la tabla -->
-        <div>
-
-            
-
-        </div>
+    <div class="flex flex-col-reverse md:flex-row w-full mt-4 gap-4">
 
         <!-- Listado de reuniones -->
-        <div>
+        <div class="flex gap-3 flex-col w-full lg:w-3/4">
 
             @if (reuniones.length > 0) {
 
                 @for (reunion of reuniones; track $index) {
-                    <div class="border w-full">
+                    <div class="border w-full border-purple-700 p-2 shadow-lg">
         
-                        <div>
-                            {{ reunion.version['proyecto'].nombre }}
+                        <div class="p-2 flex flex-col lg:flex-row">
+
+                            <div class="lg:w-3/5">
+                                <h1 class="text-xl font-bold text-purple-700">
+                                    {{ reunion.version['proyecto'].nombre }} - {{ reunion.version.nombre }}
+                                </h1>
+                                <h1 class="text-lg font-bold text-gray-700">
+                                    {{ reunion.nombre }}
+                                </h1>
+                                <div class="flex flex-col">
+                                    <p>
+                                        Creador de reunión: 
+                                        <span class="font-light italic">{{ reunion.user.nombre }}</span>
+                                    </p> 
+                                    <p>
+                                        Lugar de reunión: 
+                                        <span class="font-light italic">{{ reunion.lugar }}</span>
+                                    </p>
+                                    <p>
+                                        Fecha y hora: 
+                                        <span class="font-light italic">{{ reunion.createdAt }}</span>
+                                    </p> 
+                                </div>
+                            </div>
+
+                            <div class="lg:w-2/5 flex flex-col justify-between text-end">
+                                
+                                <div class="flex lg:justify-end items-start gap-2">
+                                    @if(reunion.reactivado){
+                                        <div class="bg-purple-500 text-white font-semibold rounded w-40 p-1 text-center">
+                                            Reunión reactivada
+                                        </div>
+                                    }
+    
+                                    <div 
+                                        class="p-1 rounded text-white font-semibold w-24 text-center"
+                                        [class]="claseEstado(reunion.estado.nombre)">
+                                        {{ reunion.estado.nombre }}
+                                    </div>
+                                </div>
+
+                                <div>
+                                    <!-- Continuar Reunión  -->
+                                     @if(reunion.estado.nombre === 'Iniciado'){
+                                         <button 
+                                             mat-icon-button 
+                                             matTooltip="Continuar Reunión"
+                                             [disabled]="reunion.estado.nombre === 'Finalizado'"
+                                             [routerLink]="['/reunion', reunion.codigo]"
+                                             class="btn-continuar">
+                                             <mat-icon>edit</mat-icon>
+                                         </button>
+                                     }
+
+                                    <!-- Ver Reunión  -->
+                                     @if(reunion.estado.nombre === 'Finalizado'){
+                                         <button 
+                                             mat-icon-button 
+                                             matTooltip="Ver Detalle de Reunión"
+                                             [disabled]="reunion.estado.nombre === 'Iniciado' || reunion.estado.nombre === 'Cancelado'"
+                                             [routerLink]="['/reunion/detalle', reunion.id]"
+                                             class="btn-ver">
+                                             <mat-icon>visibility</mat-icon>
+                                         </button>
+                                     }
+                        
+                                    <!-- reactivar Reunión  -->
+                                    @if(reunion.estado.nombre === 'Finalizado' && !reunion.reactivado){
+                                        <button 
+                                            mat-icon-button 
+                                            matTooltip="Reactivar Reunión"
+                                            [disabled]="(reunion.estado.nombre !== 'Finalizado' && !reunion.reactivado) || reunion.reactivado"
+                                            class="btn-reactivar">
+                                            <mat-icon>sync_arrow</mat-icon>
+                                        </button>
+                                    }
+                                
+                                    <!-- Cancelar Reunión  -->
+                                     @if(reunion.estado.nombre !== 'Cancelado' && reunion.estado.nombre !== 'Finalizado'){
+                                         <button 
+                                             mat-icon-button 
+                                             matTooltip="Cancelar Reunión"
+                                             (click)="mostrarModalCancelar(reunion)"
+                                             [disabled]="reunion.estado.nombre === 'Cancelado'"
+                                             class="btn-cancelar">
+                                             <mat-icon>block</mat-icon>
+                                         </button>
+                                     }
+                                </div>
+
+                            </div>
                         </div>
         
                     </div>
@@ -31,10 +113,79 @@
             }
 
             @else {
-                No hay reuniones realizadas...
+                
+                <p class="text-purple-700 font-black text-center w-full text-2xl mt-24">
+                    No hay reuniones realizadas...
+                </p>
             }
 
+            <mat-paginator
+                [length]="totalRecords"
+                [pageSize]="pageSize"
+                [pageIndex]="currentPage"
+            ></mat-paginator>
+
         </div>
+
+        <!-- Filtros de la tabla -->
+        <div class="lg:w-1/4 ">
+
+            <div class="border p-4 bg-purple-100 border-purple-500 rounded-md">
+
+                <div class="flex gap-2 items-center">
+                    <mat-icon style="color: oklch(49.6% 0.265 301.924);">filter_alt</mat-icon>
+                    <span class="text-purple-700 font-bold text-lg">Filtros</span>
+                </div>
+
+                <form class="mt-4" [formGroup]="formFiltro" (submit)="onSubmit()">
+                    <mat-form-field class="w-full">
+                        <mat-label>Proyecto</mat-label>
+                        <input type="text"
+                            placeholder="Selecciona un proyecto"
+                            aria-label="Proyecto"
+                            matInput
+                            formControlName="proyecto"
+                            [matAutocomplete]="auto"
+                        >
+                        <mat-autocomplete 
+                            #auto="matAutocomplete" 
+                            [displayWith]="displayProyectoNombre"
+                        >
+                            @for (proyecto of proyectosFiltrados | async ; track $index) {
+                                <mat-option [value]="proyecto">{{ proyecto.nombre }}</mat-option>
+                            }
+                        </mat-autocomplete>
+                    </mat-form-field>
+
+                    <mat-form-field class="w-full">
+                        <mat-label>Rango de fechas</mat-label>
+                        <mat-date-range-input [rangePicker]="picker">
+                            <input matStartDate placeholder="Fecha inicio" formControlName="inicio">
+                            <input matEndDate placeholder="Fecha fin" formControlName="fin">
+                        </mat-date-range-input>
+                        <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
+                        <mat-date-range-picker #picker></mat-date-range-picker>
+                    </mat-form-field>
+
+                    <div class="space-x-2">
+                        <button mat-flat-button type="submit">
+                            <mat-icon>search</mat-icon>
+                            Buscar
+                        </button>
+    
+                        <button
+                            mat-flat-button
+                            class="btn-secondary"
+                            type="reset">
+                            Limpiar
+                        </button>
+                    </div>
+                </form>
+
+            </div>
+
+        </div>
+
 
     </div>
 

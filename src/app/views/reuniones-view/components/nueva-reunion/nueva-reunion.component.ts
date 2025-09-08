@@ -12,7 +12,7 @@ import { ReunionService } from '../../../../services/reunion.service';
 import { Router } from '@angular/router';
 import { ProyectoService } from '../../../../services/proyecto.service';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
-import { Observable, startWith, map, filter } from 'rxjs';
+import { Observable, startWith, map } from 'rxjs';
 import { Proyecto } from '../../../../models/proyecto.model';
 import { jwtDecode } from 'jwt-decode';
 

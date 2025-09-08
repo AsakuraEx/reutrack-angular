@@ -33,6 +33,11 @@ export class ProyectoService {
     return this.http.post(url, data)
   }
 
+  actualizarProyecto(data: any): Observable<any> {
+    let url = this.BaseURL + '/proyectos/update/' + data.id;
+    return this.http.patch(url, data)
+  }
+
 
   // -----------------------------------------------------------------------------------------------------------
   // VERSIONES -------------------------------------------------------------------------------------------------

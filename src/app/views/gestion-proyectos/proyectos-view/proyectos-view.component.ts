@@ -1,15 +1,17 @@
-import { Component, inject, OnInit } from '@angular/core';
+import { AfterViewInit, Component, inject, OnInit, ViewChild } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { MatTableModule } from '@angular/material/table';
 import {MatTooltipModule} from '@angular/material/tooltip';
-import { Router, RouterLink } from '@angular/router';
+import { RouterLink } from '@angular/router';
 import { ProyectoService } from '../../../services/proyecto.service';
 import { MatDialog } from '@angular/material/dialog';
 import { FormProyectosComponent } from './components/form-proyectos/form-proyectos.component';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { FormControl, ReactiveFormsModule } from '@angular/forms';
+import { MatPaginator, MatPaginatorModule, PageEvent } from '@angular/material/paginator';
+
 
 
 @Component({
@@ -17,17 +19,24 @@ import { FormControl, ReactiveFormsModule } from '@angular/forms';
   imports: [
     MatButtonModule, MatIconModule, MatTableModule, MatTooltipModule,
     MatFormFieldModule, MatInputModule, ReactiveFormsModule,
-    RouterLink
+    RouterLink, MatPaginatorModule
 ],
   templateUrl: './proyectos-view.component.html',
   styleUrl: './proyectos-view.component.css'
 })
-export class ProyectosViewComponent implements OnInit{
+export class ProyectosViewComponent implements AfterViewInit{
 
   constructor(
-    private proyectoService: ProyectoService,
-    private router: Router
+    private proyectoService: ProyectoService
   ){}
+
+
+  // Paginación
+  currentPage = 0;
+  pageSize = 10;
+  totalRecords = 0;
+  @ViewChild(MatPaginator) paginator!: MatPaginator
+
 
   proyectos: any = [];
   displayedColumns = ['proyecto', 'usuario', 'fecha', 'accion'];
@@ -35,16 +44,31 @@ export class ProyectosViewComponent implements OnInit{
 
   proyectoBuscado = new FormControl('');
 
-  ngOnInit(): void {
-      this.obtenerProyectos();
+  ngAfterViewInit(): void {
+
+    this.paginator.page.subscribe((event: PageEvent) => {
+      this.onPageEvent(event);
+    })
+    this.obtenerProyectos();
+    
+  }
+
+  onPageEvent(event: PageEvent):void {
+    this.totalRecords = event.length;
+    this.pageSize = event.pageSize;
+    this.currentPage = event.pageIndex;
+    this.obtenerProyectos();
   }
 
   obtenerProyectos():void {
 
-    this.proyectoService.obtenerProyectos(null, 10, 1).subscribe({
+    const page = this.currentPage + 1;     // ESTO ES HIPER IMPORTANTE
+
+    this.proyectoService.obtenerProyectos(null, this.pageSize, page).subscribe({
       next: response => {
         console.log(response)
         this.proyectos = response.data
+        this.totalRecords = response.totalRecords
       },
       error: err => {
         console.log(err)
@@ -53,11 +77,24 @@ export class ProyectosViewComponent implements OnInit{
 
   }
 
-  mostrarModal(): void {
+  mostrarModal(proyecto?: any): void {
 
-    const dialogRef = this.dialog.open(FormProyectosComponent, {
-      minWidth: '340px'
-    });
+    let dialogRef;
+
+    if(!proyecto){
+
+      dialogRef = this.dialog.open(FormProyectosComponent, {
+        minWidth: '340px'
+      });
+
+    }else{
+
+      dialogRef = this.dialog.open(FormProyectosComponent, {
+        minWidth: '340px',
+        data: proyecto
+      });
+
+    }
 
     dialogRef.afterClosed().subscribe(result => {
         if(result === true) {

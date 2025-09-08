@@ -1,7 +1,7 @@
 import { Component, inject } from '@angular/core';
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
-import { MatDialogRef } from '@angular/material/dialog';
+import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { jwtDecode } from 'jwt-decode';
@@ -27,9 +27,12 @@ export class FormProyectosComponent {
 
   isSubmitting:boolean = false;
 
+  data = inject(MAT_DIALOG_DATA);
+
   formProyectos = new FormGroup({
-    nombre: new FormControl('', [Validators.required, Validators.maxLength(200)]),
-    id_usuario: new FormControl<number|null>(null, [Validators.required])
+    id: new FormControl<number|null>(this.data?.id ?? null),
+    nombre: new FormControl(this.data?.nombre ??'', [Validators.required, Validators.maxLength(200)]),
+    id_usuario: new FormControl<number|null>(this.data?.id_usuario ?? null, [Validators.required])
   })
 
   cerrarModal(flag:boolean): void {
@@ -40,6 +43,8 @@ export class FormProyectosComponent {
 
     this.isSubmitting = true
 
+    console.log(this.data)
+
     if(this.formProyectos.controls['nombre'].valid){
       const token = localStorage.getItem('token')
       if(!token){
@@ -48,21 +53,45 @@ export class FormProyectosComponent {
       }
       const decoded: any = jwtDecode(token)
       this.formProyectos.controls['id_usuario'].setValue(decoded.id)
-      this.proyectoService.crearProyectos(this.formProyectos.value).subscribe({
-        next: () => {
-          this.toastService.success('Se ha creado el proyecto satisfactoriamente', {
-            duration: 3000,
-            position: 'top-right'
-          })
-          this.cerrarModal(true)
-        },
-        error: (err) => {
-          this.toastService.error(err, {
-            duration: 3000,
-            position: 'top-right'
-          })
-        }
-      })
+
+      if(!this.data){
+
+        this.proyectoService.crearProyectos(this.formProyectos.value).subscribe({
+          next: () => {
+            this.toastService.success('Se ha creado el proyecto satisfactoriamente', {
+              duration: 3000,
+              position: 'top-right'
+            })
+            this.cerrarModal(true)
+          },
+          error: (err) => {
+            this.toastService.error(err, {
+              duration: 3000,
+              position: 'top-right'
+            })
+          }
+        })
+
+      }else{
+
+        this.proyectoService.actualizarProyecto(this.formProyectos.value).subscribe({
+          next: () => {
+            this.toastService.success('El proyecto se actualizó correctamente', {
+              duration: 3000,
+              position: 'top-right'
+            })
+            this.cerrarModal(true)
+          },
+          error: (err) => {
+            this.toastService.error(err.message, {
+              duration: 3000,
+              position: 'top-right'
+            })
+            console.error(err)
+          }    
+        })
+
+      }
     }
 
   }

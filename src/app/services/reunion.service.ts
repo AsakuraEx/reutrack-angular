@@ -109,6 +109,17 @@ export class ReunionService {
     return this.http.get(url)
   }
 
+  cancelarReunion(id_reunion: number): Observable<any> {
+    const url = `${this.BaseUrl}/reuniones/cancelar/${id_reunion}`;
+    return this.http.patch(url, {})
+  }
+
+  reactivarReunion(data: any): Observable<any> {
+    const url = `${this.BaseUrl}/reuniones/reactivar`;
+    return this.http.patch(url, data)
+  }
+
+
   // ---------------------------------------------------------------------
   // Responsables
 
