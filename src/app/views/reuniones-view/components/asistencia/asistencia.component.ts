@@ -23,6 +23,7 @@ export class AsistenciaComponent implements OnInit{
   ) {}
 
   @Input() id_reunion!: number;
+  @Input() reunion!: any;
 
   columnasMostradas: string[] = ['nombre', 'dui', 'cargo', 'institucion', 'telefono', 'correo', 'acciones'];
   participantes: any = [ 'algo' ];
@@ -31,6 +32,7 @@ export class AsistenciaComponent implements OnInit{
 
   ngOnInit(): void {
       this.consultarParticipantes(this.id_reunion)
+      console.log(this.reunion)
   }
 
   abrirAsistenciaModal(): void {

@@ -3,10 +3,12 @@
     <div class="flex flex-col md:flex-row justify-between items-center">
         <h1 class="text-2xl font-bold text-purple-700">Personal que asistió a la reunión</h1>
 
-        <button mat-button (click)="abrirAsistenciaModal()">
-            Agregar Asistencia
-            <mat-icon>qr_code</mat-icon>
-        </button>
+        @if(!reunion.reactivado){
+            <button mat-flat-button (click)="abrirAsistenciaModal()">
+                Agregar Asistencia
+                <mat-icon>qr_code</mat-icon>
+            </button>
+        }
     </div>
 
     <div class="overflow-auto">

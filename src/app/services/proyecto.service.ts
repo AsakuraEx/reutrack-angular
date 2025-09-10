@@ -12,6 +12,11 @@ export class ProyectoService {
 
   readonly BaseURL = environment.apiURL;
 
+  obtenerProyecto(id_proyecto: number): Observable<any> {
+    const url = this.BaseURL + '/proyectos/' + id_proyecto;
+    return this.http.get(url)
+  }
+
   obtenerProyectos(estado: any, limit: any, page: number): Observable<any> {
     
     let url = this.BaseURL + '/proyectos?';
@@ -37,6 +42,7 @@ export class ProyectoService {
     let url = this.BaseURL + '/proyectos/update/' + data.id;
     return this.http.patch(url, data)
   }
+
 
 
   // -----------------------------------------------------------------------------------------------------------

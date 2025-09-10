@@ -78,13 +78,13 @@ export class AsistenciaFormComponent {
 
         if (control?.errors) {
           if (control.errors['required']) {
-            mensajes.push(`${field} es requerido`);
+            mensajes.push(`${field === 'doc_identidad' ? 'Número de DUI': field} es requerido`);
           }
           if (control.errors['maxlength']) {
-            mensajes.push(`${field} excede el máximo de caracteres (${control.errors['maxlength'].requiredLength})`);
+            mensajes.push(`${field === 'doc_identidad' ? 'Número de DUI': field} excede el máximo de caracteres (${control.errors['maxlength'].requiredLength})`);
           }
           if (control.errors['email']) {
-            mensajes.push(`${field} no es un correo válido`);
+            mensajes.push(`${field === 'doc_identidad' ? 'Número de DUI': field} no es un correo válido`);
           }
         }
       });

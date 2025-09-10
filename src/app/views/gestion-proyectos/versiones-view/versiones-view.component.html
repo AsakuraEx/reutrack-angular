@@ -1,1 +1,132 @@
-<p>versiones-view works!</p>
+<main class="container mx-auto pt-4">
+
+    <h1 class="text-2xl text-purple-700 font-black">Versiones del proyecto: {{ proyectoActual.nombre }} </h1>
+
+    <div class="text-end w-full mt-8 space-x-2">
+        
+        <button 
+            mat-flat-button
+            (click)="mostrarAgregarVersion()">
+            <mat-icon>add</mat-icon>
+            Agregar versión
+        </button>
+
+        <button 
+            mat-flat-button
+            class="btn-secondary"
+            routerLink="/proyectos"
+            >
+            <mat-icon>list</mat-icon>
+            Listado
+        </button>
+
+    </div>
+
+    <div class="overflow-auto mt-8">
+        
+        <table mat-table [dataSource]="versiones">
+
+            <ng-container matColumnDef="version">
+                <th mat-header-cell *matHeaderCellDef class="text-purple-700">Versión</th>
+                <td mat-cell *matCellDef="let version">
+                    <p class="text-ellipsis">
+                        {{ version.nombre }}
+                    </p>
+                </td>
+            </ng-container>
+
+            <ng-container matColumnDef="estado">
+                <th mat-header-cell *matHeaderCellDef class="text-purple-700">Estado</th>
+                <td mat-cell *matCellDef="let version">
+                    <div 
+                        class="p-1 rounded text-white font-medium w-24 text-center"
+                        [class]="claseEstado(version.estado.nombre)">
+                        {{ version.estado.nombre }}
+                    </div>
+                </td>
+            </ng-container>
+
+            <ng-container matColumnDef="acta">
+                <th mat-header-cell *matHeaderCellDef class="text-purple-700">Acta de Aceptación</th>
+                <td mat-cell *matCellDef="let version">
+
+                    @if(version.acta_aceptacion){
+                        <button mat-icon-button>
+                            <mat-icon>visibility</mat-icon>
+                        </button>
+                    } @else {
+                        <p class="text-ellipsis">
+                            Aún no ha sido aprobado
+                        </p>
+                    }
+
+                </td>
+            </ng-container>
+
+            <ng-container matColumnDef="usuario">
+                <th mat-header-cell *matHeaderCellDef class="text-purple-700 w-80">Usuario que registra</th>
+                <td mat-cell *matCellDef="let version">
+                    <p class="text-ellipsis">
+                        {{ version.usuario['nombre'] }}
+                    </p>
+                </td>
+            </ng-container>
+
+            <ng-container matColumnDef="fecha">
+                <th mat-header-cell *matHeaderCellDef class="text-purple-700 w-56">Fecha de creación</th>
+                <td mat-cell *matCellDef="let version">
+                    <p class="text-ellipsis">
+                        {{ transformarFecha(version.createdAt) }}
+                    </p>
+                </td>
+            </ng-container>
+
+            <ng-container matColumnDef="accion">
+                <th mat-header-cell *matHeaderCellDef class="text-purple-700 w-48">Acciones</th>
+                <td mat-cell *matCellDef="let version">
+
+                    <button 
+                        mat-icon-button
+                        matTooltip="Editar versión"
+                        type="button">
+                        <mat-icon style="color: orange;">edit</mat-icon>
+                    </button>
+                    
+                    <button 
+                        mat-icon-button
+                        matTooltip="Agregar acta de aceptación"
+                        type="button">
+                        <mat-icon style="color: blue;">file_present</mat-icon>
+                    </button>
+
+                    <button 
+                        mat-icon-button
+                        matTooltip="Cancelar versión"
+                        type="button">
+                        <mat-icon style="color: red;">delete</mat-icon>
+                    </button>
+
+                </td>
+            </ng-container>
+
+            <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+            <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+
+            <tr class="mat-row" *matNoDataRow>
+                <td class="mat-cell" colspan="4">
+                    <p class="font-italic py-2 px-4 text-center">
+                        No hay proyectos registrados.
+                    </p>
+                </td>
+            </tr>
+
+        </table>
+
+        <mat-paginator
+            [length]="totalRecords"
+            [pageSize]="pageSize"
+            [pageIndex]="currentPage"
+        ></mat-paginator>
+    </div>
+
+</main>

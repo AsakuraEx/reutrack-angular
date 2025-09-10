@@ -19,13 +19,15 @@ import { MatTooltipModule } from '@angular/material/tooltip';
 import { RouterLink } from '@angular/router';
 import { MatDialog, MatDialogModule } from '@angular/material/dialog';
 import { CancelarReunionModalComponent } from '../../components/cancelar-reunion-modal/cancelar-reunion-modal.component';
+import { ReactivarReunionModalComponent } from '../../components/reactivar-reunion-modal/reactivar-reunion-modal.component';
+import { MatSelectModule } from '@angular/material/select';
 
 @Component({
   selector: 'app-historial-view',
   imports: [
     MatIconModule, MatFormFieldModule, MatInputModule, MatButtonModule, ReactiveFormsModule,
     MatDatepickerModule, MatAutocompleteModule, AsyncPipe, MatPaginatorModule, MatTooltipModule,
-    RouterLink, MatDialogModule
+    RouterLink, MatDialogModule, MatSelectModule
   ],
   providers: [provideNativeDateAdapter()],
   templateUrl: './historial-view.component.html',
@@ -39,7 +41,7 @@ export class HistorialViewComponent implements AfterViewInit {
     private toastService: HotToastService
   ){}
 
-  readonly dialogCancelar = inject(MatDialog)
+  readonly dialog = inject(MatDialog)
 
   reuniones: any = [];
 
@@ -52,7 +54,8 @@ export class HistorialViewComponent implements AfterViewInit {
   formFiltro = new FormGroup({
     proyecto: new FormControl<number|null>(null),
     inicio: new FormControl<Date|null>(null),
-    fin: new FormControl<Date|null>(null)
+    fin: new FormControl<Date|null>(null),
+    estado: new FormControl<number|null>(null)
   })
 
   proyectos: Proyecto[] = [];
@@ -66,7 +69,6 @@ export class HistorialViewComponent implements AfterViewInit {
   @ViewChild(MatPaginator) paginator!: MatPaginator
 
   claseEstado (estado: string): string {
-
     return `${ this.estados[estado] }`
   }
 
@@ -83,7 +85,7 @@ export class HistorialViewComponent implements AfterViewInit {
       })
 
       if(decoded.id_rol && decoded.id){
-        this.obtenerReuniones(decoded.id_rol, decoded.id)
+        this.obtenerReuniones(decoded.id_rol, decoded.id, false)
       }
 
     }
@@ -95,40 +97,7 @@ export class HistorialViewComponent implements AfterViewInit {
     this.currentPage = event.pageIndex;
 
     if(decoded.id_rol && decoded.id){
-      this.obtenerReuniones(decoded.id_rol, decoded.id)
-    }
-
-  }
-
-  obtenerReuniones(id_rol: number, id_usuario: number): void {
-
-    const page = this.currentPage + 1;
-    const proyecto = this.formFiltro.controls['proyecto'].value;
-    const inicio = this.formFiltro.controls['inicio'].value;
-    const fin = this.formFiltro.controls['fin'].value
-
-    if(id_rol != 1){
-
-      this.reunionService.obtenerReuniones(null,this.pageSize, null, proyecto, id_usuario, page, inicio, fin).subscribe({
-        next: response => {
-          this.reuniones = response.data
-          this.totalRecords = response.totalRecords
-          console.log(response.data)
-        },
-        error: err => console.log(err)
-      })
-
-    }else{
-
-      this.reunionService.obtenerReuniones(null,this.pageSize, null, proyecto, null, page, inicio, fin).subscribe({
-        next: response => {
-          this.reuniones = response.data
-          this.totalRecords = response.totalRecords
-          console.log(response.data)
-        },
-        error: err => console.log(err)
-      })
-
+      this.obtenerReuniones(decoded.id_rol, decoded.id, false)
     }
 
   }
@@ -146,6 +115,9 @@ export class HistorialViewComponent implements AfterViewInit {
     })
 
   }
+
+
+  // METODOS NECESARIOS PARA QUE FUNCIONE EL AUTOCOMPLETE -----------------------------------------------------------------------------------
 
   displayProyectoNombre(proyecto: any): string {
     return proyecto && proyecto.nombre ? proyecto.nombre : '';
@@ -171,6 +143,49 @@ export class HistorialViewComponent implements AfterViewInit {
     );
   }
 
+  // ABSTRACCION DE LA LOGICA DE LA LLAMADA AL SERVICE ----------------------------------------------------------------------------------------
+
+  cargarReuniones(page: number, id_usuario?:number|null, id_proyecto?: number|null, inicio?:Date|null, fin?:Date|null, estado?:number|null): void {
+      this.reunionService.obtenerReuniones(estado,this.pageSize, null, id_proyecto, id_usuario, page, inicio, fin).subscribe({
+        next: response => {
+          this.reuniones = response.data
+          this.totalRecords = response.totalRecords
+        },
+        error: err => console.log(err)
+      })
+  }
+
+  // LLAMA AL SERVICE DE ACUERDO AL PRIVILEGIO DEL USUARIO ------------------------------------------------------------------------------------
+
+  obtenerReuniones(id_rol: number, id_usuario: number, pageIndex: boolean): void {
+
+    let page!: number;
+    
+    if(pageIndex){
+      this.currentPage = 0;
+    }
+    
+    page = this.currentPage + 1;
+
+    const proyecto = this.formFiltro.controls['proyecto'].value;
+    const inicio = this.formFiltro.controls['inicio'].value;
+    const fin = this.formFiltro.controls['fin'].value;
+    const estado = this.formFiltro.controls['estado'].value;
+
+    console.log(page)
+
+    if(id_rol != 1){
+      this.cargarReuniones(page, id_usuario, proyecto, inicio, fin, estado);
+
+    }else{
+      this.cargarReuniones(page, null, proyecto, inicio, fin, estado);
+
+    }
+
+  }
+
+  // METODO QUE ACCIONA EL SUBMIT DEL FORMULARIO -------------------------------------------------------------------------------------
+
   onSubmit(): void {
 
     if(this.formFiltro.controls['inicio'].value && !this.formFiltro.controls['fin'].value){
@@ -188,49 +203,47 @@ export class HistorialViewComponent implements AfterViewInit {
 
     }
 
-    const proyecto = this.formFiltro.controls['proyecto'].value;
-    const inicio = this.formFiltro.controls['inicio'].value;
-    const fin = this.formFiltro.controls['fin'].value
-
     const token = localStorage.getItem('token');
     if(token){
       const decoded:any = jwtDecode(token);
-      const page = this.currentPage +1;      
-
-      if(decoded.id === 1){
-
-        this.reunionService.obtenerReuniones(null, this.pageSize, null, proyecto, null, page, inicio, fin).subscribe({
-          next: res => {
-            this.reuniones = res.data
-            this.totalRecords = res.totalRecords
-          },
-          error: err => {
-            console.error(err)
-          }
-        })
-
-      }else {
-
-        this.reunionService.obtenerReuniones(null, 10, this.pageSize, proyecto, decoded.id, page, inicio, fin).subscribe({
-          next: res => {
-            this.reuniones = res.data
-            this.totalRecords = res.totalRecords
-          },
-          error: err => {
-            console.error(err)
-          }
-        })
-
-      }
-
-      console.log(this.formFiltro.value)
+      
+      this.obtenerReuniones(decoded.id_rol, decoded.id, true);
     }
 
   }
 
+  // SE ENCARGA DE MOSTRAR EL MODAL CANCELAR --------------------------------------------------------------------
+
   mostrarModalCancelar(reunion: any): void {
 
-    const dialogRef = this.dialogCancelar.open(CancelarReunionModalComponent, {
+    const dialogRef = this.dialog.open(CancelarReunionModalComponent, {
+      data: reunion,
+      maxWidth: '500px'
+    })
+
+    dialogRef.afterClosed().subscribe(result => {
+      if(result === true){
+
+        const token = localStorage.getItem('token')
+        if(token){
+          const decoded:any = jwtDecode(token);
+
+          if(decoded.id_rol && decoded.id){
+            this.obtenerReuniones(decoded.id_rol, decoded.id, true)
+          }
+
+        }
+
+      }
+    })
+
+  }
+
+  // SE ENCARGA DE MOSTRAR EL BOTÓN REACTIVAR -----------------------------------------------------------------
+
+  mostrarModalReactivar(reunion: any): void {
+
+    const dialogRef = this.dialog.open(ReactivarReunionModalComponent, {
       data: reunion
     })
 
@@ -242,7 +255,7 @@ export class HistorialViewComponent implements AfterViewInit {
           const decoded:any = jwtDecode(token);
 
           if(decoded.id_rol && decoded.id){
-            this.obtenerReuniones(decoded.id_rol, decoded.id)
+            this.obtenerReuniones(decoded.id_rol, decoded.id, true)
           }
 
         }

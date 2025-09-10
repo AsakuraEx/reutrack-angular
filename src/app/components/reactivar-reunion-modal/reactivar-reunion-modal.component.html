@@ -1,1 +1,49 @@
-<p>reactivar-reunion-modal works!</p>
+<div class="w-full h-full bg-purple-50">
+    <div class="p-4">
+        <h3 class="text-purple-700 font-bold text-xl inline-flex items-center gap-2 mb-4">
+            <mat-icon class="flex-shrink-0">info</mat-icon>
+            ¿Realmente deseas reactivar la reunión {{ data.nombre }}?
+        </h3>
+        <p class="text-purple-700 text-justify">
+            Si confirma esta acción la reunión pasará a estado iniciado, puede realizar cambios sin embargo los encargados de la reunión serán tomados como "lectores".
+        </p>
+
+        <form class="mt-4" [formGroup]="formReactivar" (submit)="reactivarReunion()">
+
+            <mat-form-field class="w-full">
+                <mat-label>Justificación</mat-label>
+                <textarea matInput formControlName="justificacion"></textarea>
+            </mat-form-field>
+            @if (formReactivar.controls['justificacion'].hasError('required') && (formReactivar.dirty || formReactivar.touched)) {
+                <p class="text-red-700 pl-4">El campo justificación es requerido.</p>
+            }
+            @if (formReactivar.controls['justificacion'].hasError('minLength') && (formReactivar.dirty || formReactivar.touched)) {
+                <p class="text-red-700 pl-4">El campo justificación requiere al menos 20 caracteres.</p>
+            }
+
+            <div class="text-end space-x-2 mt-4">
+                <button 
+                    mat-flat-button
+                    class="btn-aceptar"
+                    type="submit"
+                    [disabled]="formReactivar.controls['justificacion'].invalid"
+                >
+                    <mat-icon>check</mat-icon>
+                    Si, Reactivar reunión
+                </button>
+    
+                <button 
+                    mat-flat-button
+                    class="btn-cancelar"
+                    (click)="cerrarModal(false)"
+                    type="button"
+                >
+                    <mat-icon>block</mat-icon>
+                    No, cancelar
+                </button>
+            </div>
+        </form>
+
+
+    </div>
+</div>

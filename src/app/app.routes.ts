@@ -33,9 +33,14 @@ export const routes: Routes = [
         loadComponent: () => import('./views/gestion-proyectos/proyectos-view/proyectos-view.component').then(m => m.ProyectosViewComponent),
         canActivate: [AuthGuard]
     },
-        {
+    {
         path: 'versiones/:id_proyecto',
         loadComponent: () => import('./views/gestion-proyectos/versiones-view/versiones-view.component').then(m => m.VersionesViewComponent),
+        canActivate: [AuthGuard]
+    },
+    {
+        path: 'usuarios',
+        loadComponent: () => import('./views/usuario-view/usuario-view.component').then(m => m.UsuarioViewComponent),
         canActivate: [AuthGuard]
     },
 ];

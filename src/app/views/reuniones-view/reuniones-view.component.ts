@@ -15,6 +15,8 @@ import { AngularEditorModule } from '@kolkov/angular-editor';
 import { AngularEditorConfig } from '@kolkov/angular-editor';
 import { FormControl, ReactiveFormsModule, Validators } from '@angular/forms';
 import { HotToastService } from '@ngxpert/hot-toast';
+import { jwtDecode } from 'jwt-decode';
+import { firstValueFrom } from 'rxjs';
 
 @Component({
   selector: 'app-reuniones-view',
@@ -57,7 +59,31 @@ export class ReunionesViewComponent implements OnInit {
   ngOnInit(): void {
    
     this.recuperarReunionActual()
+    
 
+  }
+
+  async validarUsuarioLector(): Promise<boolean> {
+    const token = localStorage.getItem('token');
+    if (!token) return false;
+
+    const decoded: any = jwtDecode(token);
+
+    try {
+      const responsables: any[] = await firstValueFrom(
+        this.reunionService.obtenerResponsablesPorReunion(this.reunionActualDetails.id)
+      );
+
+      if (responsables.length <= 0) return false;
+
+      return responsables.some(
+        responsable => responsable.id_usuario === decoded.id && responsable.visitante
+      );
+
+    } catch (e) {
+      console.error(e);
+      return false;
+    }
   }
 
   recuperarReunionActual(): void {
@@ -73,6 +99,7 @@ export class ReunionesViewComponent implements OnInit {
         this.reunionActualDetails = response;
         this.obtenerInformacionVersion()
         this.consultarDesarrolloDeReunion()
+        console.log(this.reunionActualDetails)
       },
       error: (err) => {
         console.error(err);
@@ -109,7 +136,17 @@ export class ReunionesViewComponent implements OnInit {
 
   }
 
-  guardarReunion(): void {
+  async guardarReunion(): Promise<void> {
+
+    this.validarUsuarioLector();
+    const esLector = await this.validarUsuarioLector();
+    if(esLector){
+      this.toastService.info('Usted ha ingresado como un usuario lector, no tiene permitido realizar cambios',{
+        duration: 3000,
+        position: 'top-right'
+      })
+      return;
+    }
 
     let contador!: number;
 
@@ -170,7 +207,17 @@ export class ReunionesViewComponent implements OnInit {
 
   }
 
-  finalizarReunion(): void {
+  async finalizarReunion(): Promise<void> {
+
+    this.validarUsuarioLector();
+    const esLector = await this.validarUsuarioLector();
+    if(esLector){
+      this.toastService.info('Usted ha ingresado como un usuario lector, no tiene permitido realizar cambios',{
+        duration: 3000,
+        position: 'top-right'
+      })
+      return;
+    }
 
     let contador!: number;
 
@@ -206,7 +253,17 @@ export class ReunionesViewComponent implements OnInit {
     })
   }
 
-  guardarReunionYSalir(): void {
+  async guardarReunionYSalir(): Promise<void> {
+
+    this.validarUsuarioLector();
+    const esLector = await this.validarUsuarioLector();
+    if(esLector){
+      this.toastService.info('Usted ha ingresado como un usuario lector, no tiene permitido realizar cambios',{
+        duration: 3000,
+        position: 'top-right'
+      })
+      return;
+    }
 
     let contador!: number;
 

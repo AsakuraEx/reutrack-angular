@@ -12,7 +12,7 @@
             @if (reuniones.length > 0) {
 
                 @for (reunion of reuniones; track $index) {
-                    <div class="border w-full border-purple-700 p-2 shadow-lg">
+                    <div class="border rounded-lg w-full border-purple-700 p-2 shadow-sm hover:-translate-y-1 hover:shadow-xl transition-all duration-300 ease-in-out">
         
                         <div class="p-2 flex flex-col lg:flex-row">
 
@@ -49,7 +49,7 @@
                                     }
     
                                     <div 
-                                        class="p-1 rounded text-white font-semibold w-24 text-center"
+                                        class="p-1 rounded text-white font-medium w-24 text-center"
                                         [class]="claseEstado(reunion.estado.nombre)">
                                         {{ reunion.estado.nombre }}
                                     </div>
@@ -86,13 +86,14 @@
                                             mat-icon-button 
                                             matTooltip="Reactivar Reunión"
                                             [disabled]="(reunion.estado.nombre !== 'Finalizado' && !reunion.reactivado) || reunion.reactivado"
+                                            (click)="mostrarModalReactivar(reunion)"
                                             class="btn-reactivar">
                                             <mat-icon>sync_arrow</mat-icon>
                                         </button>
                                     }
                                 
                                     <!-- Cancelar Reunión  -->
-                                     @if(reunion.estado.nombre !== 'Cancelado' && reunion.estado.nombre !== 'Finalizado'){
+                                     @if(reunion.estado.nombre !== 'Cancelado' && reunion.estado.nombre !== 'Finalizado' && !reunion.reactivado){
                                          <button 
                                              mat-icon-button 
                                              matTooltip="Cancelar Reunión"
@@ -155,6 +156,15 @@
                                 <mat-option [value]="proyecto">{{ proyecto.nombre }}</mat-option>
                             }
                         </mat-autocomplete>
+                    </mat-form-field>
+
+                    <mat-form-field class="w-full">
+                        <mat-label>Estado</mat-label>
+                        <mat-select formControlName="estado">
+                            <mat-option value="1">Iniciado</mat-option>
+                            <mat-option value="3">Finalizado</mat-option>
+                            <mat-option value="2">Cancelado</mat-option>
+                        </mat-select>                        
                     </mat-form-field>
 
                     <mat-form-field class="w-full">

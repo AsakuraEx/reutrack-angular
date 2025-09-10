@@ -13,10 +13,10 @@
         <ng-container matColumnDef="proyecto">
             <th mat-header-cell *matHeaderCellDef>Proyecto</th>
             <td mat-cell *matCellDef="let reunion">
-                <p class="text-ellipsis text-purple-700 font-semibold">
+                <p class="text-ellipsis text-purple-700 font-medium py-2">
                     {{ reunion.version.proyecto.nombre }}
+                    <span class="text-gray-700 font-medium block">{{ reunion.version.nombre }}</span>
                 </p>
-                <span class="text-gray-700 font-medium">{{ reunion.version.nombre }}</span>
             </td>
         </ng-container>
 

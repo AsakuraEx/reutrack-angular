@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Output } from '@angular/core';
+import { ChangeDetectionStrategy, Component, EventEmitter, Output, signal } from '@angular/core';
 import {MatButtonModule} from '@angular/material/button';
 import {MatInputModule} from '@angular/material/input';
 import {MatFormFieldModule} from '@angular/material/form-field';
@@ -9,15 +9,17 @@ import { ReunionCodeComponent } from "../reunion-code/reunion-code.component";
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { AuthService } from '../../../../services/auth-service.service';
 import { HotToastService } from '@ngxpert/hot-toast';
+import { MatIconModule } from '@angular/material/icon';
 
 @Component({
   selector: 'app-login-form',
   imports: [
     MatButtonModule, MatInputModule, MatFormFieldModule, MatDividerModule, ReunionCodeComponent,
-    ReactiveFormsModule, MatProgressSpinnerModule, MatProgressBarModule
+    ReactiveFormsModule, MatProgressSpinnerModule, MatProgressBarModule, MatIconModule
   ],
   templateUrl: './login-form.component.html',
-  styleUrl: './login-form.component.css'
+  styleUrl: './login-form.component.css',
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class LoginFormComponent {
 
@@ -99,6 +101,12 @@ export class LoginFormComponent {
     this.loginForm.markAsPristine();
     this.loginForm.markAsUntouched();
     this.loginForm.updateValueAndValidity();
+  }
+
+  hide = signal(true);
+  clickEvent(event: MouseEvent) {
+    this.hide.set(!this.hide());
+    event.stopPropagation();
   }
 
 }
