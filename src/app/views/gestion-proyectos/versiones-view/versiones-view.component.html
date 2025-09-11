@@ -29,8 +29,21 @@
             <ng-container matColumnDef="version">
                 <th mat-header-cell *matHeaderCellDef class="text-purple-700">Versión</th>
                 <td mat-cell *matCellDef="let version">
-                    <p class="text-ellipsis">
+                    <p class="text-ellipsis py-2">
                         {{ version.nombre }}
+                    </p>
+                </td>
+            </ng-container>
+
+            <ng-container matColumnDef="descripcion">
+                <th mat-header-cell *matHeaderCellDef class="text-purple-700">Descripción</th>
+                <td mat-cell *matCellDef="let version">
+                    <p class="text-ellipsis py-2">
+                        @if(version.descripcion){
+                            {{ version.descripcion }}
+                        } @else {
+                            <p class="font-light text-gray-700">La descripción no fue especificada</p>
+                        }
                     </p>
                 </td>
             </ng-container>
@@ -55,8 +68,8 @@
                             <mat-icon>visibility</mat-icon>
                         </button>
                     } @else {
-                        <p class="text-ellipsis">
-                            Aún no ha sido aprobado
+                        <p class="text-ellipsis py-2 font-light text-gray-700">
+                            No disponible
                         </p>
                     }
 
@@ -64,7 +77,7 @@
             </ng-container>
 
             <ng-container matColumnDef="usuario">
-                <th mat-header-cell *matHeaderCellDef class="text-purple-700 w-80">Usuario que registra</th>
+                <th mat-header-cell *matHeaderCellDef class="text-purple-700 w-40">Usuario que registra</th>
                 <td mat-cell *matCellDef="let version">
                     <p class="text-ellipsis">
                         {{ version.usuario['nombre'] }}
@@ -73,7 +86,7 @@
             </ng-container>
 
             <ng-container matColumnDef="fecha">
-                <th mat-header-cell *matHeaderCellDef class="text-purple-700 w-56">Fecha de creación</th>
+                <th mat-header-cell *matHeaderCellDef class="text-purple-700 w-40">Fecha de creación</th>
                 <td mat-cell *matCellDef="let version">
                     <p class="text-ellipsis">
                         {{ transformarFecha(version.createdAt) }}
@@ -85,26 +98,30 @@
                 <th mat-header-cell *matHeaderCellDef class="text-purple-700 w-48">Acciones</th>
                 <td mat-cell *matCellDef="let version">
 
-                    <button 
-                        mat-icon-button
-                        matTooltip="Editar versión"
-                        type="button">
-                        <mat-icon style="color: orange;">edit</mat-icon>
-                    </button>
-                    
-                    <button 
-                        mat-icon-button
-                        matTooltip="Agregar acta de aceptación"
-                        type="button">
-                        <mat-icon style="color: blue;">file_present</mat-icon>
-                    </button>
-
-                    <button 
-                        mat-icon-button
-                        matTooltip="Cancelar versión"
-                        type="button">
-                        <mat-icon style="color: red;">delete</mat-icon>
-                    </button>
+                    @if(version.estado.nombre !== 'Cancelado') {
+                        <button 
+                            mat-icon-button
+                            matTooltip="Editar versión"
+                            (click)="mostrarActualizarVersion(version)"
+                            type="button">
+                            <mat-icon style="color: orange;">edit</mat-icon>
+                        </button>
+                        
+                        <button 
+                            mat-icon-button
+                            matTooltip="Agregar acta de aceptación"
+                            type="button">
+                            <mat-icon style="color: blue;">file_present</mat-icon>
+                        </button>
+    
+                        <button 
+                            mat-icon-button
+                            matTooltip="Cancelar versión"
+                            (click)="mostrarCancelarVersion(version)"
+                            type="button">
+                            <mat-icon style="color: red;">delete</mat-icon>
+                        </button>
+                    }
 
                 </td>
             </ng-container>

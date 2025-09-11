@@ -8,6 +8,7 @@ import { MatPaginator, MatPaginatorModule, PageEvent } from '@angular/material/p
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { MatDialog } from '@angular/material/dialog';
 import { AgregarVersionFormComponent } from './agregar-version-form/agregar-version-form.component';
+import { CancelarVersionComponent } from './cancelar-version/cancelar-version.component';
 
 @Component({
   selector: 'app-versiones-view',
@@ -31,7 +32,7 @@ export class VersionesViewComponent implements AfterViewInit{
 
   proyectoActual:any = {}
   versiones: any = [];
-  displayedColumns: string[] = ['version','estado', 'acta', 'usuario', 'fecha', 'accion'];
+  displayedColumns: string[] = ['version', 'descripcion','estado', 'acta', 'usuario', 'fecha', 'accion'];
 
   estados:any = {
     Iniciado: 'bg-yellow-500',
@@ -57,13 +58,39 @@ export class VersionesViewComponent implements AfterViewInit{
   }
 
   mostrarAgregarVersion(): void {
-    const dialogRef = this.dialog.open(AgregarVersionFormComponent);
+    const dialogRef = this.dialog.open(AgregarVersionFormComponent, {
+      data: this.id_proyecto
+    });
 
     dialogRef.afterClosed().subscribe(result=>{
       if(result) {
         this.obtenerProyecto(this.id_proyecto);
       }
     })
+  }
+
+  mostrarActualizarVersion(version: any): void {
+    const dialogRef = this.dialog.open(AgregarVersionFormComponent, {
+      data: version
+    });
+
+    dialogRef.afterClosed().subscribe(result=>{
+      if(result) {
+        this.obtenerProyecto(this.id_proyecto);
+      }
+    }) 
+  }
+
+  mostrarCancelarVersion(version: any): void {
+    const dialogRef = this.dialog.open(CancelarVersionComponent, {
+      data: version
+    });
+
+    dialogRef.afterClosed().subscribe(result=>{
+      if(result) {
+        this.obtenerProyecto(this.id_proyecto);
+      }
+    }) 
   }
 
   onPageEvent(pageEvent: PageEvent, id_proyecto: number): void{
@@ -101,6 +128,7 @@ export class VersionesViewComponent implements AfterViewInit{
       next: resp => {
         this.versiones = resp.data;
         this.totalRecords = resp.totalRecords;
+        console.log(this.versiones)
       },
       error: e => {
         console.error(e)

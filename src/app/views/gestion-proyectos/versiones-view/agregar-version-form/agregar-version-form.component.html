@@ -1,1 +1,39 @@
-<p>agregar-version-form works!</p>
+<div class="p-4">
+    <h1 class="text-xl font-bold text-purple-700">
+        @if(data.id){
+            Actualiza la versión del proyecto
+        }
+        @else {
+            Agrega una nueva versión del proyecto
+        }
+    </h1>
+
+    <form class="mt-4" [formGroup]="formVersion" (submit)="onSubmit()">
+
+        <mat-form-field class="w-full">
+            <mat-label>Nombre de la versión</mat-label>
+            <input type="text" matInput formControlName="nombre">
+        </mat-form-field>
+
+        <mat-form-field class="w-full">
+            <mat-label>Descripción de la versión</mat-label>
+            <textarea matInput formControlName="descripcion"></textarea>
+        </mat-form-field>
+
+        <div class="space-x-2 text-end">
+            <button mat-flat-button type="submit" [disabled]="formVersion.controls['nombre'].hasError('required')">
+                @if(data.id){
+                    Actualizar
+                } @else {
+                    Agregar
+                }
+            </button>
+
+            <button class="btn-secondary" mat-flat-button type="button" (click)="cerrarModal(false)">
+                Cancelar
+            </button>
+        </div>
+
+    </form>
+
+</div>

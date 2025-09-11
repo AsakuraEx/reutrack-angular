@@ -70,5 +70,17 @@ export class ProyectoService {
     return this.http.get(`${this.BaseURL}/versiones/version/${id_version}`);
   }
 
+  crearVersion(data:any): Observable<any>{
+    return this.http.post(this.BaseURL + '/versiones/create', data)
+  }
+
+  actualizarVersion(data:any){
+    const url = this.BaseURL + '/versiones/update/' + data.id;
+    return this.http.patch(url, data);
+  }
+
+  cancelarVersion(id_version: number) {
+    return this.http.patch(`${this.BaseURL}/versiones/cancelar/${id_version}`, { estado: 'Cancelado' });
+  }
 
 }
