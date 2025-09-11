@@ -1,0 +1,91 @@
+<div class="mt-6 overflow-auto">
+
+    <mat-form-field class="w-full">
+        <mat-label>Buscar</mat-label>
+        <input matInput (keyup)="applyFilter($event)" placeholder="Busca por cualquier campo de la tabla..." #input>
+    </mat-form-field>
+
+    <table mat-table [dataSource]="dataSource">
+
+        <ng-container matColumnDef="nombre">
+            <th mat-header-cell *matHeaderCellDef class="text-purple-700">Nombre de usuario</th>
+            <td mat-cell *matCellDef="let usuario">
+                <p class="text-ellipsis">
+                    {{ usuario.nombre }}
+                </p>
+            </td>
+        </ng-container>
+
+        <ng-container matColumnDef="email">
+            <th mat-header-cell *matHeaderCellDef class="text-purple-700">Correo Electrónico</th>
+            <td mat-cell *matCellDef="let usuario">
+                <p class="text-ellipsis">
+                    {{ usuario.email }}
+                </p>
+            </td>
+        </ng-container>
+
+        <ng-container matColumnDef="rol">
+            <th mat-header-cell *matHeaderCellDef class="text-purple-700 w-56">Rol de usuario</th>
+            <td mat-cell *matCellDef="let usuario">
+                <p class="text-ellipsis">
+                    @if(usuario.id_rol === 1){
+                        Administrador
+                    } @else {
+                        Estandar
+                    }
+                </p>
+            </td>
+        </ng-container>
+
+        <ng-container matColumnDef="estado">
+            <th mat-header-cell *matHeaderCellDef class="text-purple-700 w-56">Estado</th>
+            <td mat-cell *matCellDef="let usuario">
+                <button
+                    [class]="usuario.id_estado === 4 ? 'bg-green-50 border-green-700 text-green-700 hover:bg-green-200':'bg-red-50 border-red-700 text-red-700 hover:bg-red-200'" 
+                    class="font-medium rounded border px-3 py-1 cursor-pointer transition-colors duration-150 ease-in w-20"
+                    (click)="cambiarEstado(usuario)">
+                    @if(usuario.id_estado === 4){
+                        Activo
+                    } @else {
+                        Inactivo
+                    }
+                </button>
+            </td>
+        </ng-container>
+
+        <ng-container matColumnDef="acciones">
+            <th mat-header-cell *matHeaderCellDef class="text-purple-700 w-32">Acciones</th>
+            <td mat-cell *matCellDef="let usuario">
+
+                <button 
+                    mat-icon-button
+                    matTooltip="Editar proyecto"
+                    type="button"
+                    (click)="mostrarEditarUsuario(usuario)">
+                    <mat-icon style="color: orange;">edit</mat-icon>
+                </button>
+
+            </td>
+        </ng-container>
+
+        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+        <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+
+        <tr class="mat-row" *matNoDataRow>
+            <td class="mat-cell" colspan="5">
+                <p class="font-italic py-4 px-4 text-center">
+                    No hay usuarios registrados.
+                </p>
+            </td>
+        </tr>
+
+    </table>
+
+    <mat-paginator 
+        [length]="totalRegistros"
+        [pageSize]="9"
+        aria-label="Select page">
+    </mat-paginator>
+
+</div>

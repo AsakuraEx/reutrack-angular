@@ -1,0 +1,76 @@
+<div class="p-4">
+
+    <h1 class="text-xl text-purple-700 font-bold">
+        @if(data){
+            Actualizar un usuario existente
+        } @else {
+            Agregar un nuevo usuario
+        }
+    </h1>
+
+    <form class="mt-6 w-full" [formGroup]="formUsuario" (submit)="onSubmit()">
+
+        @if(formUsuario.controls['nombre'].hasError('required') && (formUsuario.controls['nombre'].touched || formUsuario.controls['nombre'].dirty)){
+            <mat-error>
+                El nombre de usuario es requerido
+            </mat-error>
+        }
+        <mat-form-field class="w-full">
+            <mat-label>Nombre de usuario</mat-label>
+            <input type="text" matInput formControlName="nombre">
+        </mat-form-field>
+
+        @if(formUsuario.controls['email'].hasError('required') && (formUsuario.controls['email'].touched || formUsuario.controls['email'].dirty)){
+            <mat-error>
+                El correo electrónico es requerido
+            </mat-error>
+        }
+        @if(formUsuario.controls['email'].hasError('email') && (formUsuario.controls['email'].touched || formUsuario.controls['email'].dirty)){
+            <mat-error>
+                Debe ingresar un correo electrónico válido
+            </mat-error>
+        }
+        <mat-form-field class="w-full">
+            <mat-label>Correo electrónico</mat-label>
+            <input type="text" matInput formControlName="email">
+        </mat-form-field>
+
+        <div class="flex flex-col gap-1 mb-4">
+
+            <button mat-button type="button" (click)="generarContrasenaTemporal()">
+                <mat-icon>key</mat-icon>
+                Generar contraseña temporal
+            </button>
+
+            <div class="text-center bg-purple-100 py-2">
+                <p class="font-medium">
+                    Contraseña temporal:                
+                </p>
+                @if(formUsuario.controls['password'].value){
+                    <p class="text-purple-700 font-black text-lg py-2">
+                        {{formUsuario.controls['password'].value}}
+                    </p>
+                } @else {
+                    <p class="text-gray-700 font-normal py-2">
+                        No Definida
+                    </p>
+                }
+            </div>
+
+        </div>
+
+        <div class="text-end space-x-2">
+            <button mat-flat-button type="submit">
+                @if(data){
+                    Actualizar
+                } @else {
+                    Agregar
+                }
+            </button>
+            <button mat-flat-button type="button" class="btn-secondary" (click)="cerrarModal(false)">
+                Cancelar
+            </button>
+        </div>
+    </form>
+
+</div>

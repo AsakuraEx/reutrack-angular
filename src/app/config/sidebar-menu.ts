@@ -17,7 +17,7 @@ export const options = [
         opciones: [
             {
                 path: '/reportes/reactivados',
-                name: 'Proyectos reactivados',
+                name: 'Reuniones reactivadas',
             },
             {
                 path: '/reportes/eliminados',

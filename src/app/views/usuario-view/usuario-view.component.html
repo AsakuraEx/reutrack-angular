@@ -1,1 +1,18 @@
-<p>usuario-view works!</p>
+<div class="container mx-auto pt-4">
+
+    <h1 class="text-purple-700 text-2xl font-bold">Usuarios del sistema</h1>
+
+    <div class="text-end">
+        <button mat-flat-button (click)="mostrarAgregarForm()">
+            <mat-icon>add</mat-icon>
+            Agregar nuevo usuario
+        </button>
+    </div>
+
+    <app-tabla-usuarios 
+        [usuarios]="usuarios" 
+        [totalRegistros]="totalRegistros"
+        (actualizarUsuarios)="actualizarUsuarios()">
+    </app-tabla-usuarios>
+
+</div>

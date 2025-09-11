@@ -31,4 +31,22 @@ export class UsuarioService {
     return this.http.get(url);
 
   }
+
+  cambiarEstado(id_usuario:number, id_estado:number): Observable<any> {
+    
+    if(id_estado === 4){
+      return this.http.patch(`${this.BaseUrl}/usuarios/updateStatus`, {id: id_usuario, id_estado: 5});
+    }else{
+      return this.http.patch(`${this.BaseUrl}/usuarios/updateStatus`, {id: id_usuario, id_estado: 4});
+    }
+
+  }
+
+  crearUsuario(data: any): Observable<any> {
+    return this.http.post(this.BaseUrl+'/usuarios/create', data);
+  }
+
+  actualizarUsuario(data: any): Observable<any> {
+    return this.http.patch(this.BaseUrl+'/usuarios/'+data.id, data);
+  }
 }
