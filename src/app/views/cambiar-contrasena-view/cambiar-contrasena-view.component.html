@@ -1,0 +1,74 @@
+<div class="container mx-auto">
+    
+    <div class="flex flex-col items-center gap-3 px-4 lg:px-0">
+        <div class="bg-sky-100 p-4 max-w-full shadow-sm border-l-3 border-sky-700">
+            <div class="flex items-center gap-2 text-sky-700 text-xl font-medium">
+                <mat-icon>info</mat-icon>
+                <span>Atención</span>
+            </div>
+            <p class="text-sky-700">
+                Para realizar el cambio de su contraseña debe ingresar la contraseña actual en el primer campo, en el segundo campo deberá ingresar una nueva contraseña; esta debe poseer al menos
+                una mayuscula, una minuscula, un número, un caracter especial y 8 caracteres de longitud mínima. Debe repetir la nueva contraseña en el tercer campo.<br>
+                <span class="font-medium">Si es su primer inicio de sesión en la aplicación</span> deberá cambiar de forma obligatoria la contraseña temporal.
+            </p>
+        </div>
+    
+        <div class="bg-white border-gray-200 border w-full lg:w-96 rounded shadow-md p-4">
+        
+            <form [formGroup]="formContrasena" (submit)="onSubmit()">
+
+                @if(formContrasena.controls['old'].hasError('required') && formContrasena.controls['old'].touched){
+                    <p class="text-red-700">La contraseña actual es requerida.</p>
+                }
+
+                <mat-form-field class="w-full">
+                    <mat-label>Contraseña actual</mat-label>
+                    <input matInput formControlName="old" [type]="hideOld() ? 'password' : 'text'">
+                    <button mat-icon-button matSuffix type="button"
+                            (click)="toggle('old', $event)">
+                        <mat-icon>{{ hideOld() ? 'visibility_off' : 'visibility' }}</mat-icon>
+                    </button>
+                </mat-form-field>
+        
+                @if(formContrasena.controls['new'].hasError('required') && formContrasena.controls['new'].touched){
+                    <p class="text-red-700">La nueva es requerida.</p>
+                }
+                @if(formContrasena.controls['new'].hasError('minlength') && formContrasena.controls['new'].touched){
+                    <p class="text-red-700">La contraseña requiere al menos 8 cracteres.</p>
+                }
+                @if(formContrasena.controls['new'].hasError('pattern') && formContrasena.controls['new'].touched){
+                    <p class="text-red-700">La contraseña no cumple los requisitos.</p>
+                }
+                <mat-form-field class="w-full">
+                    <mat-label>Nueva contraseña</mat-label>
+                    <input matInput formControlName="new" [type]="hideNew() ? 'password' : 'text'">
+                    <button mat-icon-button matSuffix type="button"
+                            (click)="toggle('new', $event)">
+                        <mat-icon>{{ hideNew() ? 'visibility_off' : 'visibility' }}</mat-icon>
+                    </button>
+                </mat-form-field>
+        
+                @if(formContrasena.hasError('passwordMismatch') && formContrasena.get('new2')?.touched) {
+                    <mat-error>Las contraseñas no coinciden.</mat-error>
+                }
+                @if(formContrasena.controls['new2'].hasError('required') && formContrasena.controls['new2'].touched){
+                    <p class="text-red-700">La confirmación de la nueva contraseña es requerida.</p>
+                }
+                <mat-form-field class="w-full">
+                    <mat-label>Confirmar contraseña</mat-label>
+                    <input matInput formControlName="new2" [type]="hideNew2() ? 'password' : 'text'">
+                    <button mat-icon-button matSuffix type="button"
+                            (click)="toggle('new2', $event)">
+                        <mat-icon>{{ hideNew2() ? 'visibility_off' : 'visibility' }}</mat-icon>
+                    </button>
+                </mat-form-field>
+
+        
+                <button mat-flat-button class="w-full">
+                    Aplicar cambio de contraseña
+                </button>
+            </form>
+        
+        </div>
+    </div>
+</div>

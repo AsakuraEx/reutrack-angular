@@ -1,69 +1,86 @@
   <div class="bg-purple-100 h-[100dvh] border-r border-purple-300 overflow-y-hidden py-16">
 
     <div class="flex flex-col justify-between h-full">
-      <div class="flex flex-col justify-center">
-        
-        @for(option of menuOptions; track $index){
-  
-          @if(option.desplegable){
-  
-            <div 
-              [id]="option.id" 
-              class="w-full text-center max-h-9 overflow-hidden transition-all duration-300 ease-in"
-              (click)="toggleDropDown(option.id)"
-            >
-  
-              <div class="flex justify-start items-center py-2 px-4 hover:bg-purple-200 rounded-full cursor-pointer gap-2">
-                <mat-icon 
-                  style="color: #7D00FA; font-size: 18px; height: auto;">
-                  {{ option.icon }}
-                </mat-icon>
-                <h1 class="text-[#7D00FA] text-sm font-medium">{{ option.name }}</h1>
-                <mat-icon 
-                  style="color: #7D00FA; font-size: 18px; height: auto;">
-                  keyboard_arrow_down
-                </mat-icon>
+
+      @if(usuario.first_session === 2){
+        <div class="flex flex-col justify-center">
+          
+          @for(option of menuOptions; track $index){
+    
+            @if(option.desplegable){
+    
+              <div 
+                [id]="option.id" 
+                class="w-full text-center max-h-9 overflow-hidden transition-all duration-300 ease-in"
+                (click)="toggleDropDown(option.id)"
+              >
+    
+                <div class="flex justify-start items-center py-2 px-4 hover:bg-purple-200 rounded-full cursor-pointer gap-2">
+                  <mat-icon 
+                    style="color: #7D00FA; font-size: 18px; height: auto;">
+                    {{ option.icon }}
+                  </mat-icon>
+                  <h1 class="text-[#7D00FA] text-sm font-medium">{{ option.name }}</h1>
+                  <mat-icon 
+                    style="color: #7D00FA; font-size: 18px; height: auto;">
+                    keyboard_arrow_down
+                  </mat-icon>
+                </div>
+    
+                <div class="w-full rounded py-2 px-8">
+                  @for(item of option.opciones; track item){
+
+                    @for(permiso of item.permiso; track $index){
+
+                      @if(permiso === usuario.id_rol){
+                        <button mat-button 
+                          routerLink="{{ item.path }}" 
+                          routerLinkActive="active" 
+                          [routerLinkActiveOptions]="{ exact: true }" 
+                          ariaCurrentWhenActive="page"
+                          class="w-full btn-tertiary"
+                        >
+                          <!-- <mat-icon>{{ item.icon }}</mat-icon> -->
+                          {{ item.name }}
+                        </button>
+                      }
+                    }
+                  }
+                </div>
+                  
+    
               </div>
-  
-              <div class="w-full rounded py-2 px-8">
-                @for(item of option.opciones; track item){
+    
+            }
+            @else{
+
+              @for(permiso of option.permiso; track $index){
+
+                @if(permiso === usuario.id_rol){
                   <button mat-button 
-                    routerLink="{{ item.path }}" 
+                    routerLink="{{ option.path }}" 
                     routerLinkActive="active" 
                     [routerLinkActiveOptions]="{ exact: true }" 
                     ariaCurrentWhenActive="page"
-                    class="w-full btn-tertiary"
                   >
-                    <!-- <mat-icon>{{ item.icon }}</mat-icon> -->
-                    {{ item.name }}
+                    <mat-icon>{{ option.icon }}</mat-icon>
+                    {{ option.name }}
                   </button>
                 }
-              </div>
-  
-            </div>
-  
+              }
+            }
+    
           }
-          @else{
-            <button mat-button 
-              routerLink="{{ option.path }}" 
-              routerLinkActive="active" 
-              [routerLinkActiveOptions]="{ exact: true }" 
-              ariaCurrentWhenActive="page"
-            >
-              <mat-icon>{{ option.icon }}</mat-icon>
-              {{ option.name }}
-            </button>
-          }
+    
+        </div>
   
-        }
-  
-      </div>
+        <div class="text-center">
+          <button mat-raised-button (click)="openDialog()">
+            <mat-icon>add</mat-icon>
+            Iniciar nueva reunión
+          </button>
+        </div>
+      }
 
-      <div class="text-center">
-        <button mat-raised-button (click)="openDialog()">
-          <mat-icon>add</mat-icon>
-          Iniciar nueva reunión
-        </button>
-      </div>
     </div>
   </div>

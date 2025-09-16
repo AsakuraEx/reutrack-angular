@@ -68,7 +68,11 @@ export class PuntosComponent implements OnInit{
     if(this.puntosForm.valid){
       this.reunionService.agregarPuntos(this.puntosForm.value).subscribe({
         next: ()=>{
-          this.obtenerPuntosDeReunion()
+          this.obtenerPuntosDeReunion();
+          this.toastService.success('El punto de la reunión se agregó correctamente', {
+            duration: 2000,
+            position: 'top-right'
+          })
           this.puntosForm.markAsPristine();
           this.puntosForm.markAsUntouched();
           this.puntosForm.reset()

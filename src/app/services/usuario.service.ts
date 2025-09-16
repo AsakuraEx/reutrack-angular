@@ -49,4 +49,14 @@ export class UsuarioService {
   actualizarUsuario(data: any): Observable<any> {
     return this.http.patch(this.BaseUrl+'/usuarios/'+data.id, data);
   }
+
+  actualizarContraseña(data: any): Observable<any>{
+    const url = this.BaseUrl + '/usuarios/updatepassword';
+    return this.http.patch(url, {
+      id_usuario: data.id_usuario,
+      oldpassword: data.old,
+      password: data.new,
+      first_session: data.sesion
+    })
+  }
 }

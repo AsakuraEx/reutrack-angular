@@ -23,4 +23,5 @@ export class AuthService {
   cerrarSesion(id: number): Observable<any> {
     return this.http.post(this.url+'/logout', {id})
   }
+
 }
