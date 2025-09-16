@@ -32,12 +32,11 @@ export class AsistenciaComponent implements OnInit{
 
   ngOnInit(): void {
       this.consultarParticipantes(this.id_reunion)
-      console.log(this.reunion)
   }
 
   abrirAsistenciaModal(): void {
     const dialogRef = this.dialog.open(AsistenciaFormComponent, {
-      data: { id_reunion: this.id_reunion }
+      data: this.reunion
     });
 
     dialogRef.afterClosed().subscribe(result => {

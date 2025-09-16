@@ -2,6 +2,7 @@ import { Routes } from '@angular/router';
 import { AuthGuard } from './guards/auth.guard';
 import { LoginGuard } from './guards/login.guard';
 import { primerInicioGuard } from './guards/primer-inicio.guard';
+import { reunionActivaGuard } from './guards/reunion-activa.guard';
 
 export const routes: Routes = [
     {
@@ -48,5 +49,20 @@ export const routes: Routes = [
         path: 'cambiar-contrasena',
         loadComponent: () => import('./views/cambiar-contrasena-view/cambiar-contrasena-view.component').then(m => m.CambiarContrasenaViewComponent),
         canActivate: [AuthGuard]
-    }
+    },
+    {
+        path: 'reportes/reuniones-reactivadas',
+        loadComponent: () => import('./views/reportes-view/reuniones-reactivadas/reuniones-reactivadas.component').then(m => m.ReunionesReactivadasComponent),
+        canActivate: [AuthGuard]
+    },
+    {
+        path: 'reportes/proyectos-eliminados',
+        loadComponent: () => import('./views/reportes-view/proyectos-eliminados/proyectos-eliminados.component').then(m => m.ProyectosEliminadosComponent),
+        canActivate: [AuthGuard]
+    },
+    {
+        path: 'reunion/asistencia/:codigo_reunion',
+        loadComponent: () => import('./views/asistencia-view/asistencia-view.component').then(m => m.AsistenciaViewComponent),
+        canActivate: [reunionActivaGuard]
+    },
 ];

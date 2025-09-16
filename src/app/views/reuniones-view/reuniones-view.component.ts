@@ -99,7 +99,6 @@ export class ReunionesViewComponent implements OnInit {
         this.reunionActualDetails = response;
         this.obtenerInformacionVersion()
         this.consultarDesarrolloDeReunion()
-        console.log(this.reunionActualDetails)
       },
       error: (err) => {
         console.error(err);

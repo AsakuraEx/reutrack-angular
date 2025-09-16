@@ -7,11 +7,13 @@ import { MatInputModule } from '@angular/material/input';
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { ReunionService } from '../../../../services/reunion.service';
 import { HotToastService } from '@ngxpert/hot-toast';
+import { QRCodeComponent } from 'angularx-qrcode';
+import { environment } from '../../../../../environments/environment';
 
 @Component({
   selector: 'app-asistencia-form',
   imports: [
-    MatSlideToggleModule, ReactiveFormsModule, MatFormFieldModule, MatInputModule, MatButtonModule
+    MatSlideToggleModule, ReactiveFormsModule, MatFormFieldModule, MatInputModule, MatButtonModule, QRCodeComponent
   ],
   templateUrl: './asistencia-form.component.html',
   styleUrl: './asistencia-form.component.css'
@@ -26,6 +28,8 @@ export class AsistenciaFormComponent {
   readonly data = inject(MAT_DIALOG_DATA)
   readonly dialogRef = inject(MatDialogRef<AsistenciaFormComponent>)
 
+  readonly urlAsistencia = environment.appURL + '/reunion/asistencia/' + this.data.codigo
+
   registro_manual = new FormControl(false);
   participante_extranjero = new FormControl(false);
 
@@ -36,7 +40,7 @@ export class AsistenciaFormComponent {
     doc_identidad: new FormControl('', [Validators.required,Validators.maxLength(20)]),
     telefono: new FormControl('', [Validators.required,Validators.maxLength(9)]),
     correo: new FormControl('', [Validators.required,Validators.maxLength(100), Validators.email]),
-    id_reunion: new FormControl(this.data.id_reunion, [Validators.required])
+    id_reunion: new FormControl(this.data.id, [Validators.required])
   })
 
   AgregarValidador() :void {

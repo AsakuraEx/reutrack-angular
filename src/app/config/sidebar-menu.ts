@@ -19,12 +19,12 @@ export const options = [
         permiso: [1,2],
         opciones: [
             {
-                path: '/reportes/reactivados',
+                path: 'reportes/reuniones-reactivadas',
                 name: 'Reuniones reactivadas',
                 permiso: [1,2]
             },
             {
-                path: '/reportes/eliminados',
+                path: 'reportes/proyectos-eliminados',
                 name: 'Proyectos eliminados',
                 permiso: [1]    
             },

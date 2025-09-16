@@ -9,7 +9,6 @@ export const primerInicioGuard: CanActivateFn = (route, state) => {
 
   if(token) {
     const decoded:any = jwtDecode(token);
-    console.log(decoded)
 
     if(decoded.first_session === 1){
       router.navigate(['/cambiar-contrasena'])
