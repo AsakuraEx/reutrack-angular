@@ -125,8 +125,10 @@ export class ReunionesViewComponent implements OnInit {
 
     this.reunionService.consultarMinutaReunion(this.reunionActualDetails.id).subscribe({
       next: resp => {
-        this.minutaReunion = resp[0].minuta
-        this.contenido.setValue(this.minutaReunion);
+        if(resp.length > 0) {
+          this.minutaReunion = resp[0].minuta
+        }
+        this.contenido.setValue(this.minutaReunion || '');
       },
       error: err => {
         console.log(err)

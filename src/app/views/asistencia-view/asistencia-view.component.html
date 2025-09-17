@@ -1,1 +1,66 @@
-<p>asistencia-view works!</p>
+<div class="container mx-auto px-4 lg:px-0">
+
+    <h1 class="mt-6 text-xl text-center font-medium text-purple-700">Formulario de registro de asistencia</h1>
+    <h2 class="text-xl font-medium text-purple-700 text-center">Reunion con codigo: {{ codigo }}</h2>
+
+
+    <div class="max-w-96 mx-auto mt-6 bg-white p-4 rounded shadow-lg">
+
+        <mat-slide-toggle
+            class="mb-4" 
+            [formControl]="participante_extranjero"
+            (change)="AgregarValidador()">
+            ¿El participante es extranjero?
+        </mat-slide-toggle>
+
+        <form [formGroup]="formAsistencia" (submit)="onSubmit()">
+            <mat-form-field class="w-full">
+                <mat-label>Nombre completo</mat-label>
+                <input type="text" matInput formControlName="participante">
+            </mat-form-field>
+
+            <mat-form-field class="w-full">
+                <mat-label>Institucion</mat-label>
+                <input type="text" matInput formControlName="institucion">
+            </mat-form-field>
+
+            <mat-form-field class="w-full">
+                <mat-label>Cargo</mat-label>
+                <input type="text" matInput formControlName="cargo">
+            </mat-form-field>
+
+            @if(!participante_extranjero.value){                
+                <mat-form-field class="w-full">
+                    <mat-label>Numero de DUI</mat-label>
+                    <input type="text" matInput formControlName="doc_identidad">
+                </mat-form-field>
+    
+                <mat-form-field class="w-full">
+                    <mat-label>Telefono</mat-label>
+                    <input type="text" matInput formControlName="telefono">
+                </mat-form-field>
+            }
+
+            <mat-form-field class="w-full">
+                <mat-label>Correo electronico</mat-label>
+                <input type="text" matInput formControlName="correo">
+            </mat-form-field>
+
+            <div class="space-y-2">
+                <button mat-flat-button type="submit" class="w-full">
+                    Registrar mi asistencia
+                </button>
+    
+                <button 
+                    mat-flat-button 
+                    type="button" 
+                    class="w-full btn-secondary"
+                    routerLink="/login">
+                    Cancelar
+                </button>
+            </div>
+
+        </form>
+    </div>
+
+</div>

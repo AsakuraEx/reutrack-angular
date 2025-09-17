@@ -41,7 +41,7 @@ export class CambiarContrasenaViewComponent {
       validators: [Validators.required, Validators.minLength(8), Validators.pattern(/^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[!@#$%^&*()_+\-{}\[\]:;<>,.?/~]).{8,}$/)],
       updateOn: 'blur'
     }),
-    sesion: new FormControl(2)
+    sesion: new FormControl(2, [Validators.required])
   }, { validators: passwordMatchValidator});
 
   hideOld = signal(true);
@@ -65,7 +65,8 @@ export class CambiarContrasenaViewComponent {
 
   cambiarContrasena(data: any): void {
     this.usuarioService.actualizarContraseña(data).subscribe({
-      next: ()=>{
+      next: response =>{
+        console.log(response)
         this.toastService.success('La contraseña se ha actualizado, por favor ingresa sesión nuevamente.', {
           duration: 5000,
           position: 'top-right'
@@ -103,6 +104,7 @@ export class CambiarContrasenaViewComponent {
 
     const decoded: any = jwtDecode(token)
     this.formContrasena.controls['id_usuario'].setValue(decoded.id);
+    this.formContrasena.controls['sesion'].setValue(decoded.first_session);
 
     if(this.formContrasena.valid){
       this.cambiarContrasena(this.formContrasena.value);
