@@ -5,6 +5,8 @@ import { routes } from './app.routes';
 import { provideHttpClient, withInterceptors } from '@angular/common/http';
 import { provideHotToastConfig } from '@ngxpert/hot-toast';
 import { Interceptor } from './services/interceptor';
+import { MatPaginatorIntl } from '@angular/material/paginator';
+import { getSpanishPaginatorIntl } from './config/spanish-paginator-intl';
 
 export const appConfig: ApplicationConfig = {
   providers: [
@@ -13,6 +15,7 @@ export const appConfig: ApplicationConfig = {
     provideHttpClient(
       withInterceptors([ Interceptor ])
     ),
-    provideHotToastConfig()
+    provideHotToastConfig(),
+    { provide: MatPaginatorIntl, useValue: getSpanishPaginatorIntl() }
   ]
 };

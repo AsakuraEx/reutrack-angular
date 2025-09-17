@@ -3,12 +3,15 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { MatTableModule } from '@angular/material/table';
 import { ProyectoService } from '../../../services/proyecto.service';
-import { ActivatedRoute, RouterLink } from '@angular/router';
+import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { MatPaginator, MatPaginatorModule, PageEvent } from '@angular/material/paginator';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { MatDialog } from '@angular/material/dialog';
 import { AgregarVersionFormComponent } from './agregar-version-form/agregar-version-form.component';
 import { CancelarVersionComponent } from './cancelar-version/cancelar-version.component';
+import { ActaAceptacionService } from '../../../services/acta-aceptacion.service';
+import { CrearActaAceptacionComponent } from '../../acta-aceptacion-view/components/crear-acta-aceptacion/crear-acta-aceptacion.component';
+import { jwtDecode } from 'jwt-decode';
 
 @Component({
   selector: 'app-versiones-view',
@@ -22,8 +25,10 @@ import { CancelarVersionComponent } from './cancelar-version/cancelar-version.co
 export class VersionesViewComponent implements AfterViewInit{
 
   constructor(
+    private router: Router,
+    private route: ActivatedRoute,
     private proyectoService: ProyectoService,
-    private route: ActivatedRoute
+    private actaAceptacionService: ActaAceptacionService
   ){}
 
   readonly dialog = inject(MatDialog)
@@ -151,6 +156,32 @@ export class VersionesViewComponent implements AfterViewInit{
       });
 
       return fechaFormateada
+  }
+
+  mostrarActaAceptacion(id_version:number): void {
+
+    this.actaAceptacionService.obtenerActaPorVersion(id_version).subscribe({
+      next: res => {
+        this.router.navigate(['/versiones/acta-aceptacion/' + res.id])
+      },
+      error: e => {
+        if(e.status === 404){
+          const token = localStorage.getItem('token')
+          if(!token) return;
+          const decoded: any = jwtDecode(token);
+          this.dialog.open(CrearActaAceptacionComponent, {
+            data: {
+              id_version: id_version,
+              id_usuario: decoded.id,
+              id_estado: 6
+            }
+          })
+
+        }
+      }
+    })
+
+
   }
 
 }

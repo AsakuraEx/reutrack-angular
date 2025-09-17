@@ -1,0 +1,15 @@
+.btn-aceptar {
+  background-color: #B91C1C; /* purple-500 */
+  color: white;
+}
+
+.btn-aceptar:hover {
+  background-color: #991B1B; /* purple-600 */
+  transition: background-color 150ms ease-in;
+}
+
+.btn-aceptar:disabled {
+  background-color: #D8CFE4; /* gris claro */
+  color: #918A98;            /* texto gris */
+  cursor: not-allowed;
+}

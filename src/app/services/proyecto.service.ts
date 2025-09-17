@@ -43,6 +43,13 @@ export class ProyectoService {
     return this.http.patch(url, data)
   }
 
+  eliminarProyecto(data:any): Observable<any> {
+    let url = this.BaseURL + '/proyectos/delete';
+    console.log(data)
+    return this.http.delete(url, {
+      body: data
+    })
+  }
 
 
   // -----------------------------------------------------------------------------------------------------------

@@ -41,6 +41,11 @@ export const routes: Routes = [
         canActivate: [AuthGuard, primerInicioGuard]
     },
     {
+        path: 'versiones/acta-aceptacion/:id_acta',
+        loadComponent: () => import('./views/acta-aceptacion-view/acta-aceptacion-view.component').then(m => m.ActaAceptacionViewComponent),
+        canActivate: [AuthGuard, primerInicioGuard]
+    },
+    {
         path: 'usuarios',
         loadComponent: () => import('./views/usuario-view/usuario-view.component').then(m => m.UsuarioViewComponent),
         canActivate: [AuthGuard, primerInicioGuard]
@@ -53,12 +58,12 @@ export const routes: Routes = [
     {
         path: 'reportes/reuniones-reactivadas',
         loadComponent: () => import('./views/reportes-view/reuniones-reactivadas/reuniones-reactivadas.component').then(m => m.ReunionesReactivadasComponent),
-        canActivate: [AuthGuard]
+        canActivate: [AuthGuard, primerInicioGuard]
     },
     {
         path: 'reportes/proyectos-eliminados',
         loadComponent: () => import('./views/reportes-view/proyectos-eliminados/proyectos-eliminados.component').then(m => m.ProyectosEliminadosComponent),
-        canActivate: [AuthGuard]
+        canActivate: [AuthGuard, primerInicioGuard]
     },
     {
         path: 'reunion/asistencia/:codigo_reunion',

@@ -11,6 +11,7 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { FormControl, ReactiveFormsModule } from '@angular/forms';
 import { MatPaginator, MatPaginatorModule, PageEvent } from '@angular/material/paginator';
+import { EliminarProyectoComponent } from './components/eliminar-proyecto/eliminar-proyecto.component';
 
 
 
@@ -101,6 +102,20 @@ export class ProyectosViewComponent implements AfterViewInit{
           this.obtenerProyectos();
         }
       })
+
+  }
+
+  eliminarProyecto(proyecto:any): void {
+
+    const dialogRef = this.dialog.open(EliminarProyectoComponent, {
+      data: proyecto
+    })
+
+    dialogRef.afterClosed().subscribe(result => {
+      if(result === true) {
+        this.obtenerProyectos()
+      }
+    })
 
   }
 

@@ -1,0 +1,8 @@
+.btn-aceptar {
+    background-color: #0369a1;
+}
+
+.btn-aceptar:hover {
+    background-color: #075985;
+    transition: background-color 150ms ease-in;
+}

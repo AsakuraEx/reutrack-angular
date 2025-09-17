@@ -1,0 +1,18 @@
+<div class="p-4 bg-red-50">
+    <div class="flex gap-2 items-center text-red-700">
+        <mat-icon>warning</mat-icon>
+        <h1 class="text-xl font-bold">Atención</h1>
+    </div>
+    <p class="text-red-700 mt-4">
+        Está a punto de eliminar el proyecto <span class="font-bold">{{ data.nombre }}</span>. Esta acción no se puede revertir. ¿Está seguro de realizar esta acción?
+    </p>
+
+    <div class="space-x-2 text-end mt-4">
+        <button type="button" (click)="eliminarProyecto()" class="btn-aceptar" mat-flat-button>
+            Si, Eliminar proyecto
+        </button>
+        <button type="button" (click)="cerrarModal(false)" class="btn-aceptar" mat-flat-button>
+            No, Cancelar
+        </button>
+    </div>
+</div>

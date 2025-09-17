@@ -1,0 +1,20 @@
+
+<div class="container mx-auto">
+
+    @if(acta_aceptacion){
+        <h1 class="text-2xl text-purple-700 font-bold mt-8 text-center">Acta de aceptación de {{ acta_aceptacion.version.nombre }}</h1>
+        
+        <div class="flex flex-col lg:flex-row justify-between items-center bg-purple-100 p-4 rounded-lg border border-purple-500 mt-6 shadow-lg">
+            <div class="text-purple-700">
+                <h3 class="font-bold">Aperturada por: <span class="font-normal">{{ acta_aceptacion.usuario.nombre }}</span></h3>
+                <h3 class="font-bold">Fecha de apertura: <span class="font-normal">{{ acta_aceptacion.createdAt }}</span></h3>
+            </div>
+            <p class="text-white font-medium w-fit h-fit px-4 py-2 rounded-full" [class]="acta_aceptacion.estado.id === 6 ? 'bg-emerald-700': 'bg-fuchsia-700'">
+                {{ acta_aceptacion.estado.id === 6 ? 'Pendiente de aprobar': 'Aprobada' }}
+            </p>
+        </div>   
+    }
+    <app-funcionalidades></app-funcionalidades>
+
+    <app-usuarios></app-usuarios>
+</div>
