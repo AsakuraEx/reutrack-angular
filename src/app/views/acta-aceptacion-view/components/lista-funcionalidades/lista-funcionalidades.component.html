@@ -12,7 +12,7 @@
             </thead>
             <tbody>
                 @for (funcion of funcionalidades; track $index) {
-                    <tr class="text-center border-t border-gray-300">
+                    <tr class="text-center border-t border-gray-300 hover:bg-purple-100 transition-colors duration-300 ease-in-out">
                         <td class="py-4 px-4">{{ funcion.descripcion }}</td>
                         <td class="py-2 px-4" [class]=" funcion.aprobado ? 'text-green-700':'text-red-700'">
                             {{ funcion.aprobado ? 'Aprobado': 'No aprobado' }}
@@ -34,6 +34,7 @@
                                 <button 
                                     mat-icon-button
                                     matTooltip="Eliminar funcionalidad"  
+                                    (click)="eliminarFuncionalidad(funcion.id)"
                                     style="color: red;">
                                     <mat-icon>delete</mat-icon>
                                 </button>

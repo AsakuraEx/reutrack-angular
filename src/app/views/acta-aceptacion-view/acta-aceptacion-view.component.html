@@ -13,8 +13,15 @@
                 {{ acta_aceptacion.estado.id === 6 ? 'Pendiente de aprobar': 'Aprobada' }}
             </p>
         </div>   
+     
+        <app-funcionalidades></app-funcionalidades>
+        
+        <app-usuarios></app-usuarios>
     }
-    <app-funcionalidades></app-funcionalidades>
 
-    <app-usuarios></app-usuarios>
+    <div class="bg-purple-100 p-4 rounded-lg border border-purple-700 mt-6 shadow-lg text-end">
+        <button mat-flat-button>
+            Finalizar acta de aceptación
+        </button>
+    </div>   
 </div>

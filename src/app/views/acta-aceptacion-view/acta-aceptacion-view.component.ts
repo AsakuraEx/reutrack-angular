@@ -3,12 +3,14 @@ import { ActaAceptacionService } from '../../services/acta-aceptacion.service';
 import { ActivatedRoute } from '@angular/router';
 import { FuncionalidadesComponent } from './components/funcionalidades/funcionalidades.component';
 import { UsuariosComponent } from './components/usuarios/usuarios.component';
+import { MatButtonModule } from "@angular/material/button";
 
 @Component({
   selector: 'app-acta-aceptacion-view',
   imports: [
-    FuncionalidadesComponent, UsuariosComponent
-  ],
+    FuncionalidadesComponent, UsuariosComponent,
+    MatButtonModule
+],
   templateUrl: './acta-aceptacion-view.component.html',
   styleUrl: './acta-aceptacion-view.component.css'
 })

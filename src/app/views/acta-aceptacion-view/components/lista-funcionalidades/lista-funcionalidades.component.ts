@@ -34,4 +34,10 @@ export class ListaFuncionalidadesComponent {
 
   }
 
+  eliminarFuncionalidad(id_funcionalidad: number): void {
+    this.actaAceptacionService.eliminarFunciones(id_funcionalidad).subscribe(()=>{
+      this.actualizarTabla.emit();
+    })
+  }
+
 }

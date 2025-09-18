@@ -46,4 +46,22 @@ export class ActaAceptacionService {
     const url = this.baseUrl + '/acta_funcionalidades/' + id_funcionalidad;
     return this.http.put(url, { aprobado: true })  
   }
+
+  eliminarFunciones(id_funcionalidad: number): Observable<any> {
+    const url = this.baseUrl + '/acta_funcionalidades/' + id_funcionalidad;
+    return this.http.delete(url)  
+  }
+
+  /* -------------------------------------------------------------------------- */
+
+  agregarUsuarioActa(data: FormData): Observable<any> {
+    const url = this.baseUrl + '/acta_usuarios';
+    return this.http.post(url, data)  
+  }
+
+  obtenerUsuarioActa(id_acta: number): Observable<any> {
+    const url = this.baseUrl + '/acta_usuarios/all/' + id_acta;
+    return this.http.get(url)  
+  }
+
 }

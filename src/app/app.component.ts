@@ -24,7 +24,8 @@ export class AppComponent {
     this.router.events.pipe(
       filter(event => event instanceof NavigationEnd)
     ).subscribe((event: NavigationEnd) => {
-      this.isLoginPage = event.urlAfterRedirects === '/login' || event.urlAfterRedirects.startsWith('/reunion/asistencia/') || event.urlAfterRedirects.startsWith('/login');
+      this.isLoginPage = event.urlAfterRedirects === '/login' || event.urlAfterRedirects.startsWith('/reunion/asistencia/') 
+      || event.urlAfterRedirects.startsWith('/login') || event.urlAfterRedirects.startsWith('/acta_aceptacion/aprobacion/');
       this.sidenav.close();
     });
   }

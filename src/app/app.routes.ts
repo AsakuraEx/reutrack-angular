@@ -70,4 +70,9 @@ export const routes: Routes = [
         loadComponent: () => import('./views/asistencia-view/asistencia-view.component').then(m => m.AsistenciaViewComponent),
         canActivate: [reunionActivaGuard]
     },
+    {
+        path: 'acta_aceptacion/aprobacion/:id_acta',
+        loadComponent: () => import('./views/acta-aceptacion-view/components/formulario-aceptacion/formulario-aceptacion.component').then(m => m.FormularioAceptacionComponent),
+        canActivate: []
+    },
 ];

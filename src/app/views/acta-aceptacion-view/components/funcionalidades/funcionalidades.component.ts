@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, ViewChild } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatIconModule } from '@angular/material/icon';
@@ -7,7 +7,7 @@ import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { ListaFuncionalidadesComponent } from '../lista-funcionalidades/lista-funcionalidades.component';
 import { ActivatedRoute } from '@angular/router';
 import { ActaAceptacionService } from '../../../../services/acta-aceptacion.service';
-import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
+import { FormBuilder, FormControl, FormGroup, FormGroupDirective, ReactiveFormsModule, Validators } from '@angular/forms';
 import { HotToastService } from '@ngxpert/hot-toast';
 
 @Component({
@@ -23,8 +23,11 @@ export class FuncionalidadesComponent {
   constructor(
     private route: ActivatedRoute,
     private actaAceptacionService: ActaAceptacionService,
-    private toastService: HotToastService
+    private toastService: HotToastService,
+    private fb: FormBuilder
   ){}
+
+  @ViewChild(FormGroupDirective) formDirective?: FormGroupDirective
 
   id_acta!: number;
   funcionalidades: any[] = [];
@@ -61,17 +64,14 @@ export class FuncionalidadesComponent {
             duration: 3000
           })
           this.obtenerFuncionalidadesPorActa()
-          this.formFuncionalidad.reset();
-          this.formFuncionalidad.markAsUntouched();
-          this.formFuncionalidad.markAsPristine();
+          this.formDirective?.resetForm()
+          this.formFuncionalidad.reset()
         },
         error: e => {
           console.log(e)
         }
       })
-
     }
-
   }
 
 }
