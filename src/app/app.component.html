@@ -1,13 +1,15 @@
   <div class="h-screen flex flex-col">
 
-    @if(!isLoginPage){
+    @if(!isLoginPage && token){
       <div class="fixed top-0 left-0 w-full bg-white shadow-md z-10 px-4 flex justify-between items-center">
       
         <button mat-icon-button (click)="sidenav.toggle()">
           <mat-icon>menu</mat-icon>
         </button>
       
-        <img src="images/Logo-reutrack-fondo-blanco.svg" alt="reutrack-logo" class="h-12">
+        <button routerLink="/" class="cursor-pointer">
+          <img src="images/Logo-reutrack-fondo-blanco.svg" alt="reutrack-logo" class="h-12">
+        </button>
         
         <app-menu-opciones></app-menu-opciones>
 
@@ -18,7 +20,7 @@
   
       <mat-sidenav #sidenav mode="over" closed>
         
-        @if(!isLoginPage){
+        @if(!isLoginPage && token){
           <app-navbar></app-navbar>
         }
     
@@ -36,7 +38,7 @@
   
     </mat-sidenav-container>
   
-    @if(!isLoginPage){
+    @if(!isLoginPage && token){
       <div class="fixed bottom-0 left-0 w-full bg-gray-100 text-center p-3 border-t border-gray-200 z-10">
         Francisco Escobar &copy; 2025
       </div>

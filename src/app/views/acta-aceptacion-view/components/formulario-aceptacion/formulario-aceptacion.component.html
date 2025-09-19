@@ -27,21 +27,45 @@
         <mat-form-field class="w-full">
             <mat-label>Nombre completo</mat-label>
             <input type="text" matInput formControlName="nombre">
+            @if(formAceptacion.get('nombre')?.hasError('required')){
+                <mat-error>El nombre es obligatorio</mat-error>
+            }
+            @if(formAceptacion.get('nombre')?.hasError('maxlength')){
+                <mat-error>Solo puede agregar un máximo de 50 carácteres</mat-error>
+            }
         </mat-form-field>
 
         <mat-form-field class="w-full">
             <mat-label>Institución</mat-label>
             <input type="text" matInput formControlName="institucion">
+            @if(formAceptacion.get('institucion')?.hasError('required')){
+                <mat-error>La institución es obligatoria</mat-error>
+            }
+            @if(formAceptacion.get('institucion')?.hasError('maxlength')){
+                <mat-error>Solo puede agregar un máximo de 50 carácteres</mat-error>
+            }
         </mat-form-field>
 
         <mat-form-field class="w-full">
             <mat-label>Cargo</mat-label>
             <input type="text" matInput formControlName="cargo">
+            @if(formAceptacion.get('cargo')?.hasError('required')){
+                <mat-error>El cargo es obligatorio</mat-error>
+            }
+            @if(formAceptacion.get('cargo')?.hasError('maxlength')){
+                <mat-error>Solo puede agregar un máximo de 30 carácteres</mat-error>
+            }
         </mat-form-field>
 
         <mat-form-field class="w-full">
             <mat-label>Documento de identidad</mat-label>
             <input type="text" matInput formControlName="documento">
+            @if(formAceptacion.get('documento')?.hasError('required')){
+                <mat-error>El documento es obligatorio</mat-error>
+            }
+            @if(formAceptacion.get('documento')?.hasError('pattern')){
+                <mat-error>Solo tiene permitido agregar números.</mat-error>
+            }
         </mat-form-field>
 
         <!-- Documento de identidad -->
@@ -57,6 +81,7 @@
                     #fileInput
                     type="file"
                     accept="image/*"
+                    capture="environment"
                     (change)="onFileSelected($event)"
                     style="display: none"
                 />
@@ -84,6 +109,7 @@
                     #fileInput2
                     type="file"
                     accept="image/*"
+                    capture="environment"
                     (change)="onFileSelected2($event)"
                     style="display: none"
                 />
@@ -99,8 +125,12 @@
         </div>
 
         <div class="mt-8 text-center">
-            <button type="submit" mat-flat-button>
-                Aceptar versión del proyecto
+            <button type="submit" mat-flat-button [disabled]="isSubmitting">
+                @if(isSubmitting){
+                    <mat-spinner diameter="20" strokeWidth="2"></mat-spinner>
+                } @else {
+                    Aceptar versión del proyecto
+                }
             </button>
         </div>
 

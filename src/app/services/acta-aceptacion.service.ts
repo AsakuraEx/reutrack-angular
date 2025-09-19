@@ -30,6 +30,11 @@ export class ActaAceptacionService {
 
   }
 
+  finalizarActaAceptacion(id_acta: number): Observable<any> {
+    const url = this.baseUrl + '/acta_aceptacion/' + id_acta;
+    return this.http.put(url, {})  
+  }
+
   /* -------------------------------------------------------------------*/
 
   obtenerFuncionesPorActa(id_acta: number): Observable<any> {

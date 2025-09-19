@@ -1,5 +1,5 @@
 import { Component, ViewChild } from '@angular/core';
-import { RouterOutlet, Router, NavigationEnd } from '@angular/router';
+import { RouterOutlet, Router, NavigationEnd, RouterLink } from '@angular/router';
 import {MatSidenav, MatSidenavModule} from '@angular/material/sidenav';
 import {MatToolbarModule} from '@angular/material/toolbar';
 import { MatButtonModule } from '@angular/material/button';
@@ -10,7 +10,7 @@ import { filter } from 'rxjs/operators';
 
 @Component({
   selector: 'app-root',
-  imports: [RouterOutlet, NavbarComponent, MatSidenavModule, MatToolbarModule, MatButtonModule, MatIconModule, MenuOpcionesComponent],
+  imports: [RouterOutlet, NavbarComponent, MatSidenavModule, MatToolbarModule, MatButtonModule, MatIconModule, MenuOpcionesComponent, RouterLink],
   templateUrl: './app.component.html',
   styleUrl: './app.component.css'
 })
@@ -20,13 +20,24 @@ export class AppComponent {
   @ViewChild('sidenav') sidenav!: MatSidenav;
   isLoginPage = false;
 
+  token!:any;
+
   constructor(private router: Router) {
+    const rutasSinMenu = [
+        '/login',
+        '/reunion/asistencia/',
+        '/acta_aceptacion/aprobacion/',
+        '/agradecimiento'
+    ];
+
     this.router.events.pipe(
-      filter(event => event instanceof NavigationEnd)
+        filter(event => event instanceof NavigationEnd)
     ).subscribe((event: NavigationEnd) => {
-      this.isLoginPage = event.urlAfterRedirects === '/login' || event.urlAfterRedirects.startsWith('/reunion/asistencia/') 
-      || event.urlAfterRedirects.startsWith('/login') || event.urlAfterRedirects.startsWith('/acta_aceptacion/aprobacion/');
-      this.sidenav.close();
+        const urlActual = event.urlAfterRedirects;
+        this.isLoginPage = rutasSinMenu.some(path => urlActual.startsWith(path));
+        
+        this.sidenav.close();
+        this.token = localStorage.getItem('token');
     });
   }
 

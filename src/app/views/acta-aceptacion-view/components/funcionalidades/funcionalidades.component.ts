@@ -1,4 +1,4 @@
-import { Component, ViewChild } from '@angular/core';
+import { Component, Input, ViewChild } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatIconModule } from '@angular/material/icon';
@@ -28,6 +28,8 @@ export class FuncionalidadesComponent {
   ){}
 
   @ViewChild(FormGroupDirective) formDirective?: FormGroupDirective
+
+  @Input() acta_aceptacion!:any
 
   id_acta!: number;
   funcionalidades: any[] = [];

@@ -11,26 +11,26 @@ export const options = [
         icon: 'book',
         permiso: [1,2]
     },
-    {
-        id: 'reportes',
-        desplegable: true,
-        name: 'Reportes',
-        icon: 'article',
-        permiso: [1,2],
-        opciones: [
-            {
-                path: 'reportes/reuniones-reactivadas',
-                name: 'Reuniones reactivadas',
-                permiso: [1,2]
-            },
-            {
-                path: 'reportes/proyectos-eliminados',
-                name: 'Proyectos eliminados',
-                permiso: [1]    
-            },
+    // {
+    //     id: 'reportes',
+    //     desplegable: true,
+    //     name: 'Reportes',
+    //     icon: 'article',
+    //     permiso: [1,2],
+    //     opciones: [
+    //         {
+    //             path: 'reportes/reuniones-reactivadas',
+    //             name: 'Reuniones reactivadas',
+    //             permiso: [1,2]
+    //         },
+    //         {
+    //             path: 'reportes/proyectos-eliminados',
+    //             name: 'Proyectos eliminados',
+    //             permiso: [1]    
+    //         },
 
-        ]
-    },
+    //     ]
+    // },
     {
         id: 'opciones',
         desplegable: true,

@@ -1,0 +1,23 @@
+<div class="p-4">
+
+    <div class="py-2 text-xl text-purple-700 font-medium flex gap-2 items-center">
+        <mat-icon>info</mat-icon>
+        <h1>¿Realmente desea finalizar el acta de aceptación?</h1>
+    </div>
+
+    <p class="text-justify text-purple-700 mt-2">
+        Si finaliza el acta de aceptación, no se podrá agregar más personas para aprobar la versión, tampoco podrá registrar, aprobar o eliminar funcionalidades
+    </p>
+
+    <div class="space-x-2 text-end mt-2">
+        <button mat-flat-button (click)="finalizarActaAceptacion()">
+            Finalizar Acta de Aceptación
+        </button>
+        
+        <button mat-flat-button class="btn-secondary" (click)="cerrarModal(false)">
+            Cancelar
+        </button>
+    </div>
+
+
+</div>

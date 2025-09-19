@@ -22,6 +22,8 @@ export class UsuariosComponent implements OnInit{
     private actaAceptacionService: ActaAceptacionService
   ){}
 
+  @Input() acta_aceptacion!:any;
+
   baseURL = environment.appURL;
   backURL = environment.backendURL
   pathQR!: string

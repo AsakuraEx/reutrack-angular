@@ -1,5 +1,5 @@
-import { Component } from '@angular/core';
-import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
+import { Component, ViewChild } from '@angular/core';
+import { FormControl, FormGroup, FormGroupDirective, ReactiveFormsModule, Validators } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatIconModule } from '@angular/material/icon';
@@ -7,11 +7,12 @@ import { MatInputModule } from '@angular/material/input';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ActaAceptacionService } from '../../../../services/acta-aceptacion.service';
 import { HotToastService } from '@ngxpert/hot-toast';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 
 @Component({
   selector: 'app-formulario-aceptacion',
   imports: [
-    MatIconModule, MatButtonModule, MatFormFieldModule, MatInputModule, ReactiveFormsModule
+    MatIconModule, MatButtonModule, MatFormFieldModule, MatInputModule, ReactiveFormsModule, MatProgressSpinnerModule
   ],
   templateUrl: './formulario-aceptacion.component.html',
   styleUrl: './formulario-aceptacion.component.css'
@@ -25,15 +26,19 @@ export class FormularioAceptacionComponent {
     private toastService: HotToastService
   ){}
 
+  @ViewChild(FormGroupDirective) formGroupDirective!: FormGroupDirective
+
   formAceptacion = new FormGroup({
     id_acta: new FormControl<number|null>(null, [Validators.required]),
-    nombre: new FormControl('', [Validators.required]),
-    institucion: new FormControl('', [Validators.required]),
-    cargo: new FormControl('', [Validators.required]),
-    documento: new FormControl('', [Validators.required]),
+    nombre: new FormControl('', [Validators.required, Validators.maxLength(50)]),
+    institucion: new FormControl('', [Validators.required, Validators.maxLength(50)]),
+    cargo: new FormControl('', [Validators.required, Validators.maxLength(30)]),
+    documento: new FormControl('', [Validators.required, Validators.pattern(/[0-9]$/)]),
     documento_identidad: new FormControl<File|null>(null),
     documento_institucional: new FormControl<File|null>(null)
   })
+
+  isSubmitting:boolean = false;
 
   identidadPreview: string | null = null;
 
@@ -77,8 +82,19 @@ export class FormularioAceptacionComponent {
   }
 
   onSubmit(): void {
+
+    this.isSubmitting = true
+
     const id_acta:number = Number(this.route.snapshot.paramMap.get('id_acta'));
     this.formAceptacion.controls['id_acta'].setValue(id_acta)
+
+    if(!this.formAceptacion.controls['documento_identidad'].value || !this.formAceptacion.controls['documento_institucional'].value) {
+      this.toastService.error('Debe agregar la foto del documento de identidad y el documento de su institución', {
+        position: 'top-right',
+        duration: 3000
+      })
+      return
+    }
 
     if(this.formAceptacion.valid) {
 
@@ -107,14 +123,21 @@ export class FormularioAceptacionComponent {
             duration: 3000
           })
           this.router.navigate(['/login'])
+          this.isSubmitting = false;
+          this.formGroupDirective.resetForm();
+          this.formAceptacion.reset();
         },
         error: e => {
           this.toastService.error("No pudo enviarse el formulario, ocurrio un error", {
             position: 'top-right',
             duration: 3000
           })
+          this.isSubmitting = false;
+          this.formGroupDirective.resetForm();
+          this.formAceptacion.reset();
         }
       })
+
     
     }
   }

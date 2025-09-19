@@ -14,14 +14,22 @@
             </p>
         </div>   
      
-        <app-funcionalidades></app-funcionalidades>
+        <app-funcionalidades [acta_aceptacion]="acta_aceptacion"></app-funcionalidades>
         
-        <app-usuarios></app-usuarios>
+        <app-usuarios [acta_aceptacion]="acta_aceptacion"></app-usuarios>
+        
+        <div class="bg-purple-100 p-4 rounded-lg border border-purple-700 mt-6 shadow-lg text-end">
+            @if(acta_aceptacion.estado.id === 6){
+                <button mat-flat-button (click)="finalizarActaAceptacion()">
+                    Finalizar acta de aceptación
+                </button>
+            }
+            @if(acta_aceptacion.estado.id === 7){
+                <button mat-flat-button>
+                    <mat-icon>picture_as_pdf</mat-icon>
+                    Generar PDF
+                </button>
+            }
+        </div>   
     }
-
-    <div class="bg-purple-100 p-4 rounded-lg border border-purple-700 mt-6 shadow-lg text-end">
-        <button mat-flat-button>
-            Finalizar acta de aceptación
-        </button>
-    </div>   
 </div>

@@ -1,32 +1,38 @@
 <div class="mt-4">
 
-    <div class="w-full flex flex-col lg:flex-row gap-4">
-        <div class="w-full lg:w-1/4 space-y-2 p-4 border border-gray-300 rounded shadow-md h-fit">
-            <h1 class="font-medium text-purple-700 text-lg">Registra las funcionalidades:</h1>
-            <form [formGroup]="formFuncionalidad" (submit)="agregarFuncionalidades()">
-                <mat-form-field class="w-full">
-                    <mat-label>Funcionalidad</mat-label>
-                    <input matInput type="text" formControlName="descripcion">
-                    <mat-error>El campo es requerido</mat-error>
-                </mat-form-field>
-    
-                <mat-slide-toggle labelPosition="before" formControlName="aprobado">¿Está aprobada esta funcionalidad?</mat-slide-toggle>
-                
-                <mat-form-field class="w-full mt-4">
-                    <mat-label>Cambio solicitado</mat-label>
-                    <input matInput type="text" formControlName="cambio_solicitado">
-                </mat-form-field>
+    @if(acta_aceptacion){
 
-                <button mat-flat-button>
-                    <mat-icon>edit</mat-icon>
-                    Registrar
-                </button>
-            </form>
+        <div class="w-full flex flex-col lg:flex-row gap-4">
+            @if(acta_aceptacion.estado.id === 6){            
+                <div class="w-full lg:w-[500px] space-y-2 p-4 border border-gray-300 rounded shadow-md h-fit">
+                    <h1 class="font-medium text-purple-700 text-lg">Registra las funcionalidades:</h1>
+                    <form [formGroup]="formFuncionalidad" (submit)="agregarFuncionalidades()">
+                        <mat-form-field class="w-full">
+                            <mat-label>Funcionalidad</mat-label>
+                            <input matInput type="text" formControlName="descripcion">
+                            <mat-error>El campo es requerido</mat-error>
+                        </mat-form-field>
+            
+                        <mat-slide-toggle labelPosition="before" formControlName="aprobado">¿Está aprobada esta funcionalidad?</mat-slide-toggle>
+                        
+                        <mat-form-field class="w-full mt-4">
+                            <mat-label>Cambio solicitado</mat-label>
+                            <input matInput type="text" formControlName="cambio_solicitado">
+                        </mat-form-field>
+        
+                        <button mat-flat-button>
+                            <mat-icon>edit</mat-icon>
+                            Registrar
+                        </button>
+                    </form>
+                </div>
+            }
+        
+            <div class="w-full lg:w-full">
+                <app-lista-funcionalidades [funcionalidades]="funcionalidades" (actualizarTabla)="obtenerFuncionalidadesPorActa()"></app-lista-funcionalidades>
+            </div>
         </div>
     
-        <div class="w-full lg:w-3/4">
-            <app-lista-funcionalidades [funcionalidades]="funcionalidades" (actualizarTabla)="obtenerFuncionalidadesPorActa()"></app-lista-funcionalidades>
-        </div>
-    </div>
+    }
 
 </div>

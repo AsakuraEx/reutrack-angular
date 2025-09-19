@@ -11,9 +11,24 @@ export const routes: Routes = [
         canActivate: [AuthGuard, primerInicioGuard]
     },
     {
+        path: 'agradecimiento',
+        loadComponent: () => import('./components/agradecimiento/agradecimiento.component').then(m => m.AgradecimientoComponent),
+        canActivate: []
+    },
+    {
         path: 'login',
         loadComponent: () => import('./views/login-view/login-view.component').then(m => m.LoginViewComponent),
         canActivate: [LoginGuard]
+    },
+    {
+        path: 'reunion/asistencia/:codigo_reunion',
+        loadComponent: () => import('./views/asistencia-view/asistencia-view.component').then(m => m.AsistenciaViewComponent),
+        canActivate: [reunionActivaGuard]
+    },
+    {
+        path: 'reunion/detalle/:id',
+        loadComponent: () => import('./views/detalle-view/detalle-view.component').then(m => m.DetalleViewComponent),
+        canActivate: [AuthGuard, primerInicioGuard]
     },
     {
         path: 'reunion/:codigo',
@@ -26,23 +41,23 @@ export const routes: Routes = [
         canActivate: [AuthGuard, primerInicioGuard]
     },
     {
-        path: 'reunion/detalle/:id',
-        loadComponent: () => import('./views/detalle-view/detalle-view.component').then(m => m.DetalleViewComponent),
-        canActivate: [AuthGuard, primerInicioGuard]
-    },
-    {
         path: 'proyectos',
         loadComponent: () => import('./views/gestion-proyectos/proyectos-view/proyectos-view.component').then(m => m.ProyectosViewComponent),
         canActivate: [AuthGuard, primerInicioGuard]
     },
     {
-        path: 'versiones/:id_proyecto',
-        loadComponent: () => import('./views/gestion-proyectos/versiones-view/versiones-view.component').then(m => m.VersionesViewComponent),
-        canActivate: [AuthGuard, primerInicioGuard]
+        path: 'acta_aceptacion/aprobacion/:id_acta',
+        loadComponent: () => import('./views/acta-aceptacion-view/components/formulario-aceptacion/formulario-aceptacion.component').then(m => m.FormularioAceptacionComponent),
+        canActivate: [LoginGuard]
     },
     {
         path: 'versiones/acta-aceptacion/:id_acta',
         loadComponent: () => import('./views/acta-aceptacion-view/acta-aceptacion-view.component').then(m => m.ActaAceptacionViewComponent),
+        canActivate: [AuthGuard, primerInicioGuard]
+    },
+    {
+        path: 'versiones/:id_proyecto',
+        loadComponent: () => import('./views/gestion-proyectos/versiones-view/versiones-view.component').then(m => m.VersionesViewComponent),
         canActivate: [AuthGuard, primerInicioGuard]
     },
     {
@@ -66,13 +81,8 @@ export const routes: Routes = [
         canActivate: [AuthGuard, primerInicioGuard]
     },
     {
-        path: 'reunion/asistencia/:codigo_reunion',
-        loadComponent: () => import('./views/asistencia-view/asistencia-view.component').then(m => m.AsistenciaViewComponent),
-        canActivate: [reunionActivaGuard]
-    },
-    {
-        path: 'acta_aceptacion/aprobacion/:id_acta',
-        loadComponent: () => import('./views/acta-aceptacion-view/components/formulario-aceptacion/formulario-aceptacion.component').then(m => m.FormularioAceptacionComponent),
-        canActivate: []
-    },
+        path: '**',
+        loadComponent: () => import('./components/not-found-page/not-found-page.component').then(m => m.NotFoundPageComponent)
+
+    }
 ];
