@@ -1,0 +1,4 @@
+.btn-secondary {
+  background-color: var(--mat-sys-secondary);
+  color: white;
+}

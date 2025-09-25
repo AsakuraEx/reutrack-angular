@@ -90,4 +90,8 @@ export class ProyectoService {
     return this.http.patch(`${this.BaseURL}/versiones/cancelar/${id_version}`, { estado: 'Cancelado' });
   }
 
+  finalizarVersion(id_version: number) {
+    return this.http.patch(`${this.BaseURL}/versiones/finalizar/${id_version}`, { acta_aceptacion: 'El acta fue aprobada!' });
+  }
+
 }

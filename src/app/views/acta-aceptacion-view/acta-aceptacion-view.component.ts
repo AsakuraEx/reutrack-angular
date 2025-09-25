@@ -7,6 +7,7 @@ import { MatButtonModule } from "@angular/material/button";
 import { MatDialog } from '@angular/material/dialog';
 import { FinalizarActaComponent } from './components/finalizar-acta/finalizar-acta.component';
 import { MatIconModule } from '@angular/material/icon';
+import { ProyectoService } from '../../services/proyecto.service';
 
 @Component({
   selector: 'app-acta-aceptacion-view',
@@ -21,7 +22,8 @@ export class ActaAceptacionViewComponent  implements OnInit{
 
   constructor(
     private actaAceptacionService: ActaAceptacionService,
-    private route: ActivatedRoute
+    private proyectoService: ProyectoService,
+    private route: ActivatedRoute,
   ){}
 
   acta_aceptacion!:any;
@@ -58,9 +60,28 @@ export class ActaAceptacionViewComponent  implements OnInit{
     dialogRef.afterClosed().subscribe(result => {
       if(result === true){
         this.obtenerActaAceptacion()
+        this.finalizarVersion()
       }
     })
 
+  }
+
+  finalizarVersion(): void {
+
+    if(this.acta_aceptacion.version.id) {
+      const id_version = this.acta_aceptacion.version.id
+      this.proyectoService.finalizarVersion(id_version).subscribe(()=>{
+        console.log("Versión finalizada")
+      });
+      return
+    }
+
+    console.error("No hay un id de versión especificado...")
+
+  }
+
+  irAtras(): void {
+    window.history.back();
   }
 
 }

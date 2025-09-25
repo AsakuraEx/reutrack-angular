@@ -18,7 +18,7 @@
         
         <app-usuarios [acta_aceptacion]="acta_aceptacion"></app-usuarios>
         
-        <div class="bg-purple-100 p-4 rounded-lg border border-purple-700 mt-6 shadow-lg text-end">
+        <div class="bg-purple-100 space-x-2 p-4 rounded-lg border border-purple-700 mt-6 shadow-lg text-end">
             @if(acta_aceptacion.estado.id === 6){
                 <button mat-flat-button (click)="finalizarActaAceptacion()">
                     Finalizar acta de aceptación
@@ -30,6 +30,11 @@
                     Generar PDF
                 </button>
             }
+
+            <button class="btn-secondary" mat-flat-button (click)="irAtras()">
+                <mat-icon>list</mat-icon>
+                Regresar al listado
+            </button>
         </div>   
     }
 </div>

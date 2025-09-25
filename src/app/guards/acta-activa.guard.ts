@@ -1,15 +1,15 @@
 import { inject } from '@angular/core';
 import { CanActivateFn, Router } from '@angular/router';
-import { ReunionService } from '../services/reunion.service';
 import { catchError, map, of } from 'rxjs';
+import { ActaAceptacionService } from '../services/acta-aceptacion.service';
 
-export const reunionActivaGuard: CanActivateFn = (route, state) => {
+export const actaActivaGuard: CanActivateFn = (route, state) => {
   
-  const reunionService = inject(ReunionService);
+  const actaAceptacionService = inject(ActaAceptacionService);
   const router = inject(Router);
 
   // Usar route en lugar de routeActive para los parámetros
-  const codigo = route.paramMap.get('codigo_reunion');
+  const codigo = Number(route.paramMap.get('id_acta'));
 
   if (!codigo) {
     router.navigate(['/']);
@@ -17,11 +17,10 @@ export const reunionActivaGuard: CanActivateFn = (route, state) => {
   }
 
   // Retornar el observable directamente
-  return reunionService.obtenerReunionPorCodigo(codigo).pipe(
+  return actaAceptacionService.obtenerActaPorId(codigo).pipe(
     map(response => {
-      console.log('estado: ' + response.id_estado)
-      const reunionActual = response;
-      if (reunionActual.id_estado === 1) {
+      const actaActual = response;
+      if (actaActual.estado.id === 6) {
         return true;
       }
       router.navigate(['/']);

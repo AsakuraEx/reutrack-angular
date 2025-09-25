@@ -3,6 +3,7 @@ import { AuthGuard } from './guards/auth.guard';
 import { LoginGuard } from './guards/login.guard';
 import { primerInicioGuard } from './guards/primer-inicio.guard';
 import { reunionActivaGuard } from './guards/reunion-activa.guard';
+import { actaActivaGuard } from './guards/acta-activa.guard';
 
 export const routes: Routes = [
     {
@@ -48,7 +49,7 @@ export const routes: Routes = [
     {
         path: 'acta_aceptacion/aprobacion/:id_acta',
         loadComponent: () => import('./views/acta-aceptacion-view/components/formulario-aceptacion/formulario-aceptacion.component').then(m => m.FormularioAceptacionComponent),
-        canActivate: [LoginGuard]
+        canActivate: [actaActivaGuard]
     },
     {
         path: 'versiones/acta-aceptacion/:id_acta',

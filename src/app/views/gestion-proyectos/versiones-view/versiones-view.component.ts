@@ -181,7 +181,6 @@ export class VersionesViewComponent implements AfterViewInit{
       }
     })
 
-
   }
 
 }
