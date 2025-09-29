@@ -1,4 +1,4 @@
-import { AfterViewInit, Component, inject, OnInit, ViewChild } from '@angular/core';
+import { AfterViewInit, Component, inject, ViewChild } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { MatTableModule } from '@angular/material/table';
@@ -12,6 +12,7 @@ import { MatInputModule } from '@angular/material/input';
 import { FormControl, ReactiveFormsModule } from '@angular/forms';
 import { MatPaginator, MatPaginatorModule, PageEvent } from '@angular/material/paginator';
 import { EliminarProyectoComponent } from './components/eliminar-proyecto/eliminar-proyecto.component';
+import { jwtDecode } from 'jwt-decode';
 
 
 
@@ -31,7 +32,8 @@ export class ProyectosViewComponent implements AfterViewInit{
     private proyectoService: ProyectoService
   ){}
 
-
+  // Data del usuario
+  usuario!: any;
   // Paginación
   currentPage = 0;
   pageSize = 10;
@@ -51,11 +53,16 @@ export class ProyectosViewComponent implements AfterViewInit{
       this.onPageEvent(event);
     })
     this.obtenerProyectos();
+    const token = localStorage.getItem('token');
+    if(token){
+      this.usuario = jwtDecode(token);
+    }
     
   }
 
   onPageEvent(event: PageEvent):void {
     this.totalRecords = event.length;
+    console.log("Registros totales: " + this.totalRecords)
     this.pageSize = event.pageSize;
     this.currentPage = event.pageIndex;
     this.obtenerProyectos();
@@ -65,7 +72,7 @@ export class ProyectosViewComponent implements AfterViewInit{
 
     const page = this.currentPage + 1;     // ESTO ES HIPER IMPORTANTE
 
-    this.proyectoService.obtenerProyectos(null, this.pageSize, page).subscribe({
+    this.proyectoService.obtenerProyectosVersiones(this.pageSize, page).subscribe({
       next: response => {
         console.log(response)
         this.proyectos = response.data

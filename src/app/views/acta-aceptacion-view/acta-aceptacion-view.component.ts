@@ -8,12 +8,15 @@ import { MatDialog } from '@angular/material/dialog';
 import { FinalizarActaComponent } from './components/finalizar-acta/finalizar-acta.component';
 import { MatIconModule } from '@angular/material/icon';
 import { ProyectoService } from '../../services/proyecto.service';
+import { Location } from '@angular/common';
+import { HotToastService } from '@ngxpert/hot-toast';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 
 @Component({
   selector: 'app-acta-aceptacion-view',
   imports: [
     FuncionalidadesComponent, UsuariosComponent,
-    MatButtonModule, MatIconModule
+    MatButtonModule, MatIconModule, MatProgressSpinnerModule
 ],
   templateUrl: './acta-aceptacion-view.component.html',
   styleUrl: './acta-aceptacion-view.component.css'
@@ -24,8 +27,11 @@ export class ActaAceptacionViewComponent  implements OnInit{
     private actaAceptacionService: ActaAceptacionService,
     private proyectoService: ProyectoService,
     private route: ActivatedRoute,
+    private location: Location,
+    private toastService: HotToastService
   ){}
 
+  isSubmitting:boolean = false;
   acta_aceptacion!:any;
   readonly dialog = inject(MatDialog)
 
@@ -81,7 +87,25 @@ export class ActaAceptacionViewComponent  implements OnInit{
   }
 
   irAtras(): void {
-    window.history.back();
+    this.location.back();
   }
+
+  generarPdf(): void {
+
+    this.isSubmitting = true;
+
+    const id_acta: number = Number(this.route.snapshot.paramMap.get('id_acta'));
+    this.actaAceptacionService.obtenerPdf(id_acta).subscribe({
+      next: (blob) => {
+        this.toastService.success('PDF generado correctamente', { duration: 3000, position: 'top-right' });
+        window.open(URL.createObjectURL(blob));
+        this.isSubmitting = false;
+      },
+      error: (e) => {
+        this.toastService.error('Error al generar el PDF', { duration: 3000, position: 'top-right' });
+        this.isSubmitting = false;
+      }
+    })
+  } 
 
 }

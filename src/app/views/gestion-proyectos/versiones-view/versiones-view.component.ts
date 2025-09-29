@@ -1,4 +1,4 @@
-import { AfterViewInit, Component, inject, OnInit, ViewChild } from '@angular/core';
+import { AfterViewInit, Component, inject, ViewChild } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { MatTableModule } from '@angular/material/table';
@@ -181,6 +181,12 @@ export class VersionesViewComponent implements AfterViewInit{
       }
     })
 
+  }
+
+  ValidarActaAceptacionLegacy(acta_aceptacion: string | null | undefined): boolean {
+    const acta_url = "drive.google.com";
+    if(!acta_aceptacion) return false;
+    return acta_aceptacion.includes(acta_url)
   }
 
 }

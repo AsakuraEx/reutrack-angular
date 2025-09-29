@@ -25,9 +25,15 @@
                 </button>
             }
             @if(acta_aceptacion.estado.id === 7){
-                <button mat-flat-button>
-                    <mat-icon>picture_as_pdf</mat-icon>
-                    Generar PDF
+                <button mat-flat-button (click)="generarPdf()" [disabled]="isSubmitting">
+                    @if(isSubmitting){
+                        <mat-progress-spinner diameter="20" mode="indeterminate"></mat-progress-spinner>
+                    } @else {
+                        <div class="flex items-center gap-2">
+                            <mat-icon>picture_as_pdf</mat-icon>
+                            Generar PDF
+                        </div>
+                    }
                 </button>
             }
 

@@ -63,11 +63,21 @@
 
                     <button 
                         mat-icon-button
-                        matTooltip="Eliminar proyecto"
-                        (click)="eliminarProyecto(proyecto)"
+                        matTooltip="Seguimiento del proyecto"
+                        routerLink="/proyectos/seguimiento/{{ proyecto.id }}"
                         type="button">
-                        <mat-icon style="color: red;">delete</mat-icon>
+                        <mat-icon style="color: green;">share</mat-icon>
                     </button>
+
+                    @if(proyecto.version.length === 0 && (usuario?.id_rol === 1 || proyecto.id_usuario === usuario?.id)) {
+                        <button 
+                            mat-icon-button
+                            matTooltip="Eliminar proyecto"
+                            (click)="eliminarProyecto(proyecto)"
+                            type="button">
+                            <mat-icon style="color: red;">delete</mat-icon>
+                        </button>
+                    }
 
                 </td>
             </ng-container>

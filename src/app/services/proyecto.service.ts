@@ -33,6 +33,21 @@ export class ProyectoService {
     return this.http.get(url)
   }
 
+  obtenerProyectosVersiones(limit: any, page: number): Observable<any> {
+    
+    let url = this.BaseURL + '/proyectos/versiones?';
+    const params: string[] = [];
+
+    if(limit) params.push(`limit=${encodeURIComponent(limit)}`);
+    if(page) params.push(`page=${encodeURIComponent(page)}`);
+
+    if(params.length > 0){
+      url += params.join('&');
+    }
+
+    return this.http.get(url)
+  }
+
   crearProyectos(data: any): Observable<any> {
     let url = this.BaseURL + '/proyectos/create';
     return this.http.post(url, data)

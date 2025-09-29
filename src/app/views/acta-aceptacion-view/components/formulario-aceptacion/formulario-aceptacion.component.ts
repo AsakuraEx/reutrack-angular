@@ -33,7 +33,7 @@ export class FormularioAceptacionComponent {
     nombre: new FormControl('', [Validators.required, Validators.maxLength(50)]),
     institucion: new FormControl('', [Validators.required, Validators.maxLength(50)]),
     cargo: new FormControl('', [Validators.required, Validators.maxLength(30)]),
-    documento: new FormControl('', [Validators.required, Validators.pattern(/[0-9]$/)]),
+    documento: new FormControl('', [Validators.required, Validators.pattern(/[0-9]+$/)]),
     documento_identidad: new FormControl<File|null>(null),
     documento_institucional: new FormControl<File|null>(null)
   })
@@ -62,6 +62,9 @@ export class FormularioAceptacionComponent {
       console.warn('El archivo seleccionado no es una imagen válida');
     }
 
+    event.preventDefault();   // ⬅️ asegura que no dispare submit
+    event.stopPropagation();
+
   }
 
   onFileSelected2(event: Event): void {
@@ -79,6 +82,9 @@ export class FormularioAceptacionComponent {
       console.warn('El archivo seleccionado no es una imagen válida');
     }
 
+    event.preventDefault();   // ⬅️ asegura que no dispare submit
+    event.stopPropagation();
+
   }
 
   onSubmit(): void {
@@ -93,6 +99,7 @@ export class FormularioAceptacionComponent {
         position: 'top-right',
         duration: 3000
       })
+      this.isSubmitting = false;
       return
     }
 
@@ -122,10 +129,10 @@ export class FormularioAceptacionComponent {
             position: 'top-right',
             duration: 3000
           })
-          this.router.navigate(['/login'])
           this.isSubmitting = false;
           this.formGroupDirective.resetForm();
           this.formAceptacion.reset();
+          this.router.navigate(['/login'])
         },
         error: e => {
           this.toastService.error("No pudo enviarse el formulario, ocurrio un error", {

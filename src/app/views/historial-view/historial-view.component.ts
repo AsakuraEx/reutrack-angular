@@ -1,5 +1,5 @@
 import { AsyncPipe } from '@angular/common';
-import { AfterViewInit, Component, inject, OnInit, ViewChild } from '@angular/core';
+import { AfterViewInit, Component, inject, ViewChild } from '@angular/core';
 import { ReunionService } from '../../services/reunion.service';
 import { jwtDecode } from 'jwt-decode';
 import { MatIconModule } from '@angular/material/icon';

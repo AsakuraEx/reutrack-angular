@@ -47,6 +47,11 @@ export const routes: Routes = [
         canActivate: [AuthGuard, primerInicioGuard]
     },
     {
+        path: 'proyectos/seguimiento/:id_proyecto',
+        loadComponent: () => import('./views/gestion-proyectos/seguimiento-view/seguimiento-view.component').then(m => m.SeguimientoViewComponent),
+        canActivate: [AuthGuard, primerInicioGuard]
+    },
+    {
         path: 'acta_aceptacion/aprobacion/:id_acta',
         loadComponent: () => import('./views/acta-aceptacion-view/components/formulario-aceptacion/formulario-aceptacion.component').then(m => m.FormularioAceptacionComponent),
         canActivate: [actaActivaGuard]

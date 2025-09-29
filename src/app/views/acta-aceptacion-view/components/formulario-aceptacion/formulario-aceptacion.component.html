@@ -22,7 +22,7 @@
         </p>
     </div>
 
-    <form class="my-4" [formGroup]="formAceptacion" (submit)="onSubmit()">
+    <form class="my-4" [formGroup]="formAceptacion" (ngSubmit)="onSubmit()">
 
         <mat-form-field class="w-full">
             <mat-label>Nombre completo</mat-label>
@@ -81,7 +81,6 @@
                     #fileInput
                     type="file"
                     accept="image/*"
-                    capture="environment"
                     (change)="onFileSelected($event)"
                     style="display: none"
                 />
@@ -109,7 +108,6 @@
                     #fileInput2
                     type="file"
                     accept="image/*"
-                    capture="environment"
                     (change)="onFileSelected2($event)"
                     style="display: none"
                 />

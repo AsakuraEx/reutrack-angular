@@ -35,6 +35,11 @@ export class ActaAceptacionService {
     return this.http.put(url, {})  
   }
 
+  obtenerPdf(id_acta: number): Observable<any> {
+    const url = this.baseUrl + '/acta_aceptacion/pdf/' + id_acta;
+    return this.http.get(url, { responseType: 'blob' })
+  }
+
   /* -------------------------------------------------------------------*/
 
   obtenerFuncionesPorActa(id_acta: number): Observable<any> {
