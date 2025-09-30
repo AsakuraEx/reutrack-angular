@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input, OnInit, ViewChild } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
@@ -6,7 +6,7 @@ import { MatIconModule } from '@angular/material/icon';
 import {MatCardModule} from '@angular/material/card';
 import { ReunionService } from '../../../../services/reunion.service';
 import { HotToastService } from '@ngxpert/hot-toast';
-import { FormControl, FormGroup, Validators, FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { FormControl, FormGroup, Validators, FormsModule, ReactiveFormsModule, FormGroupDirective } from '@angular/forms';
 
 
 @Component({
@@ -29,9 +29,17 @@ export class AcuerdosComponent implements OnInit{
   expandirPanel = false;
   dataSource: any[] = [];
   acuerdoForm = new FormGroup({
-    nombre: new FormControl('', [Validators.required, Validators.maxLength(256)]),
-    id_reunion: new FormControl<number|null>(null, [Validators.required])
+    nombre: new FormControl('', {
+      updateOn: 'blur',
+      validators: [Validators.required, Validators.maxLength(256)],
+    }),
+    id_reunion: new FormControl<number|null>(null, {
+      updateOn: 'blur',
+      validators:[Validators.required]
+    })
   })
+
+  @ViewChild(FormGroupDirective) formDirective?: FormGroupDirective
 
   ngOnInit(): void {
       this.obtenerAcuerdosDeReunion()
@@ -82,6 +90,7 @@ export class AcuerdosComponent implements OnInit{
 
     }
     this.acuerdoForm.reset()
+    this.formDirective?.resetForm()
 
   }
 

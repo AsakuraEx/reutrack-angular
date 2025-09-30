@@ -5,13 +5,10 @@
 
 <form class="mt-4" [formGroup]="authForm" (ngSubmit)="onSubmit()">
 
-    @if (authForm.controls['code'].hasError('required') && (authForm.controls['code'].dirty || authForm.controls['code'].touched)) {
-        <p class="text-red-700 text-xs">El código es requerido </p>
-    }
-
     <mat-form-field class="w-full">
         <mat-label>Código de doble factor de autenticación</mat-label>
         <input type="text" matInput formControlName="code">
+        <mat-error>El código de autenticación es requerido.</mat-error>
     </mat-form-field>
 
     <div class="space-y-2">

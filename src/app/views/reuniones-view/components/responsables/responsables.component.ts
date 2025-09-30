@@ -1,5 +1,5 @@
 import { AsyncPipe } from '@angular/common';
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input, OnInit, ViewChild } from '@angular/core';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { MatButtonModule } from '@angular/material/button';
 import { MatFormFieldModule } from '@angular/material/form-field';
@@ -8,7 +8,7 @@ import { MatInputModule } from '@angular/material/input';
 import { MatTableModule } from '@angular/material/table';
 import { ReunionService } from '../../../../services/reunion.service';
 import { UsuarioService } from '../../../../services/usuario.service';
-import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
+import { FormControl, FormGroup, FormGroupDirective, ReactiveFormsModule, Validators } from '@angular/forms';
 import { HotToastService } from '@ngxpert/hot-toast';
 import { jwtDecode } from 'jwt-decode';
 import { map, Observable, startWith } from 'rxjs';
@@ -41,6 +41,8 @@ export class ResponsablesComponent implements OnInit{
   @Input() id_reunion!: number;
   @Input() reunion_reactivada!: boolean;
   @Input() id_usuario_reunion!: number;
+
+  @ViewChild(FormGroupDirective) formDirective?: FormGroupDirective
 
   responsableForm = new FormGroup({
     id_usuario: new FormControl<any>(null, [Validators.required]),
@@ -132,8 +134,7 @@ export class ResponsablesComponent implements OnInit{
         next: () => {
           this.obtenerResponsables(this.id_reunion);
           this.responsableForm.reset();
-          this.responsableForm.markAsUntouched();
-          this.responsableForm.markAsPristine();
+          this.formDirective?.resetForm()
           this.toastService.success('Responsable agregado con éxito', {
             duration: 3000,
             position: 'top-right'

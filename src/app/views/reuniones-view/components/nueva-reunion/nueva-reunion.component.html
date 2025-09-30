@@ -7,11 +7,21 @@
         <mat-form-field class="w-full">
             <mat-label>Nombre de la reunión</mat-label>
             <input matInput formControlName="nombre">
+            <mat-error>
+                {{ reunionForm.controls['nombre'].hasError('required') ? 'El nombre de la reunión es requerido' : '' }}
+                {{ reunionForm.controls['nombre'].hasError('minlength') ? 'El nombre de la reunión debe tener al menos 3 caracteres' : '' }}
+                {{ reunionForm.controls['nombre'].hasError('maxlength') ? 'El nombre de la reunión no debe exceder los 255 caracteres' : '' }}
+            </mat-error>
         </mat-form-field>
 
         <mat-form-field class="w-full">
             <mat-label>Lugar de la reunión</mat-label>
             <input matInput formControlName="lugar">
+            <mat-error>
+                {{ reunionForm.controls['lugar'].hasError('required') ? 'El lugar de la reunión es requerido' : '' }}
+                {{ reunionForm.controls['lugar'].hasError('minlength') ? 'El lugar de la reunión debe tener al menos 3 caracteres' : '' }}
+                {{ reunionForm.controls['lugar'].hasError('maxlength') ? 'El lugar de la reunión no debe exceder los 255 caracteres' : '' }}
+            </mat-error>
         </mat-form-field>
 
         @if(proyectos.length > 0) {
@@ -35,6 +45,7 @@
                         <mat-option [value]="proyecto">{{ proyecto.nombre }}</mat-option>
                     }
                 </mat-autocomplete>
+                <mat-error>Debe seleccionar un proyecto de la lista</mat-error>
             </mat-form-field>
         }
 
@@ -57,6 +68,7 @@
                     <mat-option [value]="version">{{ version.nombre }}</mat-option>
                 }
             </mat-autocomplete>
+            <mat-error>Seleccione una versión, despues de haber seleccionado un proyecto</mat-error>
         </mat-form-field>
     
 

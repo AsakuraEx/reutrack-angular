@@ -1,12 +1,14 @@
 import { Component, OnInit } from '@angular/core';
 import { ProyectoService } from '../../../services/proyecto.service';
 import { ReunionService } from '../../../services/reunion.service';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, RouterLink } from '@angular/router';
 import { HotToastService } from '@ngxpert/hot-toast';
+import { MatIconModule } from '@angular/material/icon';
+import { MatButtonModule } from '@angular/material/button';
 
 @Component({
   selector: 'app-seguimiento-view',
-  imports: [],
+  imports: [RouterLink, MatIconModule, MatButtonModule],
   templateUrl: './seguimiento-view.component.html',
   styleUrl: './seguimiento-view.component.css'
 })
