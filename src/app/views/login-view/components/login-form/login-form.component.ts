@@ -10,12 +10,13 @@ import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angula
 import { AuthService } from '../../../../services/auth-service.service';
 import { HotToastService } from '@ngxpert/hot-toast';
 import { MatIconModule } from '@angular/material/icon';
+import { RouterLink } from '@angular/router';
 
 @Component({
   selector: 'app-login-form',
   imports: [
     MatButtonModule, MatInputModule, MatFormFieldModule, MatDividerModule, ReunionCodeComponent,
-    ReactiveFormsModule, MatProgressSpinnerModule, MatProgressBarModule, MatIconModule
+    ReactiveFormsModule, MatProgressSpinnerModule, MatProgressBarModule, MatIconModule, RouterLink
   ],
   templateUrl: './login-form.component.html',
   styleUrl: './login-form.component.css',

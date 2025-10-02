@@ -1,0 +1,18 @@
+<form [formGroup]="formValidar" (submit)="onSubmit()">
+    <mat-form-field class="w-full text-center">
+        <mat-label>Código de verificación</mat-label>
+        <input type="text" matInput formControlName="codigo" placeholder="Ingresa el código recibido en {{ email }}">
+        <mat-error>El código de verificación es requerido</mat-error>
+    </mat-form-field>
+
+    <div class="space-x-2">
+        <button mat-flat-button type="submit" [disabled]="isSubmitting">
+            @if(isSubmitting){
+                <mat-progress-spinner diameter="20" mode="indeterminate"></mat-progress-spinner>
+            } @else {
+                Validar código
+            }
+        </button>
+        <button mat-stroked-button type="button" routerLink="/login">Cancelar</button>
+    </div>
+</form>

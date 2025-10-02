@@ -1,4 +1,4 @@
-import { Component, signal } from '@angular/core';
+import { Component, OnInit, signal } from '@angular/core';
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
 import { MatFormFieldModule } from '@angular/material/form-field';
@@ -19,7 +19,7 @@ import { Router } from '@angular/router';
   templateUrl: './cambiar-contrasena-view.component.html',
   styleUrl: './cambiar-contrasena-view.component.css'
 })
-export class CambiarContrasenaViewComponent {
+export class CambiarContrasenaViewComponent implements OnInit{
 
   constructor(
     private usuarioService: UsuarioService,
@@ -27,6 +27,8 @@ export class CambiarContrasenaViewComponent {
     private toastService: HotToastService,
     private router: Router
   ){}
+
+  isActualizarContrasenaUrl: boolean = false
 
   formContrasena = new FormGroup({
     id_usuario: new FormControl(null, [Validators.required]),
@@ -48,6 +50,10 @@ export class CambiarContrasenaViewComponent {
   hideNew = signal(true);
   hideNew2 = signal(true);
 
+  ngOnInit(): void {
+      this.isActualizarContrasenaUrl = this.router.url.includes('actualizar-contrasena');
+  }
+
   toggle(control: 'old' | 'new' | 'new2', event: MouseEvent) {
     event.stopPropagation();
     switch (control) {
@@ -64,6 +70,7 @@ export class CambiarContrasenaViewComponent {
   }
 
   cambiarContrasena(data: any): void {
+
     this.usuarioService.actualizarContraseña(data).subscribe({
       next: response =>{
         console.log(response)
@@ -71,6 +78,7 @@ export class CambiarContrasenaViewComponent {
           duration: 5000,
           position: 'top-right'
         })
+        localStorage.removeItem('token-recuperacion');
         this.cerrarSesion(data.id_usuario)
       },
       error: e => {
@@ -98,17 +106,26 @@ export class CambiarContrasenaViewComponent {
   onSubmit(): void {
 
     const token = localStorage.getItem('token')
-    if(!token){
-      return
+    const tokenRecuperacion = localStorage.getItem('token-recuperacion');
+    
+    if(tokenRecuperacion){
+      const decoded: any = jwtDecode(tokenRecuperacion)
+      this.formContrasena.controls['id_usuario'].setValue(decoded.id);
+      this.formContrasena.controls['sesion'].setValue(1);
+      this.formContrasena.controls['old'].setValue('temporal');
     }
-
-    const decoded: any = jwtDecode(token)
-    this.formContrasena.controls['id_usuario'].setValue(decoded.id);
-    this.formContrasena.controls['sesion'].setValue(decoded.first_session);
+    
+    if(token){
+      const decoded: any = jwtDecode(token)
+      this.formContrasena.controls['id_usuario'].setValue(decoded.id);
+      this.formContrasena.controls['sesion'].setValue(decoded.first_session);
+    }
 
     if(this.formContrasena.valid){
       this.cambiarContrasena(this.formContrasena.value);
     }
+
+    console.log("Invalido...")
 
   }
 

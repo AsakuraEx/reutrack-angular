@@ -1,0 +1,35 @@
+<div class="max-w-4xl mx-auto mt-8">
+
+    <div class="bg-white p-4 shadow-lg text-center">
+
+        @if(!codigoRecibido){
+            <form [formGroup]="formRecuperar" (submit)="onSubmit()">
+                <mat-form-field class="w-full">
+                    <mat-label>Correo electrónico</mat-label>
+                    <input matInput placeholder="Ingresa tu correo electrónico" formControlName="email">
+                    <mat-error>
+                        {{ formRecuperar.controls['email'].hasError('required') ? 'El correo electrónico es obligatorio.': '' }}
+                        {{ formRecuperar.controls['email'].hasError('email') ? 'Debes ingresar una dirección de correo electrónico válida.': '' }}
+                    </mat-error>
+                </mat-form-field>
+    
+                <div class="space-x-2">
+                    <button mat-flat-button type="submit" [disabled]="formRecuperar.invalid || isSubmitting">
+                        @if(isSubmitting){
+                            <mat-progress-spinner diameter="20" mode="indeterminate"></mat-progress-spinner>
+                        } @else {
+                            Solicitar código de validación
+                        }
+                    </button>
+                    <button mat-stroked-button type="button" routerLink="/login">Regresar al inicio de sesión</button>
+                </div>
+            </form>
+        } @else {
+
+            <app-form-validar [email]="emailUtilizado"></app-form-validar>
+
+        }
+
+    </div>
+
+</div>

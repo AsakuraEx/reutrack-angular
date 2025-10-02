@@ -24,4 +24,12 @@ export class AuthService {
     return this.http.post(this.url+'/logout', {id})
   }
 
+  enviarCodigoRecuperacion(email: string): Observable<any> {
+    return this.http.post(this.url+'/recover-password', { email: email } );
+  }
+
+  verificarCodigoRecuperacion(email: string, codigo: string): Observable<any> {
+    return this.http.post(this.url+'/verify-recover-code', {email: email, codigo: codigo})
+  }
+
 }

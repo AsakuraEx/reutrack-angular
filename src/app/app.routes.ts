@@ -12,6 +12,11 @@ export const routes: Routes = [
         canActivate: [AuthGuard, primerInicioGuard]
     },
     {
+        path: 'recuperar-contrasena',
+        loadComponent:() => import('./views/recuperar-contrasena-view/recuperar-contrasena-view.component').then(m => m.RecuperarContrasenaViewComponent),
+        canActivate: [LoginGuard]
+    },
+    {
         path: 'agradecimiento',
         loadComponent: () => import('./components/agradecimiento/agradecimiento.component').then(m => m.AgradecimientoComponent),
         canActivate: []
@@ -75,6 +80,11 @@ export const routes: Routes = [
         path: 'cambiar-contrasena',
         loadComponent: () => import('./views/cambiar-contrasena-view/cambiar-contrasena-view.component').then(m => m.CambiarContrasenaViewComponent),
         canActivate: [AuthGuard]
+    },
+    {
+        path: 'actualizar-contrasena',
+        loadComponent: () => import('./views/cambiar-contrasena-view/cambiar-contrasena-view.component').then(m => m.CambiarContrasenaViewComponent),
+        canActivate: [LoginGuard]
     },
     {
         path: 'reportes/reuniones-reactivadas',
