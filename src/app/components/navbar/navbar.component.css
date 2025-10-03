@@ -13,7 +13,7 @@ a.active {
 }
 
 .btn-tertiary:hover {
-  background-color: rgb(255, 215, 255) !important;
+  background-color: #F5C6FF !important;
   color: var(--mat-sys-tertiary) !important;
 }
 
@@ -23,3 +23,11 @@ a.active {
   justify-content: flex-start !important; /* texto a la izquierda */
   padding-left: calc(var(--spacing) * 6) !important; 
 }
+
+button.mat-mdc-button.btn-tertiary:hover,
+button.mat-mdc-raised-button.btn-tertiary:hover {
+  background-color: rgb(255, 215, 255) !important;
+  color: var(--mat-sys-tertiary) !important;
+}
+
+

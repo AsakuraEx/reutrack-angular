@@ -37,7 +37,10 @@ export class NavbarComponent implements OnInit {
     this.navbarVisible = !this.navbarVisible;
   }
 
-  toggleDropDown(id:string) {
+  toggleDropDown(id:string, event?: Event) {
+    
+    if(event) event.stopPropagation();
+
     const dropdown = document.getElementById(id);
 
     if(!dropdown) return;

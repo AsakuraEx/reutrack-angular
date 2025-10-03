@@ -14,6 +14,23 @@ export class ActaAceptacionService {
 
   baseUrl = environment.apiURL
 
+  obtenerActasDeAceptacion(id_proyecto?: number | null, estado?: number | null): Observable<any> {
+    let url = this.baseUrl + '/acta_aceptacion?';
+
+    const params: string[] = [];
+
+    if (estado) params.push(`estado=${encodeURIComponent(estado)}`);
+    if (id_proyecto) params.push(`id_proyecto=${encodeURIComponent(id_proyecto)}`);
+
+
+    // Solo agregar '?' si hay parámetros
+    if (params.length > 0) {
+      url += params.join('&');
+    }
+
+    return this.http.get(url)  
+  }
+
   obtenerActaPorVersion(id_version: number): Observable<any> {
     const url = this.baseUrl + '/acta_aceptacion/' + id_version;
     return this.http.get(url)

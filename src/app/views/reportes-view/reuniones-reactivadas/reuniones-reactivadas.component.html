@@ -1,9 +1,84 @@
 <div class="container mx-auto">
 
-    <!-- Eliminar despues -->
-    <div class="flex flex-col items-center justify-center gap-3">
-        <img src="/images/gato.webp" alt="construcción" class="w-[40%]">
-        <h1 class="text-purple-700 font-bold text-4xl">En construcción "Reuniones reactivadas", no este chingando</h1>
-    </div>
+    <h1 class="text-center text-2xl font-medium text-purple-700">
+        Bitacora de reuniones reactivadas
+    </h1>
+
+    <table mat-table [dataSource]="dataSource">
+
+        <ng-container matColumnDef="proyecto">
+            <th mat-header-cell *matHeaderCellDef class="text-purple-700">Proyecto</th>
+            <td mat-cell *matCellDef="let item" class="py-1">
+                <p class="text-ellipsis font-medium pt-1">
+                    {{ item.reunion.version.proyecto.nombre }}
+                </p>
+                <p class="text-sm font-light pb-2">
+                    {{ item.reunion.version.nombre }}
+                </p>
+            </td>
+        </ng-container>
+
+        <ng-container matColumnDef="reunion">
+            <th mat-header-cell *matHeaderCellDef class="text-purple-700 w-72">Reunion</th>
+            <td mat-cell *matCellDef="let item">
+                <p class="text-ellipsis font-medium">
+                    {{ item.reunion.nombre }}
+                </p>
+                <p class="text-sm font-light">
+                    {{ item.reunion.lugar }}
+                </p>
+            </td>
+        </ng-container>
+
+        <ng-container matColumnDef="encargado">
+            <th mat-header-cell *matHeaderCellDef class="text-purple-700">Encargado</th>
+            <td mat-cell *matCellDef="let item">
+                <p class="text-ellipsis">
+                    {{ item.reunion.user.nombre }}
+                </p>
+            </td>
+        </ng-container>
+
+        <ng-container matColumnDef="reactivado_por">
+            <th mat-header-cell *matHeaderCellDef class="text-purple-700">Reactivado por</th>
+            <td mat-cell *matCellDef="let item">
+                <p class="text-ellipsis">
+                    {{ item.usuario.nombre }}
+                </p>
+            </td>
+        </ng-container>
+
+        <ng-container matColumnDef="justificacion">
+            <th mat-header-cell *matHeaderCellDef class="text-purple-700 w-48">Justificación</th>
+            <td mat-cell *matCellDef="let item">
+                <p class="text-ellipsis">
+                    {{ item.justificacion }}
+                </p>
+            </td>
+        </ng-container>
+
+        <ng-container matColumnDef="fecha">
+            <th mat-header-cell *matHeaderCellDef class="text-purple-700 w-32">Fecha reactivación</th>
+            <td mat-cell *matCellDef="let item">
+                <p class="text-ellipsis">
+                    {{ transformarFecha(item.createdAt) }}
+                </p>
+            </td>
+        </ng-container>
+
+        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+        <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+
+        <tr class="mat-row" *matNoDataRow>
+            <td class="mat-cell" colspan="6">
+                <p class="font-italic py-1 px-4 text-center">
+                    No hay reactivaciones registradas.
+                </p>
+            </td>
+        </tr>
+
+    </table>
+
+    <mat-paginator [length]="totalRegistros" [pageSize]="10" [pageSizeOptions]="[5, 10, 20, 50]"></mat-paginator>
 
 </div>

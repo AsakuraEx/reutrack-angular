@@ -1,7 +1,7 @@
-  <div class="h-screen flex flex-col">
+  <div class="relative h-screen flex flex-col">
 
     @if(!isLoginPage && token){
-      <div class="fixed top-0 left-0 w-full bg-white shadow-md z-10 px-4 flex justify-between items-center">
+      <div class="sticky top-0 left-0 w-full bg-white shadow-md z-10 px-4 flex justify-between items-center">
       
         <button mat-icon-button (click)="sidenav.toggle()">
           <mat-icon>menu</mat-icon>
@@ -16,7 +16,7 @@
       </div>
     }
   
-    <mat-sidenav-container class="h-screen">
+    <mat-sidenav-container class="h-full">
   
       <mat-sidenav #sidenav mode="over" closed>
         
@@ -28,7 +28,7 @@
   
       <mat-sidenav-content>
         
-        <main [class]="!isLoginPage ? 'my-20':''">
+        <main [class]="!isLoginPage ? 'my-10':''">
 
           <router-outlet />
         
@@ -39,7 +39,7 @@
     </mat-sidenav-container>
   
     @if(!isLoginPage && token){
-      <div class="fixed bottom-0 left-0 w-full bg-gray-100 text-center p-3 border-t border-gray-200 z-10">
+      <div class="sticky bottom-0 left-0 w-full bg-gray-100 text-center p-3 border-t border-gray-200 z-10">
         Francisco Escobar &copy; 2025
       </div>
     }

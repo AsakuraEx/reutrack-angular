@@ -1,0 +1,4 @@
+mat-sidenav, 
+.mat-drawer-inner-container {
+  border-radius: 0 !important;
+}

@@ -1,0 +1,79 @@
+<table mat-table [dataSource]="dataSource">
+
+    <ng-container matColumnDef="proyecto">
+        <th mat-header-cell *matHeaderCellDef class="text-purple-700">Proyecto</th>
+        <td mat-cell *matCellDef="let acta">
+            <p class="text-ellipsis">
+                {{ acta.version.proyecto.nombre }}
+            </p>
+        </td>
+    </ng-container>
+
+    <ng-container matColumnDef="version">
+        <th mat-header-cell *matHeaderCellDef class="text-purple-700">Versión</th>
+        <td mat-cell *matCellDef="let acta">
+            <p class="text-ellipsis">
+                {{ acta.version.nombre }}
+            </p>
+        </td>
+    </ng-container>
+
+    <ng-container matColumnDef="fecha">
+        <th mat-header-cell *matHeaderCellDef class="text-purple-700">Fecha de Apertura</th>
+        <td mat-cell *matCellDef="let acta">
+            <p class="text-ellipsis">
+                {{ acta.createdAt }}
+            </p>
+        </td>
+    </ng-container>
+
+    <ng-container matColumnDef="usuario">
+        <th mat-header-cell *matHeaderCellDef class="text-purple-700">Usuario que apertura</th>
+        <td mat-cell *matCellDef="let acta">
+            <p class="text-ellipsis">
+                {{ acta.usuario.nombre }}
+            </p>
+        </td>
+    </ng-container>
+
+    <ng-container matColumnDef="estado">
+        <th mat-header-cell *matHeaderCellDef class="text-purple-700">Estado</th>
+        <td mat-cell *matCellDef="let acta">
+            <p class="text-ellipsis font-medium" [class]="acta.estado.nombre === 'Pendiente' ? 'text-yellow-700': 'text-green-700'">
+                {{ acta.estado.nombre }}
+            </p>
+        </td>
+    </ng-container>
+
+    <ng-container matColumnDef="acciones">
+        <th mat-header-cell *matHeaderCellDef class="text-purple-700">Acción</th>
+        <td mat-cell *matCellDef="let acta">
+
+            <button 
+                mat-icon-button 
+                [style]="acta.estado.nombre === 'Pendiente' ? 'color:orange;':'color:blue;'"
+                [matTooltip]="acta.estado.nombre === 'Pendiente' ? 'Continuar Acta': 'Ver Acta'"
+                routerLink="/versiones/acta-aceptacion/{{ acta.id }}"
+                >
+                <mat-icon>
+                    {{ acta.estado.nombre === 'Pendiente' ? 'edit': 'visibility' }}
+                </mat-icon>
+            </button>
+
+        </td>
+    </ng-container>
+
+    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+    <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+
+    <tr class="mat-row" *matNoDataRow>
+        <td class="mat-cell" colspan="7">
+            <p class="font-italic py-2 px-4 text-center">
+                No hay actas de aceptación registradas.
+            </p>
+        </td>
+    </tr>
+
+</table>
+
+<mat-paginator [length]="totalRegistros" [pageSize]="10" [pageSizeOptions]="[5, 10, 20, 50]"></mat-paginator>

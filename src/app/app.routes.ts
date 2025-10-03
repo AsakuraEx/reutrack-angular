@@ -97,8 +97,12 @@ export const routes: Routes = [
         canActivate: [AuthGuard, primerInicioGuard]
     },
     {
+        path: 'reportes/actas-de-aceptacion',
+        loadComponent: () => import('./views/reportes-view/actas-de-aceptacion/actas-de-aceptacion.component').then(m => m.ActasDeAceptacionComponent),
+        canActivate: [AuthGuard, primerInicioGuard]
+    },
+    {
         path: '**',
         loadComponent: () => import('./components/not-found-page/not-found-page.component').then(m => m.NotFoundPageComponent)
-
     }
 ];

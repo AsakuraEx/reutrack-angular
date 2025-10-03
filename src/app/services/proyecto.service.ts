@@ -33,6 +33,11 @@ export class ProyectoService {
     return this.http.get(url)
   }
 
+  obtenerProyectosEliminados(): Observable<any> {
+    const url = this.BaseURL + '/proyectos/eliminados';
+    return this.http.get(url)
+  }
+
   obtenerProyectosVersiones(limit: any, page: number): Observable<any> {
     
     let url = this.BaseURL + '/proyectos/versiones?';

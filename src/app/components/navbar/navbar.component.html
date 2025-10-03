@@ -1,5 +1,5 @@
 @if(usuario) {
-  <div class="bg-purple-100 h-[100dvh] border-r border-purple-300 overflow-y-hidden py-16">
+  <div class="bg-purple-100 h-full border-r border-purple-300 overflow-y-hidden py-6 px-2">
 
     <div class="flex flex-col justify-between h-full">
 
@@ -16,7 +16,7 @@
                 (click)="toggleDropDown(option.id)"
               >
     
-                <div class="flex justify-start items-center py-2 px-4 hover:bg-purple-200 rounded-full cursor-pointer gap-2">
+                <div class="flex justify-start items-center py-2 px-4 rounded-full hover:bg-purple-200 cursor-pointer gap-2">
                   <mat-icon 
                     style="color: #7D00FA; font-size: 18px; height: auto;">
                     {{ option.icon }}
@@ -31,21 +31,69 @@
                 <div class="w-full rounded py-2 px-8">
                   @for(item of option.opciones; track item){
 
-                    @for(permiso of item.permiso; track $index){
+                    <!-- sub-submenu del navbar -->
+                    @if(item.desplegable){
 
-                      @if(permiso === usuario.id_rol){
-                        <button mat-button 
-                          routerLink="{{ item.path }}" 
-                          routerLinkActive="active" 
-                          [routerLinkActiveOptions]="{ exact: true }" 
-                          ariaCurrentWhenActive="page"
-                          class="w-full btn-tertiary"
-                        >
-                          <!-- <mat-icon>{{ item.icon }}</mat-icon> -->
-                          {{ item.name }}
-                        </button>
-                      }
+                      <div 
+                        [id]="item.id" 
+                        class="w-full text-center max-h-9 overflow-hidden transition-all duration-300 ease-in"
+                        (click)="toggleDropDown(item.id, $event)"
+                      >
+            
+                        <div class="flex justify-start items-center btn-tertiary py-2 px-6 rounded-full cursor-pointer gap-2">
+                          <h1 class="text-sm font-medium">{{ item.name }}</h1>
+                          <mat-icon 
+                            style="font-size: 18px; height: auto;">
+                            keyboard_arrow_down
+                          </mat-icon>
+                        </div>
+            
+                        <div class="w-full rounded py-2 px-8">
+                          @for(submenu of item.opciones; track $index){
+
+                            @for(permiso of submenu.permiso; track $index){
+        
+                              @if(permiso === usuario.id_rol){
+                                <button mat-button 
+                                  routerLink="{{ submenu.path }}" 
+                                  routerLinkActive="active" 
+                                  [routerLinkActiveOptions]="{ exact: true }" 
+                                  ariaCurrentWhenActive="page"
+                                  class="w-full btn-tertiary"
+                                >
+                                  <!-- <mat-icon>{{ item.icon }}</mat-icon> -->
+                                  {{ submenu.name }}
+                                </button>
+                              }
+                            }
+
+                          }
+                        </div>
+                      </div>
+
                     }
+
+                    @else {
+
+                      <!-- submenu del navbar -->
+                      @for(permiso of item.permiso; track $index){
+  
+                        @if(permiso === usuario.id_rol){
+                          <button mat-button 
+                            routerLink="{{ item.path }}" 
+                            routerLinkActive="active" 
+                            [routerLinkActiveOptions]="{ exact: true }" 
+                            ariaCurrentWhenActive="page"
+                            class="w-full btn-tertiary"
+                          >
+                            <!-- <mat-icon>{{ item.icon }}</mat-icon> -->
+                            {{ item.name }}
+                          </button>
+                        }
+                      }
+
+                    }
+
                   }
                 </div>
                   

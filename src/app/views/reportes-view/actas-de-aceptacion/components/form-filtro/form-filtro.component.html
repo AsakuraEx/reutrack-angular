@@ -1,0 +1,33 @@
+        <form [formGroup]="formFiltro" class="px-24 pb-2" (submit)="onSubmit()">
+
+            <mat-form-field class="w-full">
+                <mat-label>Proyecto</mat-label>
+                <input type="text"
+                    placeholder="Selecciona un proyecto"
+                    aria-label="Proyecto"
+                    matInput
+                    formControlName="proyecto"
+                    [matAutocomplete]="auto"
+                >
+                <mat-autocomplete 
+                    #auto="matAutocomplete" 
+                    [displayWith]="displayProyectoNombre"
+                >
+                    @for (proyecto of proyectosFiltrados | async ; track $index) {
+                        <mat-option [value]="proyecto">{{ proyecto.nombre }}</mat-option>
+                    }
+                </mat-autocomplete>
+            </mat-form-field>
+
+            <mat-form-field class="w-full">
+                <mat-label>Estado del acta</mat-label>
+                <mat-select formControlName="estado">
+                    <mat-option>Ninguno</mat-option>
+                    <mat-option value="6">Pendiente</mat-option>
+                    <mat-option value="7">Aprobada</mat-option>
+                </mat-select>
+            </mat-form-field>
+
+            <button mat-flat-button type="submit">Buscar</button>
+
+        </form>

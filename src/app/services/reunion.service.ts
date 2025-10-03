@@ -202,4 +202,9 @@ export class ReunionService {
     })
   }
 
+  obtenerReunionesReactivadas(): Observable<any> {
+    const url = this.BaseUrl + '/reuniones/reactivadas';
+    return this.http.get(url)
+  }
+
 }

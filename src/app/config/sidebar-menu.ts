@@ -24,14 +24,23 @@ export const options = [
                 permiso: [1,2]
             },
             {
-                path: 'reportes/reuniones-reactivadas',
-                name: 'Reuniones reactivadas',
-                permiso: [1,2]
-            },
-            {
-                path: 'reportes/proyectos-eliminados',
-                name: 'Proyectos eliminados',
-                permiso: [1]    
+                id: 'bitacora',
+                desplegable: true,
+                name: 'Bitacoras',
+                permiso: [1,2],
+                opciones: [
+                    {
+                        path: 'reportes/reuniones-reactivadas',
+                        name: 'Reuniones reactivadas',
+                        permiso: [1,2]
+                    },
+                    {
+                        path: 'reportes/proyectos-eliminados',
+                        name: 'Proyectos eliminados',
+                        permiso: [1]    
+                    },
+
+                ]
             },
 
         ]
