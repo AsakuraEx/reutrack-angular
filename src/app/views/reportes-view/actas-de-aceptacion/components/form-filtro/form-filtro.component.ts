@@ -99,4 +99,8 @@ export class FormFiltroComponent implements AfterViewInit {
 
   }
 
+  reset(): void {
+    location.reload()
+  }
+
 }

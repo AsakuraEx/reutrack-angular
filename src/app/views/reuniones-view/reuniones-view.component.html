@@ -103,7 +103,7 @@
 
             <app-acuerdos [id_reunion]="reunionActualDetails.id"></app-acuerdos>
 
-            <div class="mt-4 flex flew-wrap justify-end items-center gap-2 border border-purple-700 rounded-md p-4 bg-purple-100">                
+            <div class="mt-4 flex flew-wrap justify-between items-center gap-2 border border-purple-700 rounded-md p-4 bg-purple-100">                
                 <button 
                     mat-flat-button 
                     (click)="finalizarReunion()"
@@ -112,23 +112,25 @@
                     Finalizar reunión
                 </button>
     
-                <button 
-                    mat-flat-button 
-                    (click)="guardarReunion()"
-                    class="btn-tertiary"
-                    [disabled]="contarLetras(contenido.value ?? '') < 20"
-                >
-                    Guardar como borrador
-                </button>
-
-                <button 
-                    mat-flat-button 
-                    (click)="guardarReunionYSalir()"
-                    class="btn-secondary"
-                    [disabled]="contarLetras(contenido.value ?? '') < 20"
-                >
-                    Guardar como borrador y salir
-                </button>
+                <div class="space-x-2">
+                    <button 
+                        mat-flat-button 
+                        (click)="guardarReunion()"
+                        class="btn-tertiary"
+                        [disabled]="contarLetras(contenido.value ?? '') < 20"
+                    >
+                        Guardar como borrador
+                    </button>
+    
+                    <button 
+                        mat-flat-button 
+                        (click)="guardarReunionYSalir()"
+                        class="btn-secondary"
+                        [disabled]="contarLetras(contenido.value ?? '') < 20"
+                    >
+                        Guardar como borrador y salir
+                    </button>
+                </div>
             </div>
 
         }

@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnChanges, OnInit, SimpleChanges } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -57,10 +57,7 @@ export class ReunionesViewComponent implements OnInit {
   }
 
   ngOnInit(): void {
-   
     this.recuperarReunionActual()
-    
-
   }
 
   async validarUsuarioLector(): Promise<boolean> {
