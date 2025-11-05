@@ -6,12 +6,12 @@
     <table mat-table [dataSource]="dataSource">
 
         <ng-container matColumnDef="nombre">
-            <th mat-header-cell *matHeaderCellDef>Nombre</th>
-            <td mat-cell *matCellDef="let reunion">{{ reunion.nombre }}</td>
+            <th mat-header-cell *matHeaderCellDef class="w-52">Nombre reunión</th>
+            <td mat-cell *matCellDef="let reunion" class="h-28">{{ reunion.nombre }}</td>
         </ng-container>
 
         <ng-container matColumnDef="proyecto">
-            <th mat-header-cell *matHeaderCellDef>Proyecto</th>
+            <th mat-header-cell *matHeaderCellDef class="w-72">Proyecto</th>
             <td mat-cell *matCellDef="let reunion">
                 <p class="text-ellipsis text-purple-700 font-medium py-2">
                     {{ reunion.version.proyecto.nombre }}

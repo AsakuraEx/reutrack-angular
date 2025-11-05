@@ -199,7 +199,7 @@ export class NuevaReunionComponent implements OnInit{
 
           this.reunionService.agregarResponsables(data).subscribe({
             next: (res) => {
-              console.log('Se agregó automáticamente al encargado de la reunión')
+  
             },
             error: (err) => {
               console.log(err)

@@ -10,7 +10,7 @@
 </div>
 
 
-@if (reunionVisualizada) {
+@if (reunionVisualizada && !loadingReunion) {
 
     <h1 class="text-center text-2xl font-black text-purple-700">
         {{ reunionVisualizada.version['proyecto'].nombre }}
@@ -68,7 +68,7 @@
     
         <h1 class="font-black text-2xl text-purple-700 mt-6">Desarrollo de la reunión</h1>
     
-        <div [innerHTML]="reunionVisualizada.minutadereunion[0].minuta"></div>
+        <div [innerHTML]="minutaSanitizada"></div>
     
         <div class="w-full">
             <p class="font-black text-2xl text-purple-700 mt-6">Acuerdos de la reunión</p>
@@ -93,12 +93,12 @@
                 <tbody>
                     @for (item of reunionVisualizada['asistencia reunion']; track $index) {
                         <tr class="border-b border-purple-700 bg-purple-100 text-center">
-                            <td class="py-1"> {{ item.participante }} </td>
-                            <td> {{ item.institucion }} </td>
-                            <td> {{ item.cargo }} </td>
-                            <td> {{ item.correo }} </td>
-                            <td> {{ item.telefono }} </td>
-                            <td> {{ item.doc_identidad }} </td>
+                            <td class="py-1"> {{ item.participante || '-' }} </td>
+                            <td> {{ item.institucion || '-' }} </td>
+                            <td> {{ item.cargo || '-' }} </td>
+                            <td> {{ item.correo || '-' }} </td>
+                            <td> {{ formatearTelefono(item.telefono) || '-' }} </td>
+                            <td> {{ formatearDUI(item.doc_identidad) || '-' }} </td>
                         </tr>
                     }
                 </tbody>
@@ -107,7 +107,16 @@
         </div>
     </main>
 
-} @else {
+} 
+
+@if(loadingReunion && !reunionVisualizada){
+    <div class="flex justify-center items-center h-64">
+        <mat-spinner diameter="50" strokeWidth="4"></mat-spinner>
+    </div>
+}
+
+
+@if(!reunionVisualizada && !loadingReunion) {
 
     <div class="container mx-auto bg-red-100 rounded p-4">
         <p class="text-red-700 text-lg font-bold">

@@ -1,35 +1,33 @@
-<div class="w-full border border-purple-700 rounded-2xl p-4 shadow-lg">
+<div class="w-full border border-purple-700 rounded-2xl p-4 shadow-lg mt-6">
 
     <h1 class="text-2xl font-bold text-purple-700">Responsables de la reunión</h1>
 
-    <form [formGroup]="responsableForm" (ngSubmit)="onSubmit(reunion_reactivada)">
-        <div class="flex flex-col md:flex-row gap-4 mt-4 items-center justify-center">
-            <mat-form-field class="w-full">
-                <mat-label>Responsable de la reunión</mat-label>
-                <input type="text"
-                    formControlName="id_usuario"
-                    placeholder="Selecciona un responsable de la reunión..."
-                    aria-label="Responsable"
-                    matInput
-                    [matAutocomplete]="auto">
-                <mat-autocomplete autoActiveFirstOption #auto="matAutocomplete" [displayWith]="displayNombre">
-                @for (option of filteredOptions | async ; track option) {
-                    <mat-option [value]="option">{{option.nombre}}</mat-option>
-                }
-                </mat-autocomplete>
-                <mat-error>El responsable de la reunión es obligatorio para agregarlo a la lista</mat-error>
-            </mat-form-field>
-
-            <button mat-flat-button type="submit" class="w-32">
-                <mat-icon>add</mat-icon>
-                Agregar
-            </button>
-        </div>
-    </form>
-</div>
-
-<div class="w-full border border-purple-700 rounded-2xl p-4 shadow-lg mt-6">
-
+    @if(!esUsuarioLector){
+        <form [formGroup]="responsableForm" (ngSubmit)="onSubmit(reunion_reactivada)">
+            <div class="flex flex-col md:flex-row gap-4 mt-4 items-center justify-center">
+                <mat-form-field class="w-full">
+                    <mat-label>Responsable de la reunión</mat-label>
+                    <input type="text"
+                        formControlName="id_usuario"
+                        placeholder="Selecciona un responsable de la reunión..."
+                        aria-label="Responsable"
+                        matInput
+                        [matAutocomplete]="auto">
+                    <mat-autocomplete autoActiveFirstOption #auto="matAutocomplete" [displayWith]="displayNombre">
+                    @for (option of filteredOptions | async ; track option) {
+                        <mat-option [value]="option">{{option.nombre}}</mat-option>
+                    }
+                    </mat-autocomplete>
+                    <mat-error>El responsable de la reunión es obligatorio para agregarlo a la lista</mat-error>
+                </mat-form-field>
+    
+                <button mat-flat-button type="submit" class="w-32">
+                    <mat-icon>add</mat-icon>
+                    Agregar
+                </button>
+            </div>
+        </form>
+    }
 
     <table mat-table [dataSource]="dataSource" class="mat-elevation-z8 w-full">
 
@@ -58,8 +56,8 @@
 
                 <!-- if ( (EVALUA USUARIO COMUN) ó (EVALUA USUARIO ADMIN) ) -->
                 @if (
-                    (element.id_usuario !== id_usuario_reunion && decoded.id !== element.id_usuario && !element.visitante) ||
-                    (decoded.id_rol === 1 && decoded.id !== element.id_usuario && element.id_usuario !== id_usuario_reunion)
+                    ((element.id_usuario !== id_usuario_reunion && decoded.id !== element.id_usuario && !element.visitante) ||
+                    (decoded.id_rol === 1 && decoded.id !== element.id_usuario && element.id_usuario !== id_usuario_reunion)) && !esUsuarioLector
                 ) {
 
                     <button mat-icon-button color="warn" (click)="eliminarResponsable(element.id)">

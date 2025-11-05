@@ -11,8 +11,13 @@
         </button>
     </div>
 
+    <mat-form-field class="w-full mt-4">
+        <mat-label>Buscar</mat-label>
+        <input matInput (keyup)="applyFilter($event)" placeholder="Busca por el nombre del proyecto..." #input>
+    </mat-form-field>
+
     <div class="overflow-auto mt-8">
-        <table mat-table [dataSource]="proyectos">
+        <table mat-table [dataSource]="dataSource">
 
             <ng-container matColumnDef="proyecto">
                 <th mat-header-cell *matHeaderCellDef class="text-purple-700">Proyecto</th>

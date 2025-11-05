@@ -45,7 +45,6 @@ export class UsuariosComponent implements OnInit{
   obtenerUsuarios(): void {
     const id_acta: number = Number(this.route.snapshot.paramMap.get('id_acta'));
     this.actaAceptacionService.obtenerUsuarioActa(id_acta).subscribe(res=>{
-      console.log(res)
       this.usuarios = res;
     })
   }

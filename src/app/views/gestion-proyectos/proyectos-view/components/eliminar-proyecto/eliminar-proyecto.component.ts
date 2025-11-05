@@ -38,8 +38,6 @@ export class EliminarProyectoComponent {
       id_usuario: decoded.id
     }
 
-    console.log(proyectoEliminado)
-
     this.proyectoService.eliminarProyecto(proyectoEliminado).subscribe({
       next: ()=>{
         this.cerrarModal(true);

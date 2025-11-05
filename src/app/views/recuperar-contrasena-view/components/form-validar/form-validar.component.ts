@@ -45,8 +45,6 @@ export class FormValidarComponent {
 
       this.authService.verificarCodigoRecuperacion(email, codigo).subscribe({
         next: res => {
-          console.log("Exito")
-          console.log(res)
           this.toastService.success('La validación se realizó exitosamente', { duration: 3000, position: 'top-right' });
           localStorage.setItem('token-recuperacion', res.token)
           this.isSubmitting = false;
@@ -60,8 +58,6 @@ export class FormValidarComponent {
       });
 
     } else {
-
-      console.log("Formulario no valido");
       this.isSubmitting = false;
 
     }

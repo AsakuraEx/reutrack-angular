@@ -23,7 +23,6 @@ export class CancelarReunionModalComponent {
 
 
   cancelarReunion(): void {
-    console.log(this.data)
     this.reunionService.cancelarReunion(this.data.id).subscribe({
       next: ()=>{
         this.cerrarModal(true)

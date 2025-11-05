@@ -7,11 +7,18 @@ import { provideHotToastConfig } from '@ngxpert/hot-toast';
 import { Interceptor } from './services/interceptor';
 import { MatPaginatorIntl } from '@angular/material/paginator';
 import { getSpanishPaginatorIntl } from './config/spanish-paginator-intl';
+import { provideEnvironmentNgxMask, NgxMaskConfig } from 'ngx-mask'
+
+
+const maskConfig: Partial<NgxMaskConfig> = {
+  validation: false
+}
 
 export const appConfig: ApplicationConfig = {
   providers: [
     provideZoneChangeDetection({ eventCoalescing: true }),
     provideRouter(routes),
+    provideEnvironmentNgxMask(maskConfig),
     provideHttpClient(
       withInterceptors([ Interceptor ])
     ),

@@ -1,4 +1,4 @@
-import { Component, inject } from '@angular/core';
+import { Component, inject, OnChanges, OnInit, SimpleChanges } from '@angular/core';
 import { FormControl, Validators, FormsModule, ReactiveFormsModule, FormGroup } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
@@ -18,7 +18,7 @@ import { HotToastService } from '@ngxpert/hot-toast';
   templateUrl: './reactivar-reunion-modal.component.html',
   styleUrl: './reactivar-reunion-modal.component.css'
 })
-export class ReactivarReunionModalComponent {
+export class ReactivarReunionModalComponent{
 
   constructor(
     private reunionService: ReunionService,
@@ -27,6 +27,7 @@ export class ReactivarReunionModalComponent {
 
   readonly data = inject(MAT_DIALOG_DATA);
   readonly dialogRef = inject(MatDialogRef<ReactivarReunionModalComponent>)
+  contarLetras:number = 0;
 
   formReactivar = new FormGroup({
     justificacion: new FormControl<string>('', [Validators.required, Validators.minLength(20)]),
@@ -51,7 +52,15 @@ export class ReactivarReunionModalComponent {
     this.formReactivar.controls['id'].setValue(this.data.id);
     this.formReactivar.controls['id_usuario'].setValue(decoded.id)
 
-    console.log(this.formReactivar.value)
+    const contarLetras = this.formReactivar.controls['justificacion'].value?.trim().length || 0;
+
+    if(contarLetras < 20) {
+      this.toastService.error('La justificación debe tener al menos 20 caracteres', {
+        duration: 3000,
+        position: 'top-right'
+      })
+      return;
+    }
 
     this.reunionService.reactivarReunion(this.formReactivar.value).subscribe({
       next: () => {

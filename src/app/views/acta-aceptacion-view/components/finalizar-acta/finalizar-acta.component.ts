@@ -29,8 +29,6 @@ export class FinalizarActaComponent {
 
   finalizarActaAceptacion(): void {
 
-    console.log(this.data)
-
     this.actaAceptacionService.finalizarActaAceptacion(this.data.id_acta).subscribe({
       next: () => {
         this.toastService.success('Se finalizó el acta de aceptación', {

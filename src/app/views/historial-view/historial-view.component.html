@@ -9,7 +9,7 @@
         <!-- Listado de reuniones -->
         <div class="flex gap-3 flex-col w-full lg:w-3/4">
 
-            @if (reuniones.length > 0) {
+            @if (reuniones.length > 0 && !loadingReuniones) {
 
                 @for (reunion of reuniones; track $index) {
                     <div class="border rounded-lg w-full border-purple-700 p-2 shadow-sm hover:-translate-y-1 hover:shadow-xl transition-all duration-300 ease-in-out">
@@ -113,7 +113,14 @@
 
             }
 
-            @else {
+            @if(loadingReuniones && reuniones.length === 0){
+                <div class="flex justify-center items-center h-64">
+                    <mat-spinner diameter="50" strokeWidth="4"></mat-spinner>
+                </div>
+            }
+
+
+            @if(reuniones.length === 0 && !loadingReuniones) {
                 <div class="w-full flex flex-col justify-center items-center">
                     <img src="/images/Reulito-2.svg" alt="" class="max-w-98">
                     <p class="text-purple-700 font-black text-center w-full text-2xl">
@@ -122,11 +129,13 @@
                 </div>
             }
 
-            <mat-paginator
-                [length]="totalRecords"
-                [pageSize]="pageSize"
-                [pageIndex]="currentPage"
-            ></mat-paginator>
+            <div [class]="reuniones.length > 0 ? 'mt-4' : 'hidden'">
+                <mat-paginator
+                    [length]="totalRecords"
+                    [pageSize]="pageSize"
+                    [pageIndex]="currentPage"
+                ></mat-paginator>
+            </div>
 
         </div>
 

@@ -10,29 +10,69 @@
 
     <form class="mt-6 w-full" [formGroup]="formUsuario" (submit)="onSubmit()">
 
-        @if(formUsuario.controls['nombre'].hasError('required') && (formUsuario.controls['nombre'].touched || formUsuario.controls['nombre'].dirty)){
-            <mat-error>
-                El nombre de usuario es requerido
-            </mat-error>
-        }
         <mat-form-field class="w-full">
             <mat-label>Nombre de usuario</mat-label>
             <input type="text" matInput formControlName="nombre">
+            @if(formUsuario.controls['nombre'].hasError('required') && (formUsuario.controls['nombre'].touched || formUsuario.controls['nombre'].dirty)){
+                <mat-error>
+                    El nombre de usuario es requerido
+                </mat-error>
+            }
+            @if(formUsuario.controls['nombre'].hasError('minlength') && (formUsuario.controls['nombre'].touched || formUsuario.controls['nombre'].dirty)){
+                <mat-error>
+                    El nombre de usuario debe contener al menos 3 caracteres.
+                </mat-error>
+            }
+            @if(formUsuario.controls['nombre'].hasError('pattern') && (formUsuario.controls['nombre'].touched || formUsuario.controls['nombre'].dirty)){
+                <mat-error>
+                    El nombre de usuario solo debe contener letras y espacios.
+                </mat-error>
+            }
         </mat-form-field>
 
-        @if(formUsuario.controls['email'].hasError('required') && (formUsuario.controls['email'].touched || formUsuario.controls['email'].dirty)){
-            <mat-error>
-                El correo electrónico es requerido
-            </mat-error>
-        }
-        @if(formUsuario.controls['email'].hasError('email') && (formUsuario.controls['email'].touched || formUsuario.controls['email'].dirty)){
-            <mat-error>
-                Debe ingresar un correo electrónico válido
-            </mat-error>
-        }
+        <mat-form-field class="w-full">
+            <mat-label>Número de DUI</mat-label>
+            <input type="text" matInput placeholder="Ej. 12345678-9" formControlName="documento" mask="00000000-0">
+            @if(formUsuario.controls['documento'].hasError('required') && (formUsuario.controls['documento'].touched || formUsuario.controls['documento'].dirty)){
+                <mat-error>
+                    El número de DUI es requerido
+                </mat-error>
+            }
+            @if(formUsuario.controls['documento'].hasError('pattern') && (formUsuario.controls['documento'].touched || formUsuario.controls['documento'].dirty)){
+                <mat-error>
+                    Ingrese 8 números, un guión y un dígito verificador.
+                </mat-error>
+            }
+        </mat-form-field>
+
+        <mat-form-field class="w-full">
+            <mat-label>Teléfono</mat-label>
+            <input type="text" matInput placeholder="Ej. 7000-4444" formControlName="telefono" mask="0000-0000">
+            @if(formUsuario.controls['telefono'].hasError('required') && (formUsuario.controls['telefono'].touched || formUsuario.controls['documento'].dirty)){
+                <mat-error>
+                    El número de teléfono es requerido
+                </mat-error>
+            }
+            @if(formUsuario.controls['telefono'].hasError('pattern') && (formUsuario.controls['telefono'].touched || formUsuario.controls['documento'].dirty)){
+                <mat-error>
+                    El número de teléfono debe empezar con (2,6,7) y tener solo 8 dígitos de longitud.
+                </mat-error>
+            }
+        </mat-form-field>
+
         <mat-form-field class="w-full">
             <mat-label>Correo electrónico</mat-label>
             <input type="text" matInput formControlName="email">
+            @if(formUsuario.controls['email'].hasError('required') && (formUsuario.controls['email'].touched || formUsuario.controls['email'].dirty)){
+                <mat-error>
+                    El correo electrónico es requerido
+                </mat-error>
+            }
+            @if(formUsuario.controls['email'].hasError('email') && (formUsuario.controls['email'].touched || formUsuario.controls['email'].dirty)){
+                <mat-error>
+                    Debe ingresar un correo electrónico válido
+                </mat-error>
+            }
         </mat-form-field>
 
         <div class="flex flex-col gap-1 mb-4">

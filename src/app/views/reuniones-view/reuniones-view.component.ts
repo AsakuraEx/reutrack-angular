@@ -1,4 +1,4 @@
-import { Component, OnChanges, OnInit, SimpleChanges } from '@angular/core';
+import { Component, OnChanges, OnDestroy, OnInit, SimpleChanges } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -17,6 +17,7 @@ import { FormControl, ReactiveFormsModule, Validators } from '@angular/forms';
 import { HotToastService } from '@ngxpert/hot-toast';
 import { jwtDecode } from 'jwt-decode';
 import { firstValueFrom } from 'rxjs';
+import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
 
 @Component({
   selector: 'app-reuniones-view',
@@ -35,8 +36,16 @@ export class ReunionesViewComponent implements OnInit {
     private route: ActivatedRoute,
     private reunionService: ReunionService,
     private proyectoService: ProyectoService,
-    private toastService: HotToastService
+    private toastService: HotToastService,
+    private sanitizer: DomSanitizer // Esto es para evaluar el contenido HTML de manera segura
   ) {}
+
+  contenidoSanitizado: SafeHtml | null = null;  // Variable para almacenar el contenido sanitizado
+
+  esUsuarioLector: boolean = false;
+
+  autoguardadoInterval: any;
+  autoGuardadoFecha: any;
 
   expandReunionActualState = false;
   reunionActualDetails!: ReunionHeader;
@@ -50,15 +59,38 @@ export class ReunionesViewComponent implements OnInit {
     spellcheck: true,
     minHeight: '200px',
     placeholder: 'Escribe aquí...',
+    sanitize: false,
+    defaultParagraphSeparator: 'p',
     toolbarHiddenButtons: [
       ['insertImage', 'insertVideo'], // Ocultar botón de imagen
-      ['link', 'unlink']
+      ['link', 'unlink', 'superscript', 'subscript']
     ]
   }
 
   ngOnInit(): void {
     this.recuperarReunionActual()
+    // this.autoguardadoInterval = setInterval(()=>{
+    //   this.Autoguardado();
+    // }, 30000)
+    this.contenido.valueChanges.subscribe((valor: string | null) => {
+      this.contenidoSanitizado = this.sanitizer.bypassSecurityTrustHtml(valor || '');
+    });
+
   }
+
+  validarLector(esLector: boolean): void {
+    this.esUsuarioLector = esLector;
+
+    if(this.esUsuarioLector === true){
+      this.editorConfig = {
+        ...this.editorConfig,
+        editable: !this.esUsuarioLector
+      };
+    }
+  }
+  // ngOnDestroy(): void {
+  //   this.cancelarAutoguardado();
+  // }
 
   async validarUsuarioLector(): Promise<boolean> {
     const token = localStorage.getItem('token');
@@ -125,7 +157,8 @@ export class ReunionesViewComponent implements OnInit {
         if(resp.length > 0) {
           this.minutaReunion = resp[0].minuta
         }
-        this.contenido.setValue(this.minutaReunion || '');
+        const minutaGuardada = localStorage.getItem('minuta');
+        this.contenido.setValue(minutaGuardada || this.minutaReunion);
       },
       error: err => {
         console.log(err)
@@ -305,5 +338,38 @@ export class ReunionesViewComponent implements OnInit {
 
       return fechaFormateada
   }
+
+  // Autoguardado(): void {
+  //   if(this.contenido.value){
+  //     const minutaGuardada = localStorage.getItem('minuta');
+
+  //     if(minutaGuardada !== this.contenido.value){
+      
+  //       localStorage.setItem('minuta', this.contenido.value)
+  //       const minutaActualizada = localStorage.getItem('minuta');
+        
+  //       this.contenido.setValue(minutaActualizada);
+  //       this.autoGuardadoFecha = new Date().toLocaleString('es-ES', {
+  //           day: '2-digit',
+  //           month: '2-digit',
+  //           year: 'numeric',
+  //           hour: '2-digit',   // Hora en formato de dos dígitos
+  //           minute: '2-digit', // Minutos en formato de dos dígitos
+  //           second: '2-digit', // Segundos en formato de dos dígitos
+  //           hour12: true
+  //       });
+
+  //       this.toastService.info('Autoguardado realizado el día: ' + this.transformarFecha(), {
+  //         duration: 3000,
+  //         position: 'top-right'
+  //       })
+  //     }
+  //   }
+  // }
+
+  // cancelarAutoguardado(): void {
+  //   localStorage.removeItem('minuta');
+  //   this.autoguardadoInterval.clearInterval();
+  // }
 
 }

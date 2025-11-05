@@ -17,33 +17,96 @@
             <mat-form-field class="w-full">
                 <mat-label>Nombre completo</mat-label>
                 <input type="text" matInput formControlName="participante">
+                @if(formAsistencia.controls['participante'].hasError('required') && (formAsistencia.controls['participante'].touched || formAsistencia.controls['participante'].dirty)){
+                    <mat-error>El nombre del participante es obligatorio</mat-error>
+                }
+                @if(formAsistencia.controls['participante'].hasError('minlength') && (formAsistencia.controls['participante'].touched || formAsistencia.controls['participante'].dirty)){
+                    <mat-error>El nombre del participante debe contener al menos 3 caracteres</mat-error>
+                }
+                @if(formAsistencia.controls['participante'].hasError('maxlength') && (formAsistencia.controls['participante'].touched || formAsistencia.controls['participante'].dirty)){
+                    <mat-error>El nombre del participante debe contener como máximo 200 caracteres</mat-error>
+                }
+                @if(formAsistencia.controls['participante'].hasError('pattern') && (formAsistencia.controls['participante'].touched || formAsistencia.controls['participante'].dirty)){
+                    <mat-error>El nombre del participante solo debe contener letras y espacios</mat-error>
+                }
             </mat-form-field>
 
             <mat-form-field class="w-full">
                 <mat-label>Institucion</mat-label>
                 <input type="text" matInput formControlName="institucion">
+                @if(formAsistencia.controls['institucion'].hasError('required') && (formAsistencia.controls['institucion'].touched || formAsistencia.controls['institucion'].dirty)){
+                    <mat-error>El nombre de la institución es obligatorio</mat-error>
+                }
+                @if(formAsistencia.controls['institucion'].hasError('minlength') && (formAsistencia.controls['institucion'].touched || formAsistencia.controls['institucion'].dirty)){
+                    <mat-error>El nombre de la institucion debe contener al menos 3 caracteres</mat-error>
+                }
+                @if(formAsistencia.controls['institucion'].hasError('maxlength') && (formAsistencia.controls['institucion'].touched || formAsistencia.controls['institucion'].dirty)){
+                    <mat-error>El nombre de la institucion debe contener como máximo 200 caracteres</mat-error>
+                }
             </mat-form-field>
 
             <mat-form-field class="w-full">
                 <mat-label>Cargo</mat-label>
                 <input type="text" matInput formControlName="cargo">
+                @if(formAsistencia.controls['cargo'].hasError('required') && (formAsistencia.controls['cargo'].touched || formAsistencia.controls['cargo'].dirty)){
+                    <mat-error>El cargo es obligatorio</mat-error>
+                }
+                @if(formAsistencia.controls['cargo'].hasError('minlength') && (formAsistencia.controls['cargo'].touched || formAsistencia.controls['cargo'].dirty)){
+                    <mat-error>El cargo debe contener al menos 3 caracteres</mat-error>
+                }
+                @if(formAsistencia.controls['cargo'].hasError('maxlength') && (formAsistencia.controls['cargo'].touched || formAsistencia.controls['cargo'].dirty)){
+                    <mat-error>El cargo debe contener como máximo 100 caracteres</mat-error>
+                }
             </mat-form-field>
 
             @if(!participante_extranjero.value){                
                 <mat-form-field class="w-full">
                     <mat-label>Numero de DUI</mat-label>
-                    <input type="text" matInput formControlName="doc_identidad">
+                    <input type="text" matInput formControlName="doc_identidad" mask="00000000-0">
+                    @if(formAsistencia.controls['doc_identidad'].hasError('required') && (formAsistencia.controls['doc_identidad'].touched || formAsistencia.controls['doc_identidad'].dirty)){
+                        <mat-error>El número de DUI es obligatorio</mat-error>
+                    }
+                    @if(formAsistencia.controls['doc_identidad'].hasError('minlength') && (formAsistencia.controls['doc_identidad'].touched || formAsistencia.controls['doc_identidad'].dirty)){
+                        <mat-error>El formato de DUI es: ########-#</mat-error>
+                    }
+                    @if(formAsistencia.controls['doc_identidad'].hasError('maxlength') && (formAsistencia.controls['doc_identidad'].touched || formAsistencia.controls['doc_identidad'].dirty)){
+                        <mat-error>El formato de DUI es: ########-#</mat-error>
+                    }
+                    @if(formAsistencia.controls['doc_identidad'].hasError('pattern') && (formAsistencia.controls['doc_identidad'].touched || formAsistencia.controls['doc_identidad'].dirty)){
+                        <mat-error>El formato de DUI es: ########-#</mat-error>
+                    }
                 </mat-form-field>
     
                 <mat-form-field class="w-full">
                     <mat-label>Telefono</mat-label>
-                    <input type="text" matInput formControlName="telefono">
+                    <input type="text" matInput formControlName="telefono" mask="0000-0000">
+                    @if(formAsistencia.controls['telefono'].hasError('required') && (formAsistencia.controls['telefono'].touched || formAsistencia.controls['telefono'].dirty)){
+                        <mat-error>El número de telefono es obligatorio</mat-error>
+                    }
+                    @if(formAsistencia.controls['telefono'].hasError('minlength') && (formAsistencia.controls['telefono'].touched || formAsistencia.controls['telefono'].dirty)){
+                        <mat-error>El formato de telefono es: ####-####</mat-error>
+                    }
+                    @if(formAsistencia.controls['telefono'].hasError('maxlength') && (formAsistencia.controls['telefono'].touched || formAsistencia.controls['telefono'].dirty)){
+                        <mat-error>El formato de telefono es: ####-####</mat-error>
+                    }
+                    @if(formAsistencia.controls['telefono'].hasError('pattern') && (formAsistencia.controls['telefono'].touched || formAsistencia.controls['telefono'].dirty)){
+                        <mat-error>El formato de telefono es: ####-####</mat-error>
+                    }
                 </mat-form-field>
             }
 
             <mat-form-field class="w-full">
                 <mat-label>Correo electronico</mat-label>
                 <input type="text" matInput formControlName="correo">
+                    @if(formAsistencia.controls['correo'].hasError('required') && (formAsistencia.controls['correo'].touched || formAsistencia.controls['correo'].dirty)){
+                        <mat-error>El correo es obligatorio</mat-error>
+                    }
+                    @if(formAsistencia.controls['correo'].hasError('email') && (formAsistencia.controls['correo'].touched || formAsistencia.controls['correo'].dirty)){
+                        <mat-error>Ingrese un correo electrónico válido</mat-error>
+                    }
+                    @if(formAsistencia.controls['correo'].hasError('maxlength') && (formAsistencia.controls['correo'].touched || formAsistencia.controls['correo'].dirty)){
+                        <mat-error>El correo electrónico permite hasta un máximo de 100 caracteres</mat-error>
+                    }
             </mat-form-field>
 
             <div class="space-y-2">

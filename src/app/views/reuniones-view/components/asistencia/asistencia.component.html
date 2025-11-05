@@ -18,58 +18,60 @@
             <ng-container matColumnDef="nombre">
     
                 <th mat-header-cell *matHeaderCellDef class="text-purple-700"> Nombre completo </th>
-                <td mat-cell *matCellDef="let participante"> {{ participante.participante }} </td>
+                <td mat-cell *matCellDef="let participante"> {{ participante.participante || '-' }} </td>
     
             </ng-container>
     
             <ng-container matColumnDef="dui">
     
                 <th mat-header-cell *matHeaderCellDef class="text-purple-700"> DUI </th>
-                <td mat-cell *matCellDef="let participante"> {{ participante.doc_identidad }} </td>
+                <td mat-cell *matCellDef="let participante"> {{ formatearDUI(participante.doc_identidad) || '-' }} </td>
     
             </ng-container>
     
             <ng-container matColumnDef="cargo">
     
                 <th mat-header-cell *matHeaderCellDef class="text-purple-700"> Cargo </th>
-                <td mat-cell *matCellDef="let participante"> {{ participante.cargo }} </td>
+                <td mat-cell *matCellDef="let participante"> {{ participante.cargo || '-' }} </td>
     
             </ng-container>
     
             <ng-container matColumnDef="institucion">
     
                 <th mat-header-cell *matHeaderCellDef class="text-purple-700"> Institución </th>
-                <td mat-cell *matCellDef="let participante"> {{ participante.institucion }} </td>
+                <td mat-cell *matCellDef="let participante"> {{ participante.institucion || '-' }} </td>
     
             </ng-container>
     
             <ng-container matColumnDef="telefono">
     
                 <th mat-header-cell *matHeaderCellDef class="text-purple-700"> Teléfono </th>
-                <td mat-cell *matCellDef="let participante"> {{ participante.telefono }} </td>
+                <td mat-cell *matCellDef="let participante"> {{ formatearTelefono(participante.telefono) || '-' }} </td>
     
             </ng-container>
     
             <ng-container matColumnDef="correo">
     
                 <th mat-header-cell *matHeaderCellDef class="text-purple-700"> Correo Electrónico </th>
-                <td mat-cell *matCellDef="let participante"> {{ participante.correo }} </td>
+                <td mat-cell *matCellDef="let participante"> {{ participante.correo || '-' }} </td>
     
             </ng-container>
     
             <ng-container matColumnDef="acciones">
-    
-                <th mat-header-cell *matHeaderCellDef class="text-purple-700"> Acciones </th>
-                <td mat-cell *matCellDef="let participante"> 
                 
-                    <button mat-icon-button (click)="eliminarParticipante(participante.id)">
-                        <mat-icon style="color: red;">
-                            delete
-                        </mat-icon>
-                    </button>
-    
-                </td>
-    
+                    <th mat-header-cell *matHeaderCellDef class="text-purple-700"> Acciones </th>
+                    <td mat-cell *matCellDef="let participante"> 
+                    
+                    @if(!esUsuarioLector){
+                        <button mat-icon-button (click)="eliminarParticipante(participante.id)">
+                            <mat-icon style="color: red;">
+                                delete
+                            </mat-icon>
+                        </button>
+                    }
+        
+                    </td>
+        
             </ng-container>
     
             <tr mat-header-row *matHeaderRowDef="columnasMostradas"></tr>

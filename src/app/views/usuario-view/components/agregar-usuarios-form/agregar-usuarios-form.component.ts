@@ -7,11 +7,12 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
 import { UsuarioService } from '../../../../services/usuario.service';
 import { HotToastService } from '@ngxpert/hot-toast';
+import { NgxMaskDirective } from 'ngx-mask';
 
 @Component({
   selector: 'app-agregar-usuarios-form',
   imports: [
-    MatButtonModule, MatFormFieldModule, MatInputModule, MatIconModule, ReactiveFormsModule
+    MatButtonModule, MatFormFieldModule, MatInputModule, MatIconModule, ReactiveFormsModule, NgxMaskDirective
   ],
   templateUrl: './agregar-usuarios-form.component.html',
   styleUrl: './agregar-usuarios-form.component.css'
@@ -28,8 +29,20 @@ export class AgregarUsuariosFormComponent {
 
   formUsuario = new FormGroup({
     id: new FormControl<number|null>(this.data?.id ?? null),
-    nombre: new FormControl(this.data?.nombre ?? '', [Validators.required]),
+    nombre: new FormControl(this.data?.nombre ?? '', [Validators.required, Validators.minLength(3), Validators.pattern('^[a-zA-ZáéíóúÁÉÍÓÚñÑüÜ\\s]+$')]),
     email: new FormControl(this.data?.email ?? '', [Validators.required, Validators.email]),
+    documento: new FormControl(this.data?.documento ?? '', 
+      [
+        Validators.required, 
+        Validators.pattern('^[0-9]{9}$')
+      ]
+    ),
+    telefono: new FormControl(this.data?.telefono ?? '', 
+      [
+        Validators.required, 
+        Validators.pattern('^[2,6,7]{1}[0-9]{7}$')
+      ]
+    ),
     password: new FormControl('')
   })
 

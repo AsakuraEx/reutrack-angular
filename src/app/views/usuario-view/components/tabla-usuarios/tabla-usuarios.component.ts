@@ -27,7 +27,7 @@ export class TablaUsuariosComponent implements OnChanges{
   @Input() totalRegistros:number = 0;
   @Output() actualizarUsuarios = new EventEmitter<void>();
 
-  displayedColumns: string[] = ['nombre', 'email', 'rol', 'estado', 'acciones']
+  displayedColumns: string[] = ['nombre', 'email', 'documento', 'telefono', 'rol', 'estado', 'acciones']
   dataSource = new MatTableDataSource();
 
   @ViewChild(MatPaginator) paginator!: MatPaginator
@@ -66,6 +66,31 @@ export class TablaUsuariosComponent implements OnChanges{
         this.actualizarUsuarios.emit();
       }
     })
+  }
+
+  formatearTelefono (telefono: string): string {
+    if (telefono.length > 0 && telefono.length < 9) {
+      const cadena = telefono.substring(0, 4) + '-' + telefono.substring(4, 8);
+      return cadena;
+    } 
+    
+    else if(telefono.length === 9){
+      return telefono;
+    } else{
+      return telefono;
+    }
+  }
+
+  formatearDUI (dui: string): string {
+    if (dui.length > 0 && dui.length < 10) {
+      const cadena = dui.substring(0, 8) + '-' + dui.substring(8,9);
+      return cadena;
+    } 
+    else if(dui.length === 10){
+      return dui;
+    } else {
+      return dui;
+    }
   }
 
 }

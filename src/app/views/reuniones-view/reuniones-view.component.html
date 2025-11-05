@@ -79,15 +79,17 @@
             <app-responsables 
                 [id_reunion]="reunionActualDetails.id" 
                 [reunion_reactivada]="reunionActualDetails.reactivado"
-                [id_usuario_reunion]="reunionActualDetails.id_usuario">
+                [id_usuario_reunion]="reunionActualDetails.id_usuario"
+                (esUsuarioLector)="validarLector($event)">
             </app-responsables>
 
             <app-asistencia
                 [id_reunion]="reunionActualDetails.id"
-                [reunion]="reunionActualDetails">
+                [reunion]="reunionActualDetails"
+                [esUsuarioLector]="esUsuarioLector">
             </app-asistencia>
 
-            <app-puntos [id_reunion]="reunionActualDetails.id"></app-puntos>
+            <app-puntos [id_reunion]="reunionActualDetails.id" [esUsuarioLector]="esUsuarioLector"></app-puntos>
 
             <div class="w-full border border-purple-700 rounded-2xl p-4 shadow-lg mt-4">
                 
@@ -101,37 +103,39 @@
 
             </div>
 
-            <app-acuerdos [id_reunion]="reunionActualDetails.id"></app-acuerdos>
+            <app-acuerdos [id_reunion]="reunionActualDetails.id" [esUsuarioLector]="esUsuarioLector"></app-acuerdos>
 
-            <div class="mt-4 flex flew-wrap justify-between items-center gap-2 border border-purple-700 rounded-md p-4 bg-purple-100">                
-                <button 
-                    mat-flat-button 
-                    (click)="finalizarReunion()"
-                    [disabled]="contarLetras(contenido.value ?? '') < 20"
-                >
-                    Finalizar reunión
-                </button>
-    
-                <div class="space-x-2">
+            @if(!esUsuarioLector) {
+                <div class="mt-4 flex flew-wrap justify-between items-center gap-2 border border-purple-700 rounded-md p-4 bg-purple-100">                
                     <button 
                         mat-flat-button 
-                        (click)="guardarReunion()"
-                        class="btn-tertiary"
+                        (click)="finalizarReunion()"
                         [disabled]="contarLetras(contenido.value ?? '') < 20"
                     >
-                        Guardar como borrador
+                        Finalizar reunión
                     </button>
-    
-                    <button 
-                        mat-flat-button 
-                        (click)="guardarReunionYSalir()"
-                        class="btn-secondary"
-                        [disabled]="contarLetras(contenido.value ?? '') < 20"
-                    >
-                        Guardar como borrador y salir
-                    </button>
+        
+                    <div class="space-x-2">
+                        <button 
+                            mat-flat-button 
+                            (click)="guardarReunion()"
+                            class="btn-tertiary"
+                            [disabled]="contarLetras(contenido.value ?? '') < 20"
+                        >
+                            Guardar como borrador
+                        </button>
+        
+                        <button 
+                            mat-flat-button 
+                            (click)="guardarReunionYSalir()"
+                            class="btn-secondary"
+                            [disabled]="contarLetras(contenido.value ?? '') < 20"
+                        >
+                            Guardar como borrador y salir
+                        </button>
+                    </div>
                 </div>
-            </div>
+            }
 
         }
 

@@ -1,5 +1,5 @@
 import { AsyncPipe } from '@angular/common';
-import { Component, Input, OnInit, ViewChild } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output, ViewChild } from '@angular/core';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { MatButtonModule } from '@angular/material/button';
 import { MatFormFieldModule } from '@angular/material/form-field';
@@ -42,6 +42,8 @@ export class ResponsablesComponent implements OnInit{
   @Input() reunion_reactivada!: boolean;
   @Input() id_usuario_reunion!: number;
 
+  @Output() esUsuarioLector = new EventEmitter<boolean>();
+
   @ViewChild(FormGroupDirective) formDirective?: FormGroupDirective
 
   responsableForm = new FormGroup({
@@ -67,6 +69,16 @@ export class ResponsablesComponent implements OnInit{
     this.reunionService.obtenerResponsablesPorReunion(id_reunion).subscribe({
       next: (response) => {
         this.dataSource = response;
+
+        const token = localStorage.getItem('token');
+        if(!token) {
+          return;          
+        }
+        const decoded: any = jwtDecode(token);
+        const esLector:boolean = this.dataSource.some((responsable: any)=> responsable.usuario.nombre === decoded.nombre && decoded.id_rol !== 1);
+        if(esLector){
+          this.esUsuarioLector.emit(esLector);
+        }
       },
       error: (error) => {
         console.error(error);
@@ -74,6 +86,7 @@ export class ResponsablesComponent implements OnInit{
     })
   }
 
+  
   obtenerUsuarios(): void {
     this.usuarioService.obtenerUsuarios(4, null, 1).subscribe({
       next: (response) => {

@@ -1,4 +1,4 @@
-import { Component, Input, OnInit, ViewChild } from '@angular/core';
+import { Component, Input, OnChanges, OnInit, SimpleChanges, ViewChild } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
@@ -24,6 +24,7 @@ export class PuntosComponent implements OnInit{
   ){}
 
   @Input() id_reunion!: number;
+  @Input() esUsuarioLector: boolean = false;
   expandirPanel = false;
   dataSource: any[] = [];
 

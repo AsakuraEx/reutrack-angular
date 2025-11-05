@@ -34,8 +34,8 @@ export class FormFiltroComponent implements AfterViewInit {
   proyectosFiltrados!: Observable<Proyecto[]>;
 
   formFiltro = new FormGroup({
-    proyecto: new FormControl<number>(0),
-    estado: new FormControl<number>(0)
+    proyecto: new FormControl<number | string>('no'),
+    estado: new FormControl<number | string>('no')
   })
 
   ngAfterViewInit(): void {
@@ -85,9 +85,10 @@ export class FormFiltroComponent implements AfterViewInit {
 
     const id_proyecto:any = this.formFiltro.controls['proyecto'].value;
     const estado:any = this.formFiltro.controls['estado'].value;
-    console.log(id_proyecto.id)
 
-    this.actaAceptacionService.obtenerActasDeAceptacion(id_proyecto.id, estado).subscribe({
+    let estadoParam = estado === 'no' ? null : estado;
+
+    this.actaAceptacionService.obtenerActasDeAceptacion(id_proyecto.id, estadoParam).subscribe({
       next: response => {
         this.actasDeAceptacion = response;
         this.actasDeReunionFiltradas.emit(this.actasDeAceptacion);

@@ -38,7 +38,6 @@ export class ReunionCodeComponent {
           this.router.navigate(['/reunion/asistencia/'+codigo])
         },
         error: e => {
-          console.log(e)
           this.toastService.error(e.error.error, {
             position: 'top-right',
             duration: 5000

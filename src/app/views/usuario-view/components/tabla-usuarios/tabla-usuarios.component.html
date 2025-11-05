@@ -25,6 +25,24 @@
             </td>
         </ng-container>
 
+        <ng-container matColumnDef="documento">
+            <th mat-header-cell *matHeaderCellDef class="text-purple-700">Número de DUI</th>
+            <td mat-cell *matCellDef="let usuario">
+                <p class="text-ellipsis">
+                    {{ formatearDUI(usuario.documento) }}
+                </p>
+            </td>
+        </ng-container>
+
+        <ng-container matColumnDef="telefono">
+            <th mat-header-cell *matHeaderCellDef class="text-purple-700">Número de teléfono</th>
+            <td mat-cell *matCellDef="let usuario">
+                <p class="text-ellipsis">
+                    {{ formatearTelefono(usuario.telefono) }}
+                </p>
+            </td>
+        </ng-container>
+
         <ng-container matColumnDef="rol">
             <th mat-header-cell *matHeaderCellDef class="text-purple-700 w-56">Rol de usuario</th>
             <td mat-cell *matCellDef="let usuario">

@@ -24,6 +24,7 @@ export class AsistenciaComponent implements OnInit{
 
   @Input() id_reunion!: number;
   @Input() reunion!: any;
+  @Input() esUsuarioLector: boolean = false;
 
   columnasMostradas: string[] = ['nombre', 'dui', 'cargo', 'institucion', 'telefono', 'correo', 'acciones'];
   participantes: any = [ 'algo' ];
@@ -74,6 +75,31 @@ export class AsistenciaComponent implements OnInit{
       }
     })
 
+  }
+
+  formatearTelefono (telefono: string): string {
+    if (telefono.length > 0 && telefono.length < 9) {
+      const cadena = telefono.substring(0, 4) + '-' + telefono.substring(4, 8);
+      return cadena;
+    } 
+    
+    else if(telefono.length === 9){
+      return telefono;
+    } else{
+      return telefono;
+    }
+  }
+
+  formatearDUI (dui: string): string {
+    if (dui.length > 0 && dui.length < 10) {
+      const cadena = dui.substring(0, 8) + '-' + dui.substring(8,9);
+      return cadena;
+    } 
+    else if(dui.length === 10){
+      return dui;
+    } else {
+      return dui;
+    }
   }
 
 }

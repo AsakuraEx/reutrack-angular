@@ -32,7 +32,7 @@ export class FormProyectosComponent {
   formProyectos = new FormGroup({
     id: new FormControl<number|null>(this.data?.id ?? null),
     nombre: new FormControl(this.data?.nombre ??'', [Validators.required, Validators.maxLength(200)]),
-    id_usuario: new FormControl<number|null>(this.data?.id_usuario ?? null, [Validators.required])
+    id_usuario: new FormControl<number|null>(null, [Validators.required])
   })
 
   cerrarModal(flag:boolean): void {
@@ -43,8 +43,6 @@ export class FormProyectosComponent {
 
     this.isSubmitting = true
 
-    console.log(this.data)
-
     if(this.formProyectos.controls['nombre'].valid){
       const token = localStorage.getItem('token')
       if(!token){
@@ -52,7 +50,9 @@ export class FormProyectosComponent {
         return
       }
       const decoded: any = jwtDecode(token)
-      this.formProyectos.controls['id_usuario'].setValue(decoded.id)
+      if(this.formProyectos.controls['id_usuario'].value === null && !this.data){
+        this.formProyectos.controls['id_usuario'].setValue(decoded.id)
+      }
 
       if(!this.data){
 

@@ -7,8 +7,9 @@
                 <span>Atención</span>
             </div>
             <p class="text-sky-700">
-                Para realizar el cambio de su contraseña debe ingresar la contraseña actual en el primer campo, en el segundo campo deberá ingresar una nueva contraseña; esta debe poseer al menos
-                una mayuscula, una minuscula, un número, un caracter especial y 8 caracteres de longitud mínima. Debe repetir la nueva contraseña en el tercer campo.<br>
+                Para realizar el cambio de su contraseña debe ingresar la contraseña actual en el primer campo, en el segundo campo deberá ingresar una nueva contraseña; 
+                esta debe poseer al menos una mayúscula, una minúscula, un número, un caracter especial y 8 caracteres de longitud mínima. Debe repetir la nueva contraseña en 
+                el tercer campo.<br>
                 <span class="font-medium">Si es su primer inicio de sesión en la aplicación</span> deberá cambiar de forma obligatoria la contraseña temporal.
             </p>
         </div>
@@ -25,7 +26,7 @@
                                 (click)="toggle('old', $event)">
                             <mat-icon>{{ hideOld() ? 'visibility_off' : 'visibility' }}</mat-icon>
                         </button>
-                        @if(formContrasena.controls['old'].hasError('required') && formContrasena.controls['old'].touched){
+                        @if(formContrasena.controls['old'].hasError('required') && (formContrasena.controls['old'].touched || formContrasena.controls['old'].dirty)){
                             <mat-error>La contraseña actual es requerida.</mat-error>
                         }
                     </mat-form-field>
@@ -38,13 +39,13 @@
                             (click)="toggle('new', $event)">
                         <mat-icon>{{ hideNew() ? 'visibility_off' : 'visibility' }}</mat-icon>
                     </button>
-                    @if(formContrasena.controls['new'].hasError('required') && formContrasena.controls['new'].touched){
+                    @if(formContrasena.controls['new'].hasError('required') && (formContrasena.controls['new'].touched || formContrasena.controls['new'].dirty)){
                         <mat-error>La nueva es requerida.</mat-error>
                     }
-                    @if(formContrasena.controls['new'].hasError('minlength') && formContrasena.controls['new'].touched){
+                    @if(formContrasena.controls['new'].hasError('minlength') && (formContrasena.controls['new'].touched || formContrasena.controls['new'].dirty)){
                         <mat-error>La contraseña requiere al menos 8 cracteres.</mat-error>
                     }
-                    @if(formContrasena.controls['new'].hasError('pattern') && formContrasena.controls['new'].touched){
+                    @if(formContrasena.controls['new'].hasError('pattern') && (formContrasena.controls['new'].touched || formContrasena.controls['new'].dirty)){
                         <mat-error>La contraseña no cumple los requisitos.</mat-error>
                     }
                 </mat-form-field>

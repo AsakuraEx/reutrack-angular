@@ -1,5 +1,5 @@
 import { AsyncPipe } from '@angular/common';
-import { AfterViewInit, Component, inject, ViewChild } from '@angular/core';
+import { AfterViewInit, Component, inject, OnInit, ViewChild } from '@angular/core';
 import { ReunionService } from '../../services/reunion.service';
 import { jwtDecode } from 'jwt-decode';
 import { MatIconModule } from '@angular/material/icon';
@@ -21,19 +21,20 @@ import { MatDialog, MatDialogModule } from '@angular/material/dialog';
 import { CancelarReunionModalComponent } from '../../components/cancelar-reunion-modal/cancelar-reunion-modal.component';
 import { ReactivarReunionModalComponent } from '../../components/reactivar-reunion-modal/reactivar-reunion-modal.component';
 import { MatSelectModule } from '@angular/material/select';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 
 @Component({
   selector: 'app-historial-view',
   imports: [
     MatIconModule, MatFormFieldModule, MatInputModule, MatButtonModule, ReactiveFormsModule,
     MatDatepickerModule, MatAutocompleteModule, AsyncPipe, MatPaginatorModule, MatTooltipModule,
-    RouterLink, MatDialogModule, MatSelectModule
+    RouterLink, MatDialogModule, MatSelectModule, MatProgressSpinnerModule
   ],
   providers: [provideNativeDateAdapter()],
   templateUrl: './historial-view.component.html',
   styleUrl: './historial-view.component.css'
 })
-export class HistorialViewComponent implements AfterViewInit {
+export class HistorialViewComponent implements AfterViewInit, OnInit {
 
   constructor(
     private reunionService: ReunionService,
@@ -61,6 +62,8 @@ export class HistorialViewComponent implements AfterViewInit {
   proyectos: Proyecto[] = [];
   proyectosFiltrados!: Observable<Proyecto[]>;
 
+  loadingReuniones: boolean = false;
+
   // Paginación
   currentPage = 0;
   totalRecords = 0;
@@ -70,6 +73,21 @@ export class HistorialViewComponent implements AfterViewInit {
 
   claseEstado (estado: string): string {
     return `${ this.estados[estado] }`
+  }
+
+  ngOnInit(): void {
+
+    const token = localStorage.getItem('token');
+    if(token){
+      const decoded:any = jwtDecode(token);
+
+      if(decoded.id_rol && decoded.id){
+        this.obtenerReuniones(decoded.id_rol, decoded.id, false)
+        
+      }
+
+    }    
+    
   }
 
   ngAfterViewInit(): void {
@@ -83,10 +101,6 @@ export class HistorialViewComponent implements AfterViewInit {
       this.paginator.page.subscribe((event: PageEvent)=>{
         this.onPageEvent(decoded, event)
       })
-
-      if(decoded.id_rol && decoded.id){
-        this.obtenerReuniones(decoded.id_rol, decoded.id, false)
-      }
 
     }
   }
@@ -146,12 +160,19 @@ export class HistorialViewComponent implements AfterViewInit {
   // ABSTRACCION DE LA LOGICA DE LA LLAMADA AL SERVICE ----------------------------------------------------------------------------------------
 
   cargarReuniones(page: number, id_usuario?:number|null, id_proyecto?: number|null, inicio?:Date|null, fin?:Date|null, estado?:number|null): void {
+    
+      this.loadingReuniones = true;
+
       this.reunionService.obtenerReuniones(estado,this.pageSize, null, id_proyecto, id_usuario, page, inicio, fin).subscribe({
         next: response => {
           this.reuniones = response.data
           this.totalRecords = response.totalRecords
+          this.loadingReuniones = false;
         },
-        error: err => console.log(err)
+        error: err => {
+          console.log(err)
+          this.loadingReuniones = false;
+        }
       })
   }
 
@@ -159,20 +180,20 @@ export class HistorialViewComponent implements AfterViewInit {
 
   obtenerReuniones(id_rol: number, id_usuario: number, pageIndex: boolean): void {
 
-    let page!: number;
+    let page: number = 1;
     
     if(pageIndex){
       this.currentPage = 0;
     }
     
-    page = this.currentPage + 1;
+    if(this.currentPage > 0){
+      page = this.currentPage + 1;
+    }
 
     const proyecto = this.formFiltro.controls['proyecto'].value;
     const inicio = this.formFiltro.controls['inicio'].value;
     const fin = this.formFiltro.controls['fin'].value;
     const estado = this.formFiltro.controls['estado'].value;
-
-    console.log(page)
 
     if(id_rol != 1){
       this.cargarReuniones(page, id_usuario, proyecto, inicio, fin, estado);

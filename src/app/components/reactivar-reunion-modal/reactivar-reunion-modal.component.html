@@ -13,13 +13,13 @@
             <mat-form-field class="w-full">
                 <mat-label>Justificación</mat-label>
                 <textarea matInput formControlName="justificacion"></textarea>
+                @if (formReactivar.controls['justificacion'].hasError('required') && (formReactivar.dirty || formReactivar.touched)) {
+                    <mat-error class="text-red-700 pl-4">El campo justificación es requerido.</mat-error>
+                }
+                @if (formReactivar.controls['justificacion'].hasError('minLength') && (formReactivar.dirty || formReactivar.touched)) {
+                    <mat-error class="text-red-700 pl-4">El campo justificación requiere al menos 20 caracteres.</mat-error>
+                }
             </mat-form-field>
-            @if (formReactivar.controls['justificacion'].hasError('required') && (formReactivar.dirty || formReactivar.touched)) {
-                <p class="text-red-700 pl-4">El campo justificación es requerido.</p>
-            }
-            @if (formReactivar.controls['justificacion'].hasError('minLength') && (formReactivar.dirty || formReactivar.touched)) {
-                <p class="text-red-700 pl-4">El campo justificación requiere al menos 20 caracteres.</p>
-            }
 
             <div class="text-end space-x-2 mt-4">
                 <button 

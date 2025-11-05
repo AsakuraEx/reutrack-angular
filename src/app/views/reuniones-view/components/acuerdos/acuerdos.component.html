@@ -17,26 +17,28 @@
     </div>
 
     <div class="mt-4 flex flex-col md:flex-row gap-2">
-        <form class="w-full md:w-1/2" [formGroup]="acuerdoForm" (submit)="agregarAcuerdoDeReunion()">
-            <div class="flex flex-col md:flex-row gap-4">
-                <mat-form-field class="w-full h-fit">
-                    <mat-label>Acuerdos de la reunión</mat-label>
-                    <input 
-                        matInput
-                        formControlName="nombre"
-                        type="text" 
-                        placeholder="Ingresa un acuerdo de reunión...">
-                        <mat-error>El acuerdo de la reunión es requerido</mat-error>
-                </mat-form-field>
-    
-                <button mat-flat-button class="w-full md:w-32" type="submit">
-                    <mat-icon>add</mat-icon>
-                    Agregar
-                </button>
-            </div>
-        </form>
+        @if(!esUsuarioLector){
+            <form class="w-full md:w-1/2" [formGroup]="acuerdoForm" (submit)="agregarAcuerdoDeReunion()">
+                <div class="flex flex-col md:flex-row gap-4">
+                    <mat-form-field class="w-full h-fit">
+                        <mat-label>Acuerdos de la reunión</mat-label>
+                        <input 
+                            matInput
+                            formControlName="nombre"
+                            type="text" 
+                            placeholder="Ingresa un acuerdo de reunión...">
+                            <mat-error>El acuerdo de la reunión es requerido</mat-error>
+                    </mat-form-field>
+        
+                    <button mat-flat-button class="w-full md:w-32" type="submit">
+                        <mat-icon>add</mat-icon>
+                        Agregar
+                    </button>
+                </div>
+            </form>
+        }
 
-        <div class="md:w-1/2 space-y-4 max-h-[1200px] overflow-y-auto">
+        <div class="space-y-4 max-h-[1200px] overflow-y-auto" [class]="esUsuarioLector ? 'md:w-full':'md:w-1/2'">
 
             @if(dataSource.length > 0){
 
@@ -48,11 +50,13 @@
                         <mat-card-content>
                             {{ item.nombre }}
                         </mat-card-content>
-                        <mat-card-actions align="end">
-                            <button mat-icon-button (click)="eliminarAcuerdo(item.id)">
-                                <mat-icon style="color:red;">delete</mat-icon>
-                            </button>
-                        </mat-card-actions>
+                        @if(!esUsuarioLector){
+                            <mat-card-actions align="end">
+                                <button mat-icon-button (click)="eliminarAcuerdo(item.id)">
+                                    <mat-icon style="color:red;">delete</mat-icon>
+                                </button>
+                            </mat-card-actions>
+                        }
                     </mat-card>
                 }
             

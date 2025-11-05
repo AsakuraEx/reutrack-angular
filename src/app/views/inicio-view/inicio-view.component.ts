@@ -40,7 +40,7 @@ export class InicioViewComponent implements OnInit {
 
       dialogRef.afterClosed().subscribe(result => {
         if(result === true) {
-          console.log('Reunión creada');
+
         }
       })
     }

@@ -1,7 +1,7 @@
 import { AfterViewInit, Component, inject, ViewChild } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
-import { MatTableModule } from '@angular/material/table';
+import { MatTableDataSource, MatTableModule } from '@angular/material/table';
 import {MatTooltipModule} from '@angular/material/tooltip';
 import { RouterLink } from '@angular/router';
 import { ProyectoService } from '../../../services/proyecto.service';
@@ -41,17 +41,14 @@ export class ProyectosViewComponent implements AfterViewInit{
   @ViewChild(MatPaginator) paginator!: MatPaginator
 
 
-  proyectos: any = [];
+  proyectos = [];
+  dataSource = new MatTableDataSource<any>();
   displayedColumns = ['proyecto', 'usuario', 'fecha', 'accion'];
   readonly dialog = inject(MatDialog)
 
   proyectoBuscado = new FormControl('');
 
   ngAfterViewInit(): void {
-
-    this.paginator.page.subscribe((event: PageEvent) => {
-      this.onPageEvent(event);
-    })
     this.obtenerProyectos();
     const token = localStorage.getItem('token');
     if(token){
@@ -62,7 +59,6 @@ export class ProyectosViewComponent implements AfterViewInit{
 
   onPageEvent(event: PageEvent):void {
     this.totalRecords = event.length;
-    console.log("Registros totales: " + this.totalRecords)
     this.pageSize = event.pageSize;
     this.currentPage = event.pageIndex;
     this.obtenerProyectos();
@@ -70,13 +66,12 @@ export class ProyectosViewComponent implements AfterViewInit{
 
   obtenerProyectos():void {
 
-    const page = this.currentPage + 1;     // ESTO ES HIPER IMPORTANTE
-
-    this.proyectoService.obtenerProyectosVersiones(this.pageSize, page).subscribe({
+    this.proyectoService.obtenerProyectosVersiones(null, 1).subscribe({
       next: response => {
-        console.log(response)
         this.proyectos = response.data
         this.totalRecords = response.totalRecords
+        this.dataSource.data = this.proyectos
+        this.dataSource.paginator = this.paginator
       },
       error: err => {
         console.log(err)
@@ -84,6 +79,12 @@ export class ProyectosViewComponent implements AfterViewInit{
     })
 
   }
+
+  applyFilter(event: Event): void {
+    const filterValue = (event.target as HTMLInputElement).value;
+    this.dataSource.filter = filterValue.trim().toLowerCase();
+  }
+
 
   mostrarModal(proyecto?: any): void {
 

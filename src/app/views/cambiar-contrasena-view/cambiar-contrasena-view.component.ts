@@ -30,6 +30,9 @@ export class CambiarContrasenaViewComponent implements OnInit{
 
   isActualizarContrasenaUrl: boolean = false
 
+  isSubmitting: boolean = false;
+
+
   formContrasena = new FormGroup({
     id_usuario: new FormControl(null, [Validators.required]),
     old: new FormControl('', {
@@ -73,7 +76,6 @@ export class CambiarContrasenaViewComponent implements OnInit{
 
     this.usuarioService.actualizarContraseña(data).subscribe({
       next: response =>{
-        console.log(response)
         this.toastService.success('La contraseña se ha actualizado, por favor ingresa sesión nuevamente.', {
           duration: 5000,
           position: 'top-right'
@@ -112,7 +114,6 @@ export class CambiarContrasenaViewComponent implements OnInit{
       const decoded: any = jwtDecode(tokenRecuperacion)
       this.formContrasena.controls['id_usuario'].setValue(decoded.id);
       this.formContrasena.controls['sesion'].setValue(1);
-      this.formContrasena.controls['old'].setValue('temporal');
     }
     
     if(token){
@@ -123,9 +124,11 @@ export class CambiarContrasenaViewComponent implements OnInit{
 
     if(this.formContrasena.valid){
       this.cambiarContrasena(this.formContrasena.value);
+    } else {
+      this.formContrasena.markAllAsTouched();
     }
 
-    console.log("Invalido...")
+
 
   }
 

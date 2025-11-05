@@ -1,21 +1,25 @@
 .btn-secondary {
-  background-color: var(--mat-sys-secondary);
+  background-color: var(--mat-sys-secondary) !important;
   color: white;
 }
 
 .btn-secondary:disabled {
-  background-color: #D8CFE4; /* gris claro */
+  background-color: #D8CFE4 !important; /* gris claro */
   color: #918A98;            /* texto gris */
   cursor: not-allowed;
 }
 
 .btn-tertiary {
-  background-color: var(--mat-sys-tertiary);
+  background-color: var(--mat-sys-tertiary) !important;
   color: white;
 }
 
 .btn-tertiary:disabled {
-  background-color: #D8CFE4; 
+  background-color: #D8CFE4 !important; 
   color: #918A98;            
   cursor: not-allowed;
+}
+
+.contenido-html p {
+  all: revert; /* restablece estilos heredados */
 }

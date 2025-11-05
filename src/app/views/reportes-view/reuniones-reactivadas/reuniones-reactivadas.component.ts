@@ -31,7 +31,6 @@ export class ReunionesReactivadasComponent implements AfterViewInit {
 
     this.reunionService.obtenerReunionesReactivadas().subscribe({
       next: res => {
-        console.log(res)
         this.dataSource.data = res;
         this.dataSource.paginator = this.paginator
         this.totalRegistros = res.length;

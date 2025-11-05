@@ -133,7 +133,6 @@ export class VersionesViewComponent implements AfterViewInit{
       next: resp => {
         this.versiones = resp.data;
         this.totalRecords = resp.totalRecords;
-        console.log(this.versiones)
       },
       error: e => {
         console.error(e)

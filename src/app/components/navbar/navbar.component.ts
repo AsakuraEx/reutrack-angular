@@ -28,7 +28,6 @@ export class NavbarComponent implements OnInit {
 
     dialogRef.afterClosed().subscribe(result => {
       if(result === true) {
-        console.log('Reunión creada');
       }
     })
   }

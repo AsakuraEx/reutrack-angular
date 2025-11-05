@@ -19,7 +19,6 @@ export const reunionActivaGuard: CanActivateFn = (route, state) => {
   // Retornar el observable directamente
   return reunionService.obtenerReunionPorCodigo(codigo).pipe(
     map(response => {
-      console.log('estado: ' + response.id_estado)
       const reunionActual = response;
       if (reunionActual.id_estado === 1) {
         return true;

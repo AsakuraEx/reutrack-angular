@@ -46,7 +46,6 @@ export class ActaAceptacionViewComponent  implements OnInit{
     this.actaAceptacionService.obtenerActaPorId(id_acta).subscribe({
       next: res => {
         this.acta_aceptacion = res
-        console.log(this.acta_aceptacion)
       },
       error: e => {
         console.error(e)
@@ -77,7 +76,10 @@ export class ActaAceptacionViewComponent  implements OnInit{
     if(this.acta_aceptacion.version.id) {
       const id_version = this.acta_aceptacion.version.id
       this.proyectoService.finalizarVersion(id_version).subscribe(()=>{
-        console.log("Versión finalizada")
+        this.toastService.success('Se finalizó la versión asociada al acta de aceptación', {
+          duration: 3000,
+          position: 'top-right'
+        });
       });
       return
     }

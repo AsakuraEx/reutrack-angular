@@ -26,6 +26,7 @@ export class AcuerdosComponent implements OnInit{
   ){}
 
   @Input() id_reunion!: number;
+  @Input() esUsuarioLector: boolean = false;
   expandirPanel = false;
   dataSource: any[] = [];
   acuerdoForm = new FormGroup({
