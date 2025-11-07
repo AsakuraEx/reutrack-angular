@@ -22,7 +22,7 @@
                         </td>
                         <td class="py-2 px-4">
                             
-                            @if(!funcion.aprobado){
+                            @if(!funcion.aprobado && acta_aceptacion.estado.id === 6){
                                 <button 
                                     mat-icon-button
                                     matTooltip="Aprobar funcionalidad" 
@@ -30,6 +30,14 @@
                                     style="color: green;">
                                     <mat-icon>check</mat-icon>
                                 </button>
+
+                                <button 
+                                    mat-icon-button
+                                    matTooltip="Editar funcionalidad" 
+                                    (click)="seleccionarFuncionalidad(funcion)"
+                                    style="color: orange;">
+                                    <mat-icon>edit</mat-icon>
+                                </button>                                
                             
                                 <button 
                                     mat-icon-button
@@ -37,6 +45,16 @@
                                     (click)="eliminarFuncionalidad(funcion.id)"
                                     style="color: red;">
                                     <mat-icon>delete</mat-icon>
+                                </button>
+                            }
+
+                            @if(funcion.aprobado && acta_aceptacion.estado.id === 6){
+                                <button 
+                                    mat-icon-button
+                                    matTooltip="Revertir aprobación" 
+                                    (click)="revertirAprobacion(funcion.id)"
+                                    style="color: blue;">
+                                    <mat-icon>history</mat-icon>
                                 </button>
                             }
                         </td>

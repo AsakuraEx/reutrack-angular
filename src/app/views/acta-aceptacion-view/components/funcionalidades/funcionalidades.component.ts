@@ -1,4 +1,4 @@
-import { Component, Input, ViewChild } from '@angular/core';
+import { Component, EventEmitter, Input, Output, ViewChild } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatIconModule } from '@angular/material/icon';
@@ -24,16 +24,22 @@ export class FuncionalidadesComponent {
     private route: ActivatedRoute,
     private actaAceptacionService: ActaAceptacionService,
     private toastService: HotToastService,
-    private fb: FormBuilder
   ){}
 
   @ViewChild(FormGroupDirective) formDirective?: FormGroupDirective
 
   @Input() acta_aceptacion!:any
 
+  @Output() ContadorEventEmitter = new EventEmitter<number>();
+
+  funcionalidadSeleccionada: any = null;
+
+  contador: number = 0; 
+  
   id_acta!: number;
   funcionalidades: any[] = [];
   formFuncionalidad = new FormGroup({
+    id: new FormControl<number | null>(null),
     descripcion: new FormControl('', {
       updateOn: 'blur',
       validators: [Validators.required]
@@ -51,29 +57,78 @@ export class FuncionalidadesComponent {
     this.id_acta = Number(this.route.snapshot.paramMap.get('id_acta'));
     this.actaAceptacionService.obtenerFuncionesPorActa(this.id_acta).subscribe(response => {
       this.funcionalidades = response
+      this.contador = this.funcionalidades.filter(f => f.aprobado === true).length;
+      this.ContadorEventEmitter.emit(this.contador);
     })
   }
 
   agregarFuncionalidades(): void {
 
+
+
     this.formFuncionalidad.controls['id_acta'].setValue(this.id_acta)
+
     if(this.formFuncionalidad.valid){
 
-      this.actaAceptacionService.agregarFunciones(this.formFuncionalidad.value).subscribe({
-        next: () => {
-          this.toastService.success('Se agrego la funcionalidad al acta de aceptación', {
-            position: 'top-right',
-            duration: 3000
-          })
-          this.obtenerFuncionalidadesPorActa()
-          this.formDirective?.resetForm()
-          this.formFuncionalidad.reset()
-        },
-        error: e => {
-          console.log(e)
-        }
-      })
+      if(this.formFuncionalidad.controls['id'].value){
+
+          this.actaAceptacionService.editarFunciones(this.formFuncionalidad.value).subscribe({
+            next: () => {
+              this.toastService.success('Se edito la funcionalidad del acta de aceptación', {
+                position: 'top-right',
+                duration: 3000
+              })
+              this.obtenerFuncionalidadesPorActa()
+              this.formDirective?.resetForm()
+              this.formFuncionalidad.reset()
+              this.funcionalidadSeleccionada = null;
+            }, 
+            error: e => {
+              this.toastService.error('Ocurrió un error al editar la funcionalidad', {  
+                position: 'top-right',
+                duration: 3000
+              })
+            }
+        
+        })
+        
+      } else {
+
+        this.actaAceptacionService.agregarFunciones(this.formFuncionalidad.value).subscribe({
+          next: () => {
+            this.toastService.success('Se agrego la funcionalidad al acta de aceptación', {
+              position: 'top-right',
+              duration: 3000
+            })
+            this.obtenerFuncionalidadesPorActa()
+            this.formDirective?.resetForm()
+            this.formFuncionalidad.reset()
+          },
+          error: e => {
+            console.log(e)
+          }
+        })
+      }
+
     }
+  }
+
+  obtenerFuncionalidadSeleccionada(funcionalidad: Event): void {
+    this.funcionalidadSeleccionada = funcionalidad;
+
+    this.formFuncionalidad.controls['id'].setValue(this.funcionalidadSeleccionada.id);
+    this.formFuncionalidad.controls['descripcion'].setValue(this.funcionalidadSeleccionada.descripcion);
+    this.formFuncionalidad.controls['aprobado'].setValue(this.funcionalidadSeleccionada.aprobado);
+    this.formFuncionalidad.controls['cambio_solicitado'].setValue(this.funcionalidadSeleccionada.cambio_solicitado);
+
+  }
+
+  cancelarEdicion(): void {
+    this.funcionalidadSeleccionada = null;
+    this.formFuncionalidad.controls['id'].setValue(null);
+    this.formFuncionalidad.controls['descripcion'].setValue(null);
+    this.formFuncionalidad.controls['aprobado'].setValue(null);
+    this.formFuncionalidad.controls['cambio_solicitado'].setValue(null);
   }
 
 }

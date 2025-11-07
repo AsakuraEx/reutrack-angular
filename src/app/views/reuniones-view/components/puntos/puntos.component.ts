@@ -25,7 +25,7 @@ export class PuntosComponent implements OnInit{
 
   @Input() id_reunion!: number;
   @Input() esUsuarioLector: boolean = false;
-  expandirPanel = false;
+  expandirPanel = true;
   dataSource: any[] = [];
 
   puntosForm = new FormGroup({

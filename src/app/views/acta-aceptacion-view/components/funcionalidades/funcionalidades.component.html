@@ -13,23 +13,45 @@
                             <mat-error>El campo es requerido</mat-error>
                         </mat-form-field>
             
-                        <mat-slide-toggle labelPosition="before" formControlName="aprobado">¿Está aprobada esta funcionalidad?</mat-slide-toggle>
+                        <mat-slide-toggle 
+                            labelPosition="before" 
+                            formControlName="aprobado">
+                            ¿Está aprobada esta funcionalidad?
+                        </mat-slide-toggle>
                         
                         <mat-form-field class="w-full mt-4">
                             <mat-label>Cambio solicitado</mat-label>
                             <input matInput type="text" formControlName="cambio_solicitado">
                         </mat-form-field>
         
-                        <button mat-flat-button>
-                            <mat-icon>edit</mat-icon>
-                            Registrar
-                        </button>
+                        <div class="space-x-2">
+                            <button mat-flat-button type="submit">
+                                <mat-icon>edit</mat-icon>
+                                @if(funcionalidadSeleccionada){
+                                    Editar
+                                } @else {
+                                    Registrar
+                                }
+                            </button>
+    
+                            @if(funcionalidadSeleccionada){
+                                <button mat-stroked-button type="button" (click)="cancelarEdicion()">
+                                    <mat-icon>close</mat-icon>
+                                    Cancelar
+                                </button>
+                            }
+                        </div>
                     </form>
                 </div>
             }
         
             <div class="w-full lg:w-full">
-                <app-lista-funcionalidades [funcionalidades]="funcionalidades" (actualizarTabla)="obtenerFuncionalidadesPorActa()"></app-lista-funcionalidades>
+                <app-lista-funcionalidades 
+                    [funcionalidades]="funcionalidades" 
+                    (actualizarTabla)="obtenerFuncionalidadesPorActa()"
+                    [acta_aceptacion]="acta_aceptacion" 
+                    (funcionalidadSeleccionada)="obtenerFuncionalidadSeleccionada($event)">
+                </app-lista-funcionalidades>
             </div>
         </div>
     

@@ -20,10 +20,13 @@ export class ListaFuncionalidadesComponent {
 
   @Input() funcionalidades: any[] = [];
   @Output() actualizarTabla = new EventEmitter<void>
+  @Output() funcionalidadSeleccionada = new EventEmitter<any>();
 
   constructor(
     private actaAceptacionService: ActaAceptacionService
   ) {}
+
+  @Input() acta_aceptacion!: any;
 
   aprobarFuncionalidad(id_funcionalidad: number): void {
 
@@ -36,6 +39,26 @@ export class ListaFuncionalidadesComponent {
   eliminarFuncionalidad(id_funcionalidad: number): void {
     this.actaAceptacionService.eliminarFunciones(id_funcionalidad).subscribe(()=>{
       this.actualizarTabla.emit();
+    })
+  }
+
+  seleccionarFuncionalidad(funcionalidad: any): void {
+    this.funcionalidadSeleccionada.emit(funcionalidad);
+  }
+
+  revertirAprobacion(id_funcionalidad: number): void {
+    const data = {
+      aprobado: false,
+      id: id_funcionalidad
+    };
+
+    this.actaAceptacionService.editarFunciones(data).subscribe({
+      next: () => {
+        this.actualizarTabla.emit();
+      },
+      error: err => {
+        console.error('Error al desaprobar la funcionalidad:', err);
+      }
     })
   }
 

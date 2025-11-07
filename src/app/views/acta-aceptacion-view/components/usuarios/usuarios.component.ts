@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { environment } from '../../../../../environments/environment';
@@ -23,6 +23,7 @@ export class UsuariosComponent implements OnInit{
   ){}
 
   @Input() acta_aceptacion!:any;
+  @Output() cantidadUsuariosEmitter = new EventEmitter<number>();
 
   baseURL = environment.appURL;
   backURL = environment.backendURL
@@ -46,6 +47,19 @@ export class UsuariosComponent implements OnInit{
     const id_acta: number = Number(this.route.snapshot.paramMap.get('id_acta'));
     this.actaAceptacionService.obtenerUsuarioActa(id_acta).subscribe(res=>{
       this.usuarios = res;
+      this.cantidadUsuariosEmitter.emit(this.usuarios.length);
+    })
+  }
+
+  eliminarUsuario(usuario: any): void {
+    this.actaAceptacionService.eliminarUsuarioActa(usuario).subscribe({
+      next: () => {
+        console.log('Usuario eliminado con éxito');
+        this.obtenerUsuarios();
+      },
+      error: err => {
+        console.log(err);
+      }
     })
   }
 

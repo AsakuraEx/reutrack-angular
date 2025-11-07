@@ -8,11 +8,12 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { ActaAceptacionService } from '../../../../services/acta-aceptacion.service';
 import { HotToastService } from '@ngxpert/hot-toast';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+import { NgxMaskDirective } from 'ngx-mask';
 
 @Component({
   selector: 'app-formulario-aceptacion',
   imports: [
-    MatIconModule, MatButtonModule, MatFormFieldModule, MatInputModule, ReactiveFormsModule, MatProgressSpinnerModule
+    MatIconModule, MatButtonModule, MatFormFieldModule, MatInputModule, ReactiveFormsModule, MatProgressSpinnerModule, NgxMaskDirective
   ],
   templateUrl: './formulario-aceptacion.component.html',
   styleUrl: './formulario-aceptacion.component.css'
@@ -30,10 +31,10 @@ export class FormularioAceptacionComponent {
 
   formAceptacion = new FormGroup({
     id_acta: new FormControl<number|null>(null, [Validators.required]),
-    nombre: new FormControl('', [Validators.required, Validators.maxLength(50)]),
-    institucion: new FormControl('', [Validators.required, Validators.maxLength(50)]),
-    cargo: new FormControl('', [Validators.required, Validators.maxLength(30)]),
-    documento: new FormControl('', [Validators.required, Validators.pattern(/[0-9]+$/)]),
+    nombre: new FormControl('', [Validators.required, Validators.maxLength(50), Validators.minLength(3)]),
+    institucion: new FormControl('', [Validators.required, Validators.maxLength(50), Validators.minLength(3)]),
+    cargo: new FormControl('', [Validators.required, Validators.maxLength(30), Validators.minLength(3)]),
+    documento: new FormControl('', [Validators.required, Validators.pattern(/[0-9]+$/), Validators.minLength(9)]),
     documento_identidad: new FormControl<File|null>(null),
     documento_institucional: new FormControl<File|null>(null)
   })

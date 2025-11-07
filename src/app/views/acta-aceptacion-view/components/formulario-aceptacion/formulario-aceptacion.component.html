@@ -33,6 +33,9 @@
             @if(formAceptacion.get('nombre')?.hasError('maxlength')){
                 <mat-error>Solo puede agregar un máximo de 50 carácteres</mat-error>
             }
+            @if(formAceptacion.get('nombre')?.hasError('minlength')){
+                <mat-error>Debe agregar por lo menos 3 caracteres</mat-error>
+            }
         </mat-form-field>
 
         <mat-form-field class="w-full">
@@ -43,6 +46,9 @@
             }
             @if(formAceptacion.get('institucion')?.hasError('maxlength')){
                 <mat-error>Solo puede agregar un máximo de 50 carácteres</mat-error>
+            }
+            @if(formAceptacion.get('institucion')?.hasError('minlength')){
+                <mat-error>Debe agregar por lo menos 3 caracteres</mat-error>
             }
         </mat-form-field>
 
@@ -55,16 +61,22 @@
             @if(formAceptacion.get('cargo')?.hasError('maxlength')){
                 <mat-error>Solo puede agregar un máximo de 30 carácteres</mat-error>
             }
+            @if(formAceptacion.get('cargo')?.hasError('minlength')){
+                <mat-error>Debe agregar por lo menos 3 caracteres</mat-error>
+            }
         </mat-form-field>
 
         <mat-form-field class="w-full">
             <mat-label>Documento de identidad</mat-label>
-            <input type="text" matInput formControlName="documento">
+            <input type="text" matInput formControlName="documento" mask="00000000-0">
             @if(formAceptacion.get('documento')?.hasError('required')){
                 <mat-error>El documento es obligatorio</mat-error>
             }
             @if(formAceptacion.get('documento')?.hasError('pattern')){
                 <mat-error>Solo tiene permitido agregar números.</mat-error>
+            }
+            @if(formAceptacion.get('documento')?.hasError('minlength')){
+                <mat-error>Debe agregar por lo menos 9 caracteres</mat-error>
             }
         </mat-form-field>
 
@@ -72,7 +84,7 @@
         <div class="p-4 rounded shadow-lg border-gray-200 border">
             <div class="flex flex-col md:flex-row items-center gap-4">
     
-                <p class="text-gray-700">Ingresa una foto de tu documento de identidad</p>
+                <p class="text-gray-700">Ingresa una foto de tu rostro</p>
                 <button mat-raised-button color="primary" type="button" (click)="fileInput.click()">
                     Seleccionar archivo
                 </button>
@@ -99,7 +111,7 @@
         <div class="p-4 mt-4 rounded shadow-lg border-gray-200 border">
             <div class="flex flex-col md:flex-row items-center gap-4">
     
-                <p class="text-gray-700">Ingresa una foto de tu documento institucional</p>
+                <p class="text-gray-700">Ingresa una foto de tu documento de identidad</p>
                 <button mat-raised-button color="primary" type="button" (click)="fileInput2.click()">
                     Seleccionar archivo
                 </button>

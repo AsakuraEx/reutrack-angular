@@ -43,6 +43,12 @@
                     <div class="h-52 flex items-center justify-center">
                         <img [src]="backURL + usuario.documento_identidad" alt="documento" class="max-w-full max-h-full object-contain rounded-lg shadow-md">
                     </div>
+
+                    @if(acta_aceptacion.estado.id === 6){
+                        <button mat-icon-button style="color:red; margin-top:4px;" (click)="eliminarUsuario(usuario)">
+                            <mat-icon>delete</mat-icon>
+                        </button>
+                    }
                 </div>
             }
 

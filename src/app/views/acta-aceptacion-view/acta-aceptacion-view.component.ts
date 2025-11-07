@@ -31,6 +31,8 @@ export class ActaAceptacionViewComponent  implements OnInit{
     private toastService: HotToastService
   ){}
 
+  cantidadFuncionalidadesAprobadas: number = 0;
+  cantidadUsuariosAprobados: number = 0;
   isSubmitting:boolean = false;
   acta_aceptacion!:any;
   readonly dialog = inject(MatDialog)
@@ -109,5 +111,13 @@ export class ActaAceptacionViewComponent  implements OnInit{
       }
     })
   } 
+
+  obtenerContadorFuncionalidades(event:number){
+    this.cantidadFuncionalidadesAprobadas = event;
+  }
+
+  obtenerContadorUsuarios(event: number){
+    this.cantidadUsuariosAprobados = event;
+  }
 
 }
