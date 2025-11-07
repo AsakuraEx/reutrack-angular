@@ -196,10 +196,15 @@ export class ReunionService {
   // PDF
 
   generarPDF(id_reunion: number): Observable<any> {
-    const url = `${this.BaseUrl}/reuniones/pdf/${id_reunion}`
-    return this.http.get(url, {
+    const url = `${this.BaseUrl}/reuniones/pdf`
+    return this.http.post(url, 
+      {
+        id: id_reunion
+      }, 
+      {
       responseType: 'blob'
-    })
+      }
+    )
   }
 
   obtenerReunionesReactivadas(): Observable<any> {
