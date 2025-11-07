@@ -30,6 +30,8 @@ export class ResponsablesComponent implements OnInit{
     private toastService: HotToastService
   ) {}
 
+  esLector:boolean = false;
+
   dataSource = []
   displayedColumns: string[] = ['nombre', 'acciones'];
 
@@ -75,7 +77,8 @@ export class ResponsablesComponent implements OnInit{
           return;          
         }
         const decoded: any = jwtDecode(token);
-        const esLector:boolean = this.dataSource.some((responsable: any)=> responsable.usuario.nombre === decoded.nombre && decoded.id_rol !== 1);
+        const esLector:boolean = this.dataSource.some((responsable: any)=> responsable.usuario.nombre === decoded.nombre && decoded.id_rol !== 1 && responsable.visitante === true);
+        this.esLector = esLector;
         if(esLector){
           this.esUsuarioLector.emit(esLector);
         }

@@ -2,7 +2,7 @@
 
     <h1 class="text-2xl font-bold text-purple-700">Responsables de la reunión</h1>
 
-    @if(!esUsuarioLector){
+    @if(!esLector){
         <form [formGroup]="responsableForm" (ngSubmit)="onSubmit(reunion_reactivada)">
             <div class="flex flex-col md:flex-row gap-4 mt-4 items-center justify-center">
                 <mat-form-field class="w-full">
@@ -57,7 +57,7 @@
                 <!-- if ( (EVALUA USUARIO COMUN) ó (EVALUA USUARIO ADMIN) ) -->
                 @if (
                     ((element.id_usuario !== id_usuario_reunion && decoded.id !== element.id_usuario && !element.visitante) ||
-                    (decoded.id_rol === 1 && decoded.id !== element.id_usuario && element.id_usuario !== id_usuario_reunion)) && !esUsuarioLector
+                    (decoded.id_rol === 1 && decoded.id !== element.id_usuario && element.id_usuario !== id_usuario_reunion)) && !esLector
                 ) {
 
                     <button mat-icon-button color="warn" (click)="eliminarResponsable(element.id)">
