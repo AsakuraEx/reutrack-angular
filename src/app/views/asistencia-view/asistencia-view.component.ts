@@ -119,7 +119,7 @@ export class AsistenciaViewComponent implements OnInit {
     if(this.formAsistencia.valid){
       this.reunionService.agregarParticipante(this.formAsistencia.value).subscribe({
         next: response => {
-          this.toastService.success('Se registro su participacion en la lista de asistencia.', {
+          this.toastService.success('Se registró su participación en la lista de asistencia.', {
             duration: 3000,
             position: 'top-right'
           })

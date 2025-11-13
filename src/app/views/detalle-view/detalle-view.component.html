@@ -1,4 +1,14 @@
-<div class="w-full text-end mx-auto container mb-12">
+<div class="w-full text-end mx-auto container mb-12 space-x-2">
+    
+    <button mat-stroked-button (click)="enviarPDF()" [disabled]="loadingPdf2">
+        @if(loadingPdf2){
+            <mat-spinner diameter="20" strokeWidth="2"></mat-spinner>
+        }
+        @else{
+            Enviar PDF a participantes
+        }
+    </button>
+
     <button mat-flat-button (click)="mostrarPdf()" [disabled]="loadingPdf" class="w-64">
         @if(loadingPdf){
             <mat-spinner diameter="20" strokeWidth="2"></mat-spinner>
@@ -7,6 +17,7 @@
             Imprimir el detalle de la reunión
         }
     </button>
+
 </div>
 
 

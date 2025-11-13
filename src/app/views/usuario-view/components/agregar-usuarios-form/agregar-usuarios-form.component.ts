@@ -8,11 +8,12 @@ import { MatInputModule } from '@angular/material/input';
 import { UsuarioService } from '../../../../services/usuario.service';
 import { HotToastService } from '@ngxpert/hot-toast';
 import { NgxMaskDirective } from 'ngx-mask';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 
 @Component({
   selector: 'app-agregar-usuarios-form',
   imports: [
-    MatButtonModule, MatFormFieldModule, MatInputModule, MatIconModule, ReactiveFormsModule, NgxMaskDirective
+    MatButtonModule, MatFormFieldModule, MatInputModule, MatIconModule, ReactiveFormsModule, NgxMaskDirective, MatProgressSpinnerModule
   ],
   templateUrl: './agregar-usuarios-form.component.html',
   styleUrl: './agregar-usuarios-form.component.css'
@@ -23,6 +24,8 @@ export class AgregarUsuariosFormComponent {
     private usuarioService: UsuarioService,
     private toastService: HotToastService
   ){}
+
+  isSubmitting: boolean = false;
 
   readonly dialogRef = inject(MatDialogRef<AgregarUsuariosFormComponent>)
   readonly data = inject(MAT_DIALOG_DATA)
@@ -75,16 +78,24 @@ export class AgregarUsuariosFormComponent {
       
       if(this.formUsuario.valid){
   
+        this.isSubmitting = true
+
         this.usuarioService.crearUsuario(this.formUsuario.value).subscribe({
           next: ()=>{
-            this.toastService.success('Usuario creado con exito', {
+            this.toastService.success('Usuario creado con exito, se envió las credenciales al correo electrónico proporcionado', {
               position: 'top-right',
-              duration: 3000
+              duration: 5000
             })
+            this.isSubmitting = false;
             this.cerrarModal(true);
           },
           error: e => {
-            console.error(e)
+            this.toastService.error('Error al agregar usuario: ' + e.message, {
+              position: 'top-right',
+              duration: 3000
+            })
+
+            this.isSubmitting = false
           }
         })
   

@@ -6,12 +6,33 @@
                 <mat-icon>info</mat-icon>
                 <span>Atención</span>
             </div>
-            <p class="text-sky-700">
-                Para realizar el cambio de su contraseña debe ingresar la contraseña actual en el primer campo, en el segundo campo deberá ingresar una nueva contraseña; 
-                esta debe poseer al menos una mayúscula, una minúscula, un número, un caracter especial y 8 caracteres de longitud mínima. Debe repetir la nueva contraseña en 
-                el tercer campo.<br>
-                <span class="font-medium">Si es su primer inicio de sesión en la aplicación</span> deberá cambiar de forma obligatoria la contraseña temporal.
-            </p>
+            @if(isActualizarContrasenaUrl){
+                <p class="text-sky-700">
+                    Para realizar la recuperación de su contraseña, deberá ingresar una nueva contraseña en el primer campo y repetirla en el segundo para su confirmación.
+                    La contraseña debe cumplir con los siguientes requisitos:
+                    <span class="block">
+                        1. Poseer un mínimo de ocho (8) caracteres de longitud
+                    </span>
+                    <span class="block">
+                        2. Incluir al menos una letra mayúscula y una minúscula.
+                    </span>
+                    <span class="block">
+                        3. Incluir al menos un número.
+                    </span>
+                    <span class="block">
+                        4. Incluir al menos un carácter especial.
+                    </span>
+                    <span class="font-medium">Si este es su primer inicio de sesión en la aplicación, es obligatorio</span> que proceda con el cambio de la contraseña temporal asignada.
+                </p>
+            }
+            @else {
+                <p class="text-sky-700">
+                    Para realizar la actualización de su contraseña, deberá ingresar la contraseña actual en el primer campo. En el segundo campo, deberá definir una nueva 
+                    contraseña. Esta nueva contraseña es requerida para poseer un mínimo de <b>ocho (8) caracteres</b> de longitud, incluir al menos una letra <b>mayúscula</b>, 
+                    una <b>minúscula</b>, un <b>número</b> y un <b>carácter especial</b>. Finalmente, deberá repetir la nueva contraseña en el tercer campo para su confirmación. Si este es su 
+                    primer inicio de sesión en la aplicación, es <b>obligatorio</b> que proceda con el cambio de la contraseña temporal asignada.
+                </p>    
+            }
         </div>
     
         <div class="bg-white border-gray-200 border w-full lg:w-96 rounded shadow-md p-4">

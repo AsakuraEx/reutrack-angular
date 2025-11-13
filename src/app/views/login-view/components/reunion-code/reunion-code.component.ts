@@ -46,7 +46,7 @@ export class ReunionCodeComponent {
       })
 
     }else {
-      this.toastService.error('Para registrar su asistencia debe ingresar un codigo de reunion.', {
+      this.toastService.error('Para registrar su asistencia debe ingresar un código de reunión.', {
         position: 'top-right',
         duration: 3000
       })

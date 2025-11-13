@@ -100,7 +100,7 @@
         </div>
 
         <div class="text-end space-x-2">
-            <button mat-flat-button type="submit">
+            <button mat-flat-button type="submit" [disabled]="isSubmitting">
                 @if(data){
                     Actualizar
                 } @else {

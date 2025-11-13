@@ -207,6 +207,16 @@ export class ReunionService {
     )
   }
 
+  enviarPDF(data: any): Observable<any> {
+    const url = `${this.BaseUrl}/reuniones/email_pdf`
+    return this.http.post(url, 
+      data, 
+      {
+      responseType: 'blob'
+      }
+    )
+  }
+
   obtenerReunionesReactivadas(): Observable<any> {
     const url = this.BaseUrl + '/reuniones/reactivadas';
     return this.http.get(url)

@@ -4,6 +4,7 @@ import { ReunionService } from '../../services/reunion.service';
 import { MatButtonModule } from '@angular/material/button';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
+import { HotToastService } from '@ngxpert/hot-toast';
 
 @Component({
   selector: 'app-detalle-view',
@@ -16,11 +17,13 @@ export class DetalleViewComponent implements OnInit{
   constructor(
     private route: ActivatedRoute,
     private reunionService: ReunionService,
-    private sanitizer: DomSanitizer
+    private sanitizer: DomSanitizer,
+    private toastService: HotToastService
   ){}
 
   loadingReunion: boolean = false;
   loadingPdf: boolean = false;
+  loadingPdf2: boolean = false;
   reunionVisualizada: any = null;
   pdfUrl: any = null;
 
@@ -70,6 +73,40 @@ export class DetalleViewComponent implements OnInit{
         }
       })
     })
+
+  }
+
+  enviarPDF(): void {
+
+    this.loadingPdf2 = true
+
+    let correos: string[] = [];
+    let asistencia: any[] = this.reunionVisualizada['asistencia reunion'];
+
+    asistencia.forEach(element => {
+      correos.push(element.correo)
+    });
+
+    const data: any = {
+      id: this.reunionVisualizada.id,
+      asistentes: correos
+    }
+
+    console.log(data)
+    this.reunionService.enviarPDF(data).subscribe({
+      next: () => {
+        this.toastService.success('Se envio el documento a los remitentes', {
+          position: 'top-right',
+          duration: 3000
+        })
+        this.loadingPdf2 = false
+      },
+      error: err => {
+        console.error(err)
+        this.loadingPdf2 = false
+      }
+    })
+
 
   }
 
