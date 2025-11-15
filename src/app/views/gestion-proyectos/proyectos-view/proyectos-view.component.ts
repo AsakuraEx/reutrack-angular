@@ -70,7 +70,7 @@ export class ProyectosViewComponent implements AfterViewInit{
       next: response => {
         this.proyectos = response.data
         this.totalRecords = response.totalRecords
-        this.dataSource.data = this.proyectos
+        this.dataSource.data = response.data
         this.dataSource.paginator = this.paginator
       },
       error: err => {
