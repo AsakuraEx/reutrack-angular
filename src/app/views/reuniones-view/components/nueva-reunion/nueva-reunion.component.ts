@@ -45,8 +45,8 @@ export class NuevaReunionComponent implements OnInit{
   readonly data = inject(MAT_DIALOG_DATA);
 
   reunionForm = new FormGroup({
-    nombre: new FormControl('', [Validators.required, Validators.minLength(5), Validators.maxLength(255)]),
-    lugar: new FormControl('', [Validators.required, Validators.minLength(5), Validators.maxLength(255)]),
+    nombre: new FormControl('', [Validators.required, Validators.minLength(3), Validators.maxLength(255)]),
+    lugar: new FormControl('', [Validators.required, Validators.minLength(3), Validators.maxLength(255)]),
     codigo: new FormControl(''),
     expiracion: new FormControl(new Date('1997-01-28T00:00:00')),
     id_proyecto: new FormControl<Proyecto | null>(null, [Validators.required]),

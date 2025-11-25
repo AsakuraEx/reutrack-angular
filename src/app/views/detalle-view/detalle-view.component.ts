@@ -82,6 +82,11 @@ export class DetalleViewComponent implements OnInit{
 
     let correos: string[] = [];
     let asistencia: any[] = this.reunionVisualizada['asistencia reunion'];
+    let encargados: any[] = this.reunionVisualizada['encargado de reunion'];
+
+    encargados.forEach(element => {
+      correos.push(element.usuario.email)
+    });
 
     asistencia.forEach(element => {
       correos.push(element.correo)
@@ -89,6 +94,7 @@ export class DetalleViewComponent implements OnInit{
 
     const data: any = {
       id: this.reunionVisualizada.id,
+      nombre: this.reunionVisualizada.nombre,
       asistentes: correos
     }
 

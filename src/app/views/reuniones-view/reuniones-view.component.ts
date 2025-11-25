@@ -1,4 +1,4 @@
-import { Component, OnChanges, OnDestroy, OnInit, SimpleChanges } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -29,7 +29,7 @@ import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
   templateUrl: './reuniones-view.component.html',
   styleUrl: './reuniones-view.component.css'
 })
-export class ReunionesViewComponent implements OnInit {
+export class ReunionesViewComponent implements OnInit, OnDestroy {
 
   constructor(
     private router: Router,
@@ -40,12 +40,13 @@ export class ReunionesViewComponent implements OnInit {
     private sanitizer: DomSanitizer // Esto es para evaluar el contenido HTML de manera segura
   ) {}
 
+
+
   contenidoSanitizado: SafeHtml | null = null;  // Variable para almacenar el contenido sanitizado
 
   esUsuarioLector: boolean = false;
 
   autoguardadoInterval: any;
-  autoGuardadoFecha: any;
 
   expandReunionActualState = false;
   reunionActualDetails!: ReunionHeader;
@@ -69,13 +70,21 @@ export class ReunionesViewComponent implements OnInit {
 
   ngOnInit(): void {
     this.recuperarReunionActual()
-    // this.autoguardadoInterval = setInterval(()=>{
-    //   this.Autoguardado();
-    // }, 30000)
+
+    this.autoguardadoInterval = setInterval(() => {
+      this.autoguardado();
+    }, 30000);
+
+
+
     this.contenido.valueChanges.subscribe((valor: string | null) => {
       this.contenidoSanitizado = this.sanitizer.bypassSecurityTrustHtml(valor || '');
     });
 
+  }
+
+  ngOnDestroy(): void {
+      clearInterval(this.autoguardadoInterval);
   }
 
   validarLector(esLector: boolean): void {
@@ -88,9 +97,26 @@ export class ReunionesViewComponent implements OnInit {
       };
     }
   }
-  // ngOnDestroy(): void {
-  //   this.cancelarAutoguardado();
-  // }
+
+  autoguardado(): void {
+
+    this.saveSelection();
+
+    if(this.existenCambiosDeReunion()){
+      this.guardarReunion();
+    } 
+  }
+
+  existenCambiosDeReunion(): boolean {
+    
+    if(!this.contenido.value) return false;
+    let texto1 = this.minutaReunion.toString().replace(/(<([^>]+)>)/ig, '');
+    let texto2 = this.contenido.value.toString().replace(/(<([^>]+)>)/ig, '');
+
+    if(texto1 !== texto2) return true;
+    return false;
+    
+  }
 
   async validarUsuarioLector(): Promise<boolean> {
     const token = localStorage.getItem('token');
@@ -155,10 +181,19 @@ export class ReunionesViewComponent implements OnInit {
     this.reunionService.consultarMinutaReunion(this.reunionActualDetails.id).subscribe({
       next: resp => {
         if(resp.length > 0) {
-          this.minutaReunion = resp[0].minuta
+          const nuevaMinuta = resp[0].minuta;
+          const anterior = this.contenido.value;
+
+          this.minutaReunion = nuevaMinuta;
+
+          if (anterior !== nuevaMinuta) {
+            this.contenido.setValue(nuevaMinuta);
+          } else {
+            this.restoreSelection();
+          }
+      
         }
-        const minutaGuardada = localStorage.getItem('minuta');
-        this.contenido.setValue(minutaGuardada || this.minutaReunion);
+
       },
       error: err => {
         console.log(err)
@@ -208,6 +243,9 @@ export class ReunionesViewComponent implements OnInit {
             position: 'top-right',
             duration: 3000
           })
+          this.consultarDesarrolloDeReunion();
+          console.log('Guardado efectuado')
+          
         },
         error: err => {
           this.toastService.error(err, {
@@ -226,6 +264,8 @@ export class ReunionesViewComponent implements OnInit {
             position: 'top-right',
             duration: 3000
           })
+          this.consultarDesarrolloDeReunion();
+          console.log('Guardado efectuado')
         },
         error: err => {
           this.toastService.error(err, {
@@ -339,37 +379,21 @@ export class ReunionesViewComponent implements OnInit {
       return fechaFormateada
   }
 
-  // Autoguardado(): void {
-  //   if(this.contenido.value){
-  //     const minutaGuardada = localStorage.getItem('minuta');
+  private savedRange: Range | null = null;
 
-  //     if(minutaGuardada !== this.contenido.value){
-      
-  //       localStorage.setItem('minuta', this.contenido.value)
-  //       const minutaActualizada = localStorage.getItem('minuta');
-        
-  //       this.contenido.setValue(minutaActualizada);
-  //       this.autoGuardadoFecha = new Date().toLocaleString('es-ES', {
-  //           day: '2-digit',
-  //           month: '2-digit',
-  //           year: 'numeric',
-  //           hour: '2-digit',   // Hora en formato de dos dígitos
-  //           minute: '2-digit', // Minutos en formato de dos dígitos
-  //           second: '2-digit', // Segundos en formato de dos dígitos
-  //           hour12: true
-  //       });
+  saveSelection() {
+    const selection = window.getSelection();
+    if (selection && selection.rangeCount > 0) {
+      this.savedRange = selection.getRangeAt(0);
+    }
+  }
 
-  //       this.toastService.info('Autoguardado realizado el día: ' + this.transformarFecha(), {
-  //         duration: 3000,
-  //         position: 'top-right'
-  //       })
-  //     }
-  //   }
-  // }
-
-  // cancelarAutoguardado(): void {
-  //   localStorage.removeItem('minuta');
-  //   this.autoguardadoInterval.clearInterval();
-  // }
+  restoreSelection() {
+    if (this.savedRange) {
+      const selection = window.getSelection();
+      selection?.removeAllRanges();
+      selection?.addRange(this.savedRange);
+    }
+  }
 
 }
