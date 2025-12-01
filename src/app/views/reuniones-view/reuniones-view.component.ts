@@ -40,8 +40,6 @@ export class ReunionesViewComponent implements OnInit, OnDestroy {
     private sanitizer: DomSanitizer // Esto es para evaluar el contenido HTML de manera segura
   ) {}
 
-
-
   contenidoSanitizado: SafeHtml | null = null;  // Variable para almacenar el contenido sanitizado
 
   esUsuarioLector: boolean = false;
@@ -71,20 +69,61 @@ export class ReunionesViewComponent implements OnInit, OnDestroy {
   ngOnInit(): void {
     this.recuperarReunionActual()
 
+    // Crea el intervalo de 30 segundos para ejecutar el guardado de información
     this.autoguardadoInterval = setInterval(() => {
       this.autoguardado();
-    }, 30000);
-
-
-
-    this.contenido.valueChanges.subscribe((valor: string | null) => {
-      this.contenidoSanitizado = this.sanitizer.bypassSecurityTrustHtml(valor || '');
-    });
+    }, 10000);
 
   }
 
+  // Cuando el componente desaparece, se elimina el intervalo
   ngOnDestroy(): void {
       clearInterval(this.autoguardadoInterval);
+      sessionStorage.clear();
+  }
+
+  autoguardado(): void {
+
+    // Solo si existen cambios
+    if(this.existenCambiosDeReunion()){
+
+      // Guarda la minuta de reunión
+      this.guardarReunion();
+    } 
+  }
+
+  existenCambiosDeReunion(): boolean {
+    
+    if(!this.contenido.value) return false;
+
+    // Se obtiene la minuta de reunión tal cual
+    let texto1 = this.minutaReunion.toString().replace(/(<([^>]+)>)/ig, '');
+
+    // Se obtiene el valor del formulario 
+    let texto2 = this.contenido.value.toString().replace(/(<([^>]+)>)/ig, '');
+
+    // Si la minuta obtenida es diferente al valor entonces guarda
+    if(texto1 !== texto2) {
+
+      // Reemplaza la minuta de reunión
+      sessionStorage.setItem('minuta', texto2);
+
+      // Obtengo la minuta recien guardada
+      const anterior = sessionStorage.getItem('minuta')
+
+      // La minuta recien guardada se almacena en la variable minuta de reunión
+      if(anterior) this.minutaReunion = anterior;
+
+      // Retorna que si existen cambios y ejecuta el guardado
+      return true
+
+    } else {
+
+      // Si no hay cambios de información no realiza ninguna acción
+      console.log("la información no ha cambiado, excluyendo...")
+      return false;
+    };
+    
   }
 
   validarLector(esLector: boolean): void {
@@ -98,25 +137,6 @@ export class ReunionesViewComponent implements OnInit, OnDestroy {
     }
   }
 
-  autoguardado(): void {
-
-    this.saveSelection();
-
-    if(this.existenCambiosDeReunion()){
-      this.guardarReunion();
-    } 
-  }
-
-  existenCambiosDeReunion(): boolean {
-    
-    if(!this.contenido.value) return false;
-    let texto1 = this.minutaReunion.toString().replace(/(<([^>]+)>)/ig, '');
-    let texto2 = this.contenido.value.toString().replace(/(<([^>]+)>)/ig, '');
-
-    if(texto1 !== texto2) return true;
-    return false;
-    
-  }
 
   async validarUsuarioLector(): Promise<boolean> {
     const token = localStorage.getItem('token');
@@ -182,14 +202,17 @@ export class ReunionesViewComponent implements OnInit, OnDestroy {
       next: resp => {
         if(resp.length > 0) {
           const nuevaMinuta = resp[0].minuta;
-          const anterior = this.contenido.value;
 
-          this.minutaReunion = nuevaMinuta;
-
-          if (anterior !== nuevaMinuta) {
-            this.contenido.setValue(nuevaMinuta);
+          if(nuevaMinuta != this.minutaReunion){
+            this.minutaReunion = nuevaMinuta;
+            this.contenido.setValue(this.minutaReunion);
+            sessionStorage.setItem('minuta', this.minutaReunion)
           } else {
-            this.restoreSelection();
+
+            const minutaAnterior = sessionStorage.getItem('minuta');
+            this.contenido.setValue(minutaAnterior);
+            if (minutaAnterior) sessionStorage.setItem('minuta', minutaAnterior);
+
           }
       
         }
@@ -237,13 +260,14 @@ export class ReunionesViewComponent implements OnInit, OnDestroy {
 
     if(!this.minutaReunion){
 
+      // Aqui se guarda la reunión por primera vez
+
       this.reunionService.guardarMinutaReunion(data).subscribe({
         next: () => {
           this.toastService.success('La información se guardó hasta este punto' + this.transformarFecha(), {
             position: 'top-right',
             duration: 3000
           })
-          this.consultarDesarrolloDeReunion();
           console.log('Guardado efectuado')
           
         },
@@ -257,6 +281,8 @@ export class ReunionesViewComponent implements OnInit, OnDestroy {
 
     }
 
+    // Aca se actualiza la información de la reunión
+
     else{
       this.reunionService.actualizarMinutaReunion(this.reunionActualDetails.id, data).subscribe({
         next: resp => {
@@ -264,7 +290,6 @@ export class ReunionesViewComponent implements OnInit, OnDestroy {
             position: 'top-right',
             duration: 3000
           })
-          this.consultarDesarrolloDeReunion();
           console.log('Guardado efectuado')
         },
         error: err => {
@@ -377,23 +402,6 @@ export class ReunionesViewComponent implements OnInit, OnDestroy {
       });
 
       return fechaFormateada
-  }
-
-  private savedRange: Range | null = null;
-
-  saveSelection() {
-    const selection = window.getSelection();
-    if (selection && selection.rangeCount > 0) {
-      this.savedRange = selection.getRangeAt(0);
-    }
-  }
-
-  restoreSelection() {
-    if (this.savedRange) {
-      const selection = window.getSelection();
-      selection?.removeAllRanges();
-      selection?.addRange(this.savedRange);
-    }
   }
 
 }
