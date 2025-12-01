@@ -72,7 +72,7 @@ export class ReunionesViewComponent implements OnInit, OnDestroy {
     // Crea el intervalo de 30 segundos para ejecutar el guardado de información
     this.autoguardadoInterval = setInterval(() => {
       this.autoguardado();
-    }, 10000);
+    }, 30000);
 
   }
 
@@ -84,17 +84,24 @@ export class ReunionesViewComponent implements OnInit, OnDestroy {
 
   autoguardado(): void {
 
+
+    if(!this.minutaReunion){
+      this.guardarReunion();
+    }
+
     // Solo si existen cambios
     if(this.existenCambiosDeReunion()){
 
       // Guarda la minuta de reunión
       this.guardarReunion();
+      return
     } 
   }
 
   existenCambiosDeReunion(): boolean {
     
     if(!this.contenido.value) return false;
+    if(!this.minutaReunion) return false;
 
     // Se obtiene la minuta de reunión tal cual
     let texto1 = this.minutaReunion.toString().replace(/(<([^>]+)>)/ig, '');
@@ -120,7 +127,6 @@ export class ReunionesViewComponent implements OnInit, OnDestroy {
     } else {
 
       // Si no hay cambios de información no realiza ninguna acción
-      console.log("la información no ha cambiado, excluyendo...")
       return false;
     };
     
@@ -200,22 +206,19 @@ export class ReunionesViewComponent implements OnInit, OnDestroy {
 
     this.reunionService.consultarMinutaReunion(this.reunionActualDetails.id).subscribe({
       next: resp => {
-        if(resp.length > 0) {
-          const nuevaMinuta = resp[0].minuta;
 
-          if(nuevaMinuta != this.minutaReunion){
-            this.minutaReunion = nuevaMinuta;
-            this.contenido.setValue(this.minutaReunion);
-            sessionStorage.setItem('minuta', this.minutaReunion)
-          } else {
-
-            const minutaAnterior = sessionStorage.getItem('minuta');
-            this.contenido.setValue(minutaAnterior);
-            if (minutaAnterior) sessionStorage.setItem('minuta', minutaAnterior);
-
-          }
-      
+        if(resp.length === 0){
+          this.minutaReunion = null;
+          this.contenido.setValue('');
+          return;
         }
+
+        const nuevaMinuta = resp[0].minuta;
+        this.minutaReunion = nuevaMinuta;
+        this.contenido.setValue(this.minutaReunion);
+
+        
+      
 
       },
       error: err => {
@@ -246,10 +249,6 @@ export class ReunionesViewComponent implements OnInit, OnDestroy {
     }
 
     if(this.contenido.hasError('minLength') || contador < 20){
-      this.toastService.error('El desarrollo de la reunión debe contener al menos 20 carácteres', {
-        duration: 3000,
-        position: 'top-right'
-      })
       return
     }
 
@@ -268,7 +267,6 @@ export class ReunionesViewComponent implements OnInit, OnDestroy {
             position: 'top-right',
             duration: 3000
           })
-          console.log('Guardado efectuado')
           
         },
         error: err => {
@@ -290,7 +288,6 @@ export class ReunionesViewComponent implements OnInit, OnDestroy {
             position: 'top-right',
             duration: 3000
           })
-          console.log('Guardado efectuado')
         },
         error: err => {
           this.toastService.error(err, {
