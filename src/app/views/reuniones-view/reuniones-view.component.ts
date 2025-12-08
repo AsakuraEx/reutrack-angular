@@ -72,7 +72,7 @@ export class ReunionesViewComponent implements OnInit, OnDestroy {
     // Crea el intervalo de 30 segundos para ejecutar el guardado de información
     this.autoguardadoInterval = setInterval(() => {
       this.autoguardado();
-    }, 30000);
+    }, 10000);
 
   }
 
@@ -86,6 +86,7 @@ export class ReunionesViewComponent implements OnInit, OnDestroy {
 
 
     if(!this.minutaReunion){
+      console.log('Autoguardado...')
       this.guardarReunion();
     }
 
@@ -267,6 +268,8 @@ export class ReunionesViewComponent implements OnInit, OnDestroy {
             position: 'top-right',
             duration: 3000
           })
+
+          this.minutaReunion = this.contenido.value;
           
         },
         error: err => {
@@ -374,7 +377,7 @@ export class ReunionesViewComponent implements OnInit, OnDestroy {
       return
     }
 
-    this.guardarReunion();
+    await this.guardarReunion();
     this.consultarDesarrolloDeReunion()
     this.router.navigate(['/'])
   }
