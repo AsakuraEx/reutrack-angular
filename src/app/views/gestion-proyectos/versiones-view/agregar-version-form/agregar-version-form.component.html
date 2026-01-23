@@ -29,6 +29,15 @@
             }
         </mat-form-field>
 
+        <mat-form-field class="w-full">
+            <mat-label>Selecciona el estado del requerimiento...</mat-label>
+            <mat-select formControlName="id_estado_req">
+                @for (estado of estados; track $index) {
+                    <mat-option [value]="estado.id">{{estado.nombre}}</mat-option>
+                }
+            </mat-select>
+        </mat-form-field>
+
         <div class="space-x-2 text-end">
             <button mat-flat-button type="submit" [disabled]="formVersion.controls['nombre'].hasError('required')">
                 @if(data.id){

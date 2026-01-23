@@ -1,4 +1,4 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { AfterViewInit, Component, inject, OnDestroy, OnInit } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -13,23 +13,26 @@ import { MatInputModule } from '@angular/material/input';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { AngularEditorModule } from '@kolkov/angular-editor';
 import { AngularEditorConfig } from '@kolkov/angular-editor';
-import { FormControl, ReactiveFormsModule, Validators } from '@angular/forms';
+import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { HotToastService } from '@ngxpert/hot-toast';
 import { jwtDecode } from 'jwt-decode';
 import { firstValueFrom } from 'rxjs';
-import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
+import { MatSlideToggleModule } from '@angular/material/slide-toggle';
+import { MatSelectModule } from '@angular/material/select';
+import { MatDialog } from '@angular/material/dialog';
+import { ActualizarModalComponent } from './components/actualizar-modal/actualizar-modal.component';
 
 @Component({
   selector: 'app-reuniones-view',
   imports: [
     MatIconModule, MatButtonModule, MatInputModule, MatFormFieldModule,
     ResponsablesComponent, AsistenciaComponent, PuntosComponent, AcuerdosComponent,
-    AngularEditorModule, ReactiveFormsModule
+    AngularEditorModule, ReactiveFormsModule, MatSlideToggleModule, MatSelectModule
   ],
   templateUrl: './reuniones-view.component.html',
   styleUrl: './reuniones-view.component.css'
 })
-export class ReunionesViewComponent implements OnInit, OnDestroy {
+export class ReunionesViewComponent implements OnInit, OnDestroy, AfterViewInit {
 
   constructor(
     private router: Router,
@@ -37,10 +40,7 @@ export class ReunionesViewComponent implements OnInit, OnDestroy {
     private reunionService: ReunionService,
     private proyectoService: ProyectoService,
     private toastService: HotToastService,
-    private sanitizer: DomSanitizer // Esto es para evaluar el contenido HTML de manera segura
   ) {}
-
-  contenidoSanitizado: SafeHtml | null = null;  // Variable para almacenar el contenido sanitizado
 
   esUsuarioLector: boolean = false;
 
@@ -50,14 +50,24 @@ export class ReunionesViewComponent implements OnInit, OnDestroy {
   reunionActualDetails!: ReunionHeader;
   version!: any;
 
+  showModal: boolean = false;
+
   minutaReunion:any = '';
-  contenido = new FormControl('', [Validators.required, Validators.minLength(20)])
+
+  readonly dialog = inject(MatDialog)
+
+  reunionForm = new FormGroup({
+    contenido: new FormControl('', [Validators.required, Validators.minLength(20)]),
+    motivo: new FormControl<number | null>(null, [Validators.required]),
+    virtual: new FormControl<boolean>(false)
+
+  })
 
   editorConfig: AngularEditorConfig = {
     editable: true,
     spellcheck: true,
     minHeight: '200px',
-    placeholder: 'Escribe aquí...',
+    placeholder: 'Escribe aquí la minuta de reunión...',
     sanitize: false,
     defaultParagraphSeparator: 'p',
     toolbarHiddenButtons: [
@@ -67,13 +77,17 @@ export class ReunionesViewComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit(): void {
+    this.obtenerMotivoReunion();
+    
+  }
+  
+  ngAfterViewInit(): void {
     this.recuperarReunionActual()
-
     // Crea el intervalo de 30 segundos para ejecutar el guardado de información
     this.autoguardadoInterval = setInterval(() => {
       this.autoguardado();
     }, 10000);
-
+      
   }
 
   // Cuando el componente desaparece, se elimina el intervalo
@@ -101,14 +115,16 @@ export class ReunionesViewComponent implements OnInit, OnDestroy {
 
   existenCambiosDeReunion(): boolean {
     
-    if(!this.contenido.value) return false;
+    const contenidoTexto = this.reunionForm.controls['contenido'].value;
+
+    if(!contenidoTexto) return false;
     if(!this.minutaReunion) return false;
 
     // Se obtiene la minuta de reunión tal cual
     let texto1 = this.minutaReunion.toString().replace(/(<([^>]+)>)/ig, '');
 
     // Se obtiene el valor del formulario 
-    let texto2 = this.contenido.value.toString().replace(/(<([^>]+)>)/ig, '');
+    let texto2 = contenidoTexto.toString().replace(/(<([^>]+)>)/ig, '');
 
     // Si la minuta obtenida es diferente al valor entonces guarda
     if(texto1 !== texto2) {
@@ -151,6 +167,10 @@ export class ReunionesViewComponent implements OnInit, OnDestroy {
 
     const decoded: any = jwtDecode(token);
 
+    if(!this.reunionActualDetails){
+      return false;
+    }
+
     try {
       const responsables: any[] = await firstValueFrom(
         this.reunionService.obtenerResponsablesPorReunion(this.reunionActualDetails.id)
@@ -179,11 +199,19 @@ export class ReunionesViewComponent implements OnInit, OnDestroy {
     this.reunionService.obtenerReunionPorCodigo(codigo).subscribe({
       next: (response) => {
         this.reunionActualDetails = response;
-        this.obtenerInformacionVersion()
-        this.consultarDesarrolloDeReunion()
+
+        this.obtenerInformacionVersion();
+        this.consultarDesarrolloDeReunion();
+
+        if(response.id_motivo) {
+          this.reunionForm.controls['motivo'].setValue(response.id_motivo);
+        }
+        
+        this.reunionForm.controls['virtual'].setValue(this.reunionActualDetails.virtual);
+
       },
       error: (err) => {
-        console.error(err);
+        console.error(err.error.error);
       }
     })
   }
@@ -210,13 +238,13 @@ export class ReunionesViewComponent implements OnInit, OnDestroy {
 
         if(resp.length === 0){
           this.minutaReunion = null;
-          this.contenido.setValue('');
+          this.reunionForm.controls['contenido'].setValue('');
           return;
         }
 
         const nuevaMinuta = resp[0].minuta;
         this.minutaReunion = nuevaMinuta;
-        this.contenido.setValue(this.minutaReunion);
+        this.reunionForm.controls['contenido'].setValue(this.minutaReunion);
 
         
       
@@ -243,19 +271,31 @@ export class ReunionesViewComponent implements OnInit, OnDestroy {
 
     let contador!: number;
 
-    if(this.contenido.value){
-      contador = this.contarLetras(this.contenido.value)
+    if(this.reunionForm.controls['contenido'].value){
+      contador = this.contarLetras(this.reunionForm.controls['contenido'].value)
     }else{
       contador = 0;
     }
 
-    if(this.contenido.hasError('minLength') || contador < 20){
+    if(this.reunionForm.controls['contenido'].hasError('minLength') || contador < 20){
       return
     }
 
+    if(!this.reunionForm.controls['motivo'].value) {
+      this.toastService.error('El campo motivo de reunión es obligatorio', {
+        position: 'top-right',
+        duration: 3000
+      })
+      return;
+    }
+
+    const isVirtual: number = this.reunionForm.controls['virtual'].value ? 1 : 0;
+
     const data = {
-      minuta: this.contenido.value,
-      id_reunion: this.reunionActualDetails.id
+      minuta: this.reunionForm.controls['contenido'].value,
+      id_reunion: this.reunionActualDetails.id,
+      id_motivo: this.reunionForm.controls['motivo'].value,
+      virtual: isVirtual
     }
 
     if(!this.minutaReunion){
@@ -269,11 +309,11 @@ export class ReunionesViewComponent implements OnInit, OnDestroy {
             duration: 3000
           })
 
-          this.minutaReunion = this.contenido.value;
+          this.minutaReunion = this.reunionForm.controls['contenido'].value;
           
         },
         error: err => {
-          this.toastService.error(err, {
+          this.toastService.error(err.error.error, {
             position: 'top-right',
             duration: 3000
           })
@@ -293,7 +333,7 @@ export class ReunionesViewComponent implements OnInit, OnDestroy {
           })
         },
         error: err => {
-          this.toastService.error(err, {
+          this.toastService.error(err.error.error, {
             position: 'top-right',
             duration: 3000
           })
@@ -317,13 +357,13 @@ export class ReunionesViewComponent implements OnInit, OnDestroy {
 
     let contador!: number;
 
-    if(this.contenido.value){
-      contador = this.contarLetras(this.contenido.value)
+    if(this.reunionForm.controls['contenido'].value){
+      contador = this.contarLetras(this.reunionForm.controls['contenido'].value)
     }else{
       contador = 0;
     }
 
-    if(this.contenido.hasError('minLength') || contador < 20){
+    if(this.reunionForm.controls['contenido'].hasError('minLength') || contador < 20){
       this.toastService.error('El desarrollo de la reunión debe contener al menos 20 carácteres', {
         duration: 3000,
         position: 'top-right'
@@ -331,22 +371,16 @@ export class ReunionesViewComponent implements OnInit, OnDestroy {
       return
     }
 
-    this.reunionService.finalizarReunion(this.reunionActualDetails.id).subscribe({
-      next: () => {
-        this.guardarReunion();
-        this.toastService.success('La reunión ha finalizado, se cierra el acceso a registro de lista de asistencia', {
-          duration: 5000,
-          position: 'top-right'
-        });
-        this.router.navigate(['/historial']);
-      },
-      error: (err) => {
-        this.toastService.error(err, {
-          duration: 5000,
-          position: 'top-right'
-        })
-      }
-    })
+    if(!this.reunionForm.controls['motivo'].value) {
+      this.toastService.error('El campo motivo de reunión es obligatorio para finalizar la reunión', {
+        position: 'top-right',
+        duration: 3000
+      })
+      return;
+    }
+
+    this.abrirModalActualizarVersion();
+
   }
 
   async guardarReunionYSalir(): Promise<void> {
@@ -363,18 +397,26 @@ export class ReunionesViewComponent implements OnInit, OnDestroy {
 
     let contador!: number;
 
-    if(this.contenido.value){
-      contador = this.contarLetras(this.contenido.value)
+    if(this.reunionForm.controls['contenido'].value){
+      contador = this.contarLetras(this.reunionForm.controls['contenido'].value)
     }else{
       contador = 0;
     }
 
-    if(this.contenido.hasError('minLength') || contador < 20){
+    if(this.reunionForm.controls['contenido'].hasError('minLength') || contador < 20){
       this.toastService.error('El desarrollo de la reunión debe contener al menos 20 carácteres', {
         duration: 3000,
         position: 'top-right'
       })
       return
+    }
+
+    if(!this.reunionForm.controls['motivo'].value) {
+      this.toastService.error('El campo motivo de reunión es obligatorio', {
+        position: 'top-right',
+        duration: 3000
+      })
+      return;
     }
 
     await this.guardarReunion();
@@ -402,6 +444,53 @@ export class ReunionesViewComponent implements OnInit, OnDestroy {
       });
 
       return fechaFormateada
+  }
+
+  abrirModalActualizarVersion(): void {
+    const dialogRef = this.dialog.open(ActualizarModalComponent, {
+      data: this.version,
+      minWidth: '715px',
+      minHeight: 'auto'
+    })
+
+    this.showModal = true;
+
+    dialogRef.afterClosed().subscribe(result => {
+
+      if(result === true) {
+        this.reunionService.finalizarReunion(this.reunionActualDetails.id).subscribe({
+          next: () => {
+            this.guardarReunion();
+            this.toastService.success('La reunión ha finalizado, se cierra el acceso a registro de lista de asistencia', {
+              duration: 5000,
+              position: 'top-right'
+            });
+            this.router.navigate(['/historial']);
+          },
+          error: (err) => {
+            this.toastService.error(err, {
+              duration: 5000,
+              position: 'top-right'
+            })
+          }
+        })
+      }
+    })
+  }
+
+
+  motivosReunion: any[] = [];
+
+  obtenerMotivoReunion(): void {
+
+    this.reunionService.obtenerMotivosReunion().subscribe({
+      next: (response) => {
+        this.motivosReunion = response;
+      },
+      error: (error) => {
+        console.error('Error al obtener los motivos de reunión:', error);
+      }
+    });
   }
 
 }

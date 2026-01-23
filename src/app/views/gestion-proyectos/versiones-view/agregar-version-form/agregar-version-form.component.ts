@@ -1,4 +1,4 @@
-import { Component, inject } from '@angular/core';
+import { Component, inject, OnInit } from '@angular/core';
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
@@ -7,20 +7,23 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
 import { jwtDecode } from 'jwt-decode';
 import { ProyectoService } from '../../../../services/proyecto.service';
+import { MatSelectModule } from '@angular/material/select';
 
 @Component({
   selector: 'app-agregar-version-form',
   imports: [
-    ReactiveFormsModule, MatButtonModule, MatFormFieldModule, MatInputModule, MatIconModule
+    ReactiveFormsModule, MatButtonModule, MatFormFieldModule, MatInputModule, MatIconModule, MatSelectModule
   ],
   templateUrl: './agregar-version-form.component.html',
   styleUrl: './agregar-version-form.component.css'
 })
-export class AgregarVersionFormComponent {
+export class AgregarVersionFormComponent implements OnInit{
 
   constructor(
     private proyectoService: ProyectoService
   ) {}
+
+  estados: any[] = [];
 
   readonly dialogRef = inject(MatDialogRef<AgregarVersionFormComponent>);
   readonly data = inject(MAT_DIALOG_DATA)
@@ -31,8 +34,13 @@ export class AgregarVersionFormComponent {
     descripcion: new FormControl(this.data?.descripcion ?? '', [Validators.maxLength(250)]),
     id_proyecto: new FormControl<number|null>(this.data?.proyecto?.id ?? null),
     id_usuario: new FormControl<number|null>(this.data?.usuario?.id ?? null),
-    id_estado: new FormControl<number>(this.data?.estado?.id ?? 1, [Validators.required])
+    id_estado: new FormControl<number>(this.data?.estado?.id ?? 1, [Validators.required]),
+    id_estado_req: new FormControl<number>(this.data?.id_estado_req ?? 9, [Validators.required])
   })
+
+  ngOnInit(): void {
+      this.obtenerEstados();
+  }
 
   onSubmit(): void {
 
@@ -73,6 +81,17 @@ export class AgregarVersionFormComponent {
 
   cerrarModal(flag: boolean): void {
     this.dialogRef.close(flag)
+  }
+
+  obtenerEstados(): void {
+    this.proyectoService.obtenerEstadosRequerimiento().subscribe({
+      next: response => {
+        this.estados = response
+      },
+      error: err => {
+        console.log(err)
+      }
+    })
   }
 
 }

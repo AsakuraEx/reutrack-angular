@@ -9,4 +9,6 @@ export class ReunionHeader {
     id_estado!: number;
     id_usuario!: number;
     id_version!: number;
+    motivo!: any;
+    virtual!: boolean;
 }

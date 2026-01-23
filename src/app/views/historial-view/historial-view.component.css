@@ -34,3 +34,11 @@
 .btn-continuar:disabled {
   color: #918A98; 
 }
+
+.btn-iniciar {
+  color: green;
+}
+
+.btn-iniciar:disabled {
+  color: #918A98; 
+}

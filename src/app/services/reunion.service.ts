@@ -114,6 +114,11 @@ export class ReunionService {
     return this.http.patch(url, {})
   }
 
+  iniciarReunion(id_reunion: number): Observable<any> {
+    const url = `${this.BaseUrl}/reuniones/iniciar/${id_reunion}`;
+    return this.http.patch(url, {})
+  }
+
   reactivarReunion(data: any): Observable<any> {
     const url = `${this.BaseUrl}/reuniones/reactivar`;
     return this.http.patch(url, data)
@@ -219,6 +224,12 @@ export class ReunionService {
 
   obtenerReunionesReactivadas(): Observable<any> {
     const url = this.BaseUrl + '/reuniones/reactivadas';
+    return this.http.get(url)
+  }
+
+
+  obtenerMotivosReunion(): Observable<any> {
+    const url = this.BaseUrl + '/motivo';
     return this.http.get(url)
   }
 

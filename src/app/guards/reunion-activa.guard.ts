@@ -20,7 +20,7 @@ export const reunionActivaGuard: CanActivateFn = (route, state) => {
   return reunionService.obtenerReunionPorCodigo(codigo).pipe(
     map(response => {
       const reunionActual = response;
-      if (reunionActual.id_estado === 1) {
+      if (reunionActual.id_estado === 1 || reunionActual.id_estado === 8) {
         return true;
       }
       router.navigate(['/']);

@@ -8,7 +8,7 @@ import { Interceptor } from './services/interceptor';
 import { MatPaginatorIntl } from '@angular/material/paginator';
 import { getSpanishPaginatorIntl } from './config/spanish-paginator-intl';
 import { provideEnvironmentNgxMask, NgxMaskConfig } from 'ngx-mask'
-
+import { MAT_DATE_LOCALE } from '@angular/material/core';
 
 const maskConfig: Partial<NgxMaskConfig> = {
   validation: false
@@ -23,6 +23,12 @@ export const appConfig: ApplicationConfig = {
       withInterceptors([ Interceptor ])
     ),
     provideHotToastConfig(),
-    { provide: MatPaginatorIntl, useValue: getSpanishPaginatorIntl() }
+    { provide: MatPaginatorIntl, useValue: getSpanishPaginatorIntl() },
+    { 
+      provide: MAT_DATE_LOCALE, 
+      useValue: 'es-SV'
+    }, 
+
+
   ]
 };

@@ -1,0 +1,79 @@
+<div class="bg-purple-600 text-lg text-white p-4 shadow">
+    <p>Antes de que finalices la reunión, ¿puedes ayudarme verificando esta información?</p>
+</div>
+
+<div class="p-4">
+
+    <div class="flex items-center">
+
+        <div class="w-3/12">
+            <img src="images/Reulito-2.svg" alt="">
+        </div>
+
+        <div class="w-9/12">
+            <p class="text-lg text-center font-medium px-3">
+                ¿Hay algún cambio en el estado de la versión?
+            </p>
+        
+            <div class="border border-gray-300 text-center p-4 rounded-lg mt-2">
+        
+                <p class="text-purple-500 font-bold">
+                    {{ data.proyecto.nombre }}
+                </p> 
+                <p class="text-purple-500 font-bold">
+                    {{ data.nombre}}
+                </p> 
+                <p class="text-purple-500 font-bold">
+                    Estado:
+                    <span class="text-black font-medium">
+                        @if(data.estado_requerimiento) {
+                            {{ data.estado_requerimiento.nombre }}
+                        } @else {
+                            Aún no posee estado de requerimiento
+                        }
+                    </span>
+                </p> 
+            </div>
+        </div>
+    </div>
+
+    @if(actualizarEstado === false) {
+        <div class="mt-4 text-center space-x-2">
+            <button mat-flat-button (click)="showActualizarEstado()">
+                Si, actualizar estado
+            </button>
+        
+            <button mat-stroked-button (click)="closeModal(true)">
+                No, finalizar reunión
+            </button>
+        </div>
+    }
+
+    @if(actualizarEstado === true) {
+        <form [formGroup]="formVersion" (submit)="onSubmit()">
+            <div class="w-full mt-3">
+                <mat-form-field class="w-full">
+                    <mat-label>Selecciona el nuevo estado de la versión...</mat-label>
+                    <mat-select formControlName="id_estado_req">
+                        @for (estado of estados; track $index) {
+                            <mat-option [value]="estado.id">{{estado.nombre}}</mat-option>
+                        }
+                    </mat-select>
+                </mat-form-field>
+            </div>
+        
+            <div class="mt-4 text-center space-x-2">
+                <button mat-flat-button type="submit">
+                    Actualizar estado y finalizar reunión
+                </button>
+            
+                <button mat-stroked-button type="button" (click)="closeModal(true)">
+                    No, finalizar reunión
+                </button>
+            </div>
+        </form>
+    }
+
+
+
+</div>

@@ -1,5 +1,9 @@
 <div class="w-full py-4 px-4 border-b border-gray-400">
-    <h1 class="text-2xl font-bold uppercase text-center text-purple-700">Datos principales de la reunión</h1>
+    @if(!programacion) {
+        <h1 class="text-2xl font-bold uppercase text-center text-purple-700">Datos principales de la reunión</h1>
+    } @else {
+        <h1 class="text-2xl font-bold uppercase text-center text-purple-700">Programación de reuniones</h1>
+    }
 </div>
 
 <div class="w-full px-4 mt-8">
@@ -70,7 +74,47 @@
             </mat-autocomplete>
             <mat-error>Seleccione una versión, despues de haber seleccionado un proyecto</mat-error>
         </mat-form-field>
-    
+
+        @if(programacion) {
+            <div class="flex flex-col md:flex-row justify-between">
+                <mat-form-field>
+                    <mat-label>Fecha de reunión</mat-label>
+                    <input matInput [matDatepicker]="fechaPicker" [min]="minDate" [max]="maxDate" formControlName="fecha">
+                    <mat-hint>MM/DD/YYYY</mat-hint>
+                    <mat-datepicker-toggle matIconSuffix [for]="fechaPicker"></mat-datepicker-toggle>
+                    <mat-datepicker #fechaPicker></mat-datepicker>
+                </mat-form-field>
+
+                <mat-form-field>
+                    <mat-label>Hora de reunión</mat-label>
+                    <input matInput [matTimepicker]="horaPicker" formControlName="hora">
+                    <mat-timepicker-toggle matIconSuffix [for]="horaPicker"/>
+                    <mat-timepicker #horaPicker/>
+                </mat-form-field>
+            </div>
+
+        }
+        
+        <div class="p-4 border border-purple-300 rounded bg-purple-50">
+            <h3 class="font-bold text-purple-500 uppercase text-lg">
+                Otros datos relevantes
+            </h3>
+            <div class="mt-4">
+                <mat-slide-toggle formControlName="virtual">¿Es una reunión virtual?</mat-slide-toggle>
+            </div>
+
+            <div class="mt-2">
+                
+                <mat-form-field class="w-96 mt-2">
+                    <mat-label>Motivo de la reunión</mat-label>
+                    <mat-select formControlName="motivo">
+                        @for (motivo of motivosReunion; track $index) {
+                            <mat-option [value]="motivo.id">{{ motivo.nombre }}</mat-option>
+                        }
+                    </mat-select>
+                </mat-form-field>
+            </div>
+        </div>
 
         <!-- <mat-form-field class="w-full">
             <mat-label>Versión</mat-label>

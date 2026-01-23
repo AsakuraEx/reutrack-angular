@@ -37,13 +37,15 @@ export class VersionesViewComponent implements AfterViewInit{
 
   proyectoActual:any = {}
   versiones: any = [];
-  displayedColumns: string[] = ['version', 'descripcion','estado', 'acta', 'usuario', 'fecha', 'accion'];
+  displayedColumns: string[] = ['version', 'descripcion', 'estado_requerimiento', 'estado', 'acta', 'usuario', 'fecha', 'accion'];
 
   estados:any = {
     Iniciado: 'bg-yellow-500',
     Finalizado: 'bg-blue-500',
     Cancelado: 'bg-red-500'
   }
+
+
 
   pageSize = 10;
   currentPage = 0;

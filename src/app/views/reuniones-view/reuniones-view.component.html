@@ -97,9 +97,28 @@
                     <h1 class="text-2xl font-bold text-purple-700">Desarrollo de la reunión</h1>
                 </div>
 
-                <div class="mt-4">
-                    <angular-editor #editorTexto [formControl]="contenido" [config]="editorConfig"></angular-editor>
-                </div>
+                <form [formGroup]="reunionForm">
+                    <div class="mt-4">
+                        <mat-slide-toggle formControlName="virtual">¿Es una reunión virtual?</mat-slide-toggle>
+                    </div>
+    
+                    <div class="mt-2">
+                        
+                        <mat-form-field class="w-96 mt-2">
+                            <mat-label>Motivo de la reunión</mat-label>
+                            <mat-select formControlName="motivo">
+                                @for (motivo of motivosReunion; track $index) {
+                                    <mat-option [value]="motivo.id">{{ motivo.nombre }}</mat-option>
+                                }
+                            </mat-select>
+                        </mat-form-field>
+    
+                        <angular-editor #editorTexto formControlName="contenido" [config]="editorConfig"></angular-editor>
+                        
+                        
+                    </div>
+                </form>
+                
 
             </div>
 
@@ -110,7 +129,7 @@
                     <button 
                         mat-flat-button 
                         (click)="finalizarReunion()"
-                        [disabled]="contarLetras(contenido.value ?? '') < 20"
+                        [disabled]="contarLetras(reunionForm.controls['contenido'].value ?? '') < 20"
                     >
                         Finalizar reunión
                     </button>
@@ -120,7 +139,7 @@
                             mat-flat-button 
                             (click)="guardarReunion()"
                             class="btn-tertiary"
-                            [disabled]="contarLetras(contenido.value ?? '') < 20"
+                            [disabled]="contarLetras(reunionForm.controls['contenido'].value ?? '') < 20"
                         >
                             Guardar como borrador
                         </button>
@@ -129,7 +148,7 @@
                             mat-flat-button 
                             (click)="guardarReunionYSalir()"
                             class="btn-secondary"
-                            [disabled]="contarLetras(contenido.value ?? '') < 20"
+                            [disabled]="contarLetras(reunionForm.controls['contenido'].value ?? '') < 20"
                         >
                             Guardar como borrador y salir
                         </button>

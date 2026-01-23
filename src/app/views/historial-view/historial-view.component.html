@@ -48,14 +48,35 @@
                                         </div>
                                     }
     
-                                    <div 
-                                        class="p-1 rounded text-white font-medium w-24 text-center"
-                                        [class]="claseEstado(reunion.estado.nombre)">
-                                        {{ reunion.estado.nombre }}
+                                    <div class="flex flex-col items-center justify-center">
+                                        <div 
+                                            class="p-1 rounded text-white font-medium w-24 text-center"
+                                            [class]="claseEstado(reunion.estado.nombre)">
+                                            {{ reunion.estado.nombre }}
+                                        </div>
+
+                                        @if(reunion.virtual){
+                                            <div class="text-sm text-white bg-pink-500 text-center px-2 py-1 rounded scale-75">
+                                                Reunión virtual
+                                            </div>
+                                        }
                                     </div>
                                 </div>
 
                                 <div>
+
+                                    <!-- Iniciar Reunión  -->
+                                    @if(reunion.estado.nombre === 'Programado' && programadaParaHoy(reunion.createdAt)){
+                                        <button 
+                                            mat-icon-button 
+                                            matTooltip="Iniciar Reunión"
+                                            [disabled]="reunion.estado.nombre === 'Finalizado'"
+                                            (click)="iniciarReunion(reunion.id)"
+                                            class="btn-iniciar">
+                                            <mat-icon>flag</mat-icon>
+                                        </button>
+                                    }
+
                                     <!-- Continuar Reunión  -->
                                      @if(reunion.estado.nombre === 'Iniciado'){
                                          <button 
@@ -175,6 +196,7 @@
                             <mat-option value="1">Iniciado</mat-option>
                             <mat-option value="3">Finalizado</mat-option>
                             <mat-option value="2">Cancelado</mat-option>
+                            <mat-option value="8">Programado</mat-option>
                         </mat-select>                        
                     </mat-form-field>
 

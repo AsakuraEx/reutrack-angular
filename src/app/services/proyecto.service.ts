@@ -113,4 +113,13 @@ export class ProyectoService {
     return this.http.patch(`${this.BaseURL}/versiones/finalizar/${id_version}`, { acta_aceptacion: 'El acta fue aprobada!' });
   }
 
+  obtenerEstadosRequerimiento(): Observable<any> {
+    const url = `${this.BaseURL}/estado`
+    return this.http.get(url, {
+      params: {
+        tipo: 'version'
+      }
+    })
+  }
+
 }

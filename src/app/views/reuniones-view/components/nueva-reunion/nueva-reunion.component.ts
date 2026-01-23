@@ -1,27 +1,35 @@
 import { AsyncPipe } from '@angular/common';
-import { Component, inject, OnInit } from '@angular/core';
-import {MatInputModule} from '@angular/material/input';
-import {MatFormFieldModule} from '@angular/material/form-field';
-import {MatSelectModule} from '@angular/material/select';
-import { MatButtonModule } from '@angular/material/button';
-import { MatIconModule } from '@angular/material/icon';
+import { ChangeDetectionStrategy, Component, inject, OnInit } from '@angular/core';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { FormControl, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
-import { MatProgressSpinner } from '@angular/material/progress-spinner';
 import { ReunionService } from '../../../../services/reunion.service';
 import { Router } from '@angular/router';
 import { ProyectoService } from '../../../../services/proyecto.service';
-import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { Observable, startWith, map } from 'rxjs';
 import { Proyecto } from '../../../../models/proyecto.model';
 import { jwtDecode } from 'jwt-decode';
+import { MatProgressSpinner } from '@angular/material/progress-spinner';
+import { MatAutocompleteModule } from '@angular/material/autocomplete';
+import {MatFormFieldModule} from '@angular/material/form-field';
+import {MatSelectModule} from '@angular/material/select';
+import {MatInputModule} from '@angular/material/input';
+import { MatButtonModule } from '@angular/material/button';
+import { MatIconModule } from '@angular/material/icon';
+import { MatSlideToggleModule } from '@angular/material/slide-toggle';
+import { MatDatepickerModule } from '@angular/material/datepicker';
+import {MatTimepickerModule} from '@angular/material/timepicker';
+import { provideNativeDateAdapter} from '@angular/material/core';
 
 @Component({
   selector: 'app-nueva-reunion',
   imports: [
-    MatFormFieldModule, MatInputModule, MatSelectModule, MatButtonModule,
-    MatIconModule, ReactiveFormsModule, MatProgressSpinner, MatAutocompleteModule, AsyncPipe
-],
+    MatFormFieldModule, MatInputModule, MatSelectModule, MatButtonModule, MatSlideToggleModule, MatTimepickerModule,
+    MatIconModule, ReactiveFormsModule, MatProgressSpinner, MatAutocompleteModule, AsyncPipe, MatDatepickerModule
+  ],
+  providers: [
+    provideNativeDateAdapter()
+  ],
+  changeDetection: ChangeDetectionStrategy.OnPush,
   templateUrl: './nueva-reunion.component.html',
   styleUrl: './nueva-reunion.component.css'
 })
@@ -48,6 +56,11 @@ export class NuevaReunionComponent implements OnInit{
     nombre: new FormControl('', [Validators.required, Validators.minLength(3), Validators.maxLength(255)]),
     lugar: new FormControl('', [Validators.required, Validators.minLength(3), Validators.maxLength(255)]),
     codigo: new FormControl(''),
+    virtual: new FormControl<boolean>(false),
+    motivo: new FormControl<any>(null),
+    hora: new FormControl<any>(null),
+    fecha: new FormControl<Date>(new Date()),
+    fecha_reunion: new FormControl<Date|null>(null),
     expiracion: new FormControl(new Date('1997-01-28T00:00:00')),
     id_proyecto: new FormControl<Proyecto | null>(null, [Validators.required]),
     id_version: new FormControl<any>(null, [Validators.required]),
@@ -55,10 +68,29 @@ export class NuevaReunionComponent implements OnInit{
     id_estado: new FormControl(1),
   })
 
+  programacion: boolean = false;
+  maxDate!: Date;
+  minDate!: Date;
+  motivosReunion: any[] = [];
+
   ngOnInit(): void {
+    this.obtenerMotivoReunion()
     this.obtenerProyectos();
     this.configurarAutocomplete();
-    
+    this.programacion = this.data.programacion || false;
+
+    if(this.programacion){
+      
+      //Validando entrada del DatePicker
+      this.minDate = new Date();
+      this.maxDate = new Date();
+      this.maxDate.setFullYear(this.minDate.getFullYear() + 2);
+
+      this.reunionForm.controls['fecha'].addValidators([Validators.required]);
+      this.reunionForm.controls['hora'].addValidators([Validators.required]);
+
+
+    }
   }
 
   closeDialog(flag: boolean): void {
@@ -87,26 +119,102 @@ export class NuevaReunionComponent implements OnInit{
         this.reunionForm.controls['id_version'].setValue(this.reunionForm.controls['id_version'].value.id)
       }
       
-      this.reunionService.crearNuevaReunion(this.reunionForm.value).subscribe({
-        next: (response) => {
-          this.agregarEncargadoInicial(response.codigo)
-          this.router.navigate(['/reunion/'+response.codigo])
+      if(!this.programacion){
+        this.reunionService.crearNuevaReunion(this.reunionForm.value).subscribe({
+          next: (response) => {
+            this.agregarEncargadoInicial(response.codigo)
+            this.router.navigate(['/reunion/'+response.codigo])
+            this.isSubmitting = false;
+            this.dialogRef.close(true)
+          },
+          error: (err) => {
+            console.error('El error: ', err);
+            this.isSubmitting = false;
+          }
+        })
+      }
+
+      else {
+
+        //MANEJANDO EL FLUJO DE LA PROGRAMACIÓN DE REUNIONES
+        const f = this.reunionForm.controls['fecha'].value;
+        const h = this.reunionForm.controls['hora'].value;
+
+        if(!f || !h) {
+          console.error('Ocurrió un error al manejar la fecha y hora');
+          this.isSubmitting = false;
+          return;
+        }
+        // Combinamos: Fecha de uno + Hora del otro
+        const fechaFinal = new Date(f.getFullYear(), f.getMonth(), f.getDate(), h.getHours(), h.getMinutes());
+        this.reunionForm.controls['fecha_reunion'].setValue(fechaFinal);
+
+        this.reunionService.crearNuevaReunion(this.reunionForm.value).subscribe({
+          next: (response) => {
+
+            console.log(response)
+
+            try {
+              setTimeout(()=>{
+                this.agregarEncargadoInicial(response.id)
+                this.isSubmitting = false;
+                this.dialogRef.close(response.codigo)
+              }, 500)
+
+            }catch (e) {
+              console.error(e)
+            }
+
+          },
+          error: (err) => {
+            console.error('El error: ', err);
+            this.isSubmitting = false;
+          }
+        })
+ 
+
+      }
+    }
+  }
+
+  agregarEncargadoInicial(id:number): void {
+
+    const token = localStorage.getItem('token');
+
+    const id_reunion = id
+
+    if(token){
+      const decoded: any = jwtDecode(token);
+      
+      const data: any = {
+        id_usuario: decoded.id,
+        id_reunion: id_reunion,
+        visitante: false
+      }
+
+      this.reunionService.agregarResponsables(data).subscribe({
+        next: (res) => {
+          console.log(res)
         },
         error: (err) => {
-          console.error('El error: ', err);
+          console.log(err)
         }
       })
-
-      this.isSubmitting = false;
-      this.dialogRef.close(true)
     }
+
   }
 
   obtenerProyectos(): void {
 
     this.proyectoService.obtenerProyectos(1, null, 1).subscribe({
       next: (response) => {
-        this.proyectos = response.data;
+
+        response.data.forEach((proyecto: any) => {
+          if (proyecto.cantidad_versiones > 0) {
+            this.proyectos.push(proyecto)
+          }
+        });
+
         this.configurarAutocomplete();
       },
       error: (err) => {
@@ -179,37 +287,17 @@ export class NuevaReunionComponent implements OnInit{
     );
   }
 
-  agregarEncargadoInicial(codigo: string): void {
 
-    const token = localStorage.getItem('token');
 
-    let id_reunion: number = 0;
-    this.reunionService.obtenerReunionPorCodigo(codigo).subscribe({
-      next: (res) => {
-        id_reunion = res.id
-
-        if(token){
-          const decoded: any = jwtDecode(token);
-          
-          const data: any = {
-            id_usuario: decoded.id,
-            id_reunion: id_reunion,
-            visitante: false
-          }
-
-          this.reunionService.agregarResponsables(data).subscribe({
-            next: (res) => {
-  
-            },
-            error: (err) => {
-              console.log(err)
-            }
-          })
-        }
+  obtenerMotivoReunion(): void {
+    this.reunionService.obtenerMotivosReunion().subscribe({
+      next: (response) => {
+        this.motivosReunion = response;
+      },
+      error: (error) => {
+        console.error('Error al obtener los motivos de reunión:', error);
       }
-    })
-
-
-    }
-
+    });
   }
+
+}

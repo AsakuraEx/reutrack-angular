@@ -6,6 +6,12 @@ export const options = [
         permiso: [1,2]
     },
     {
+        path: '/programacion-reuniones',
+        name: 'Programación de reuniones',
+        icon: 'calendar_today',
+        permiso: [1, 2]
+    },
+    {
         path: '/historial',
         name: 'Historial de reuniones',
         icon: 'book',

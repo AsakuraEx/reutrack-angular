@@ -102,6 +102,11 @@ export const routes: Routes = [
         canActivate: [AuthGuard, primerInicioGuard]
     },
     {
+        path: 'programacion-reuniones',
+        loadComponent: () => import('./views/programacion-view/programacion-view.component').then(m => m.ProgramacionViewComponent),
+        canActivate: [AuthGuard, primerInicioGuard]
+    },
+    {
         path: '**',
         loadComponent: () => import('./components/not-found-page/not-found-page.component').then(m => m.NotFoundPageComponent)
     }

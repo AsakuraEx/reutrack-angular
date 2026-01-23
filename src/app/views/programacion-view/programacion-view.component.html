@@ -1,0 +1,95 @@
+<div class="container mx-auto">
+
+    <div class="flex justify-between items-center py-3 border-b-2 border-purple-700">
+        <h1 class="text-2xl font-bold text-purple-700">Programación de reuniones</h1>
+
+        <button mat-flat-button (click)="programarReunion()">
+            <mat-icon>add</mat-icon>
+            Programar una reunión
+        </button>
+    </div>
+
+    <!-- Contenido principal -->
+    <div class="mt-6 flex w-full">
+
+        <!-- Filtros de administrador -->
+        <div class="w-3/12">
+            
+            <div class="border rounded border-purple-500 p-4 mr-2">
+                
+                <p class="flex items-center gap-2 text-xl font-bold text-purple-700 mb-4">
+                    <mat-icon>filter_list</mat-icon>
+                    Filtrar
+                </p>
+
+                <form [formGroup]="filtroForm" (submit)="onSubmit()">
+
+                    @if(usuario.id_rol == 1) {
+                        <mat-form-field class="w-full">
+                            <mat-label>Recurso</mat-label>
+                            <input type="text"
+                                formControlName="responsable"
+                                placeholder="Selecciona..."
+                                aria-label="Responsable"
+                                matInput
+                                [matAutocomplete]="auto">
+                            <mat-autocomplete autoActiveFirstOption #auto="matAutocomplete" [displayWith]="displayNombre">
+                            @for (option of filteredOptions | async ; track option) {
+                                <mat-option [value]="option">{{option.nombre}}</mat-option>
+                            }
+                            </mat-autocomplete>
+                        </mat-form-field>
+                    }
+
+                    <mat-form-field class="w-full">
+                        <mat-label>Estado</mat-label>
+                        <mat-select formControlName="estado">
+                            <mat-option value="8">Programada</mat-option>
+                            <mat-option value="1">Iniciado</mat-option>
+                            <mat-option value="2">Cancelada</mat-option>
+                            <mat-option value="3">Finalizada</mat-option>
+                        </mat-select>
+                    </mat-form-field>
+
+                    <div class="space-x-2">
+                        <button mat-flat-button type="submit">
+                            Filtrar
+                        </button>
+                        <button type="reset" mat-stroked-button>
+                            Limpiar
+                        </button>
+                    </div>
+                </form>
+
+            </div>
+
+            <div class="flex flex-col justify-center items-center mt-8 text-white w-full">
+                <div class="px-6 py-1 bg-purple-200 text-purple-700 text-center w-full">
+                    Estado de las reuniones
+                </div>
+                <div class="flex w-full text-center overflow-clip">
+                    <div [class]="claseEstado('Programado')" class="px-3 py-1 w-full">
+                        Programada
+                    </div>
+                    <div [class]="claseEstado('Iniciado')" class="px-3 py-1 w-full">
+                        Iniciada
+                    </div>
+                    <div [class]="claseEstado('Finalizado')" class="px-3 py-1 w-full">
+                        Finalizada
+                    </div>
+                    <div [class]="claseEstado('Cancelado')" class="px-3 py-1 w-full">
+                        Cancelada
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+        <!-- Calendario -->
+        <div class="w-9/12 p-4">
+            <full-calendar [options]="opcionesCalendario"></full-calendar>
+        </div>
+
+    </div>
+
+</div>

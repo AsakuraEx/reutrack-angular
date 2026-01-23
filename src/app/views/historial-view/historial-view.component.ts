@@ -16,7 +16,7 @@ import { ProyectoService } from '../../services/proyecto.service';
 import { HotToastService } from '@ngxpert/hot-toast';
 import { MatPaginator, MatPaginatorModule, PageEvent } from '@angular/material/paginator';
 import { MatTooltipModule } from '@angular/material/tooltip';
-import { RouterLink } from '@angular/router';
+import { Router, RouterLink } from '@angular/router';
 import { MatDialog, MatDialogModule } from '@angular/material/dialog';
 import { CancelarReunionModalComponent } from '../../components/cancelar-reunion-modal/cancelar-reunion-modal.component';
 import { ReactivarReunionModalComponent } from '../../components/reactivar-reunion-modal/reactivar-reunion-modal.component';
@@ -39,7 +39,8 @@ export class HistorialViewComponent implements AfterViewInit, OnInit {
   constructor(
     private reunionService: ReunionService,
     private proyectoService: ProyectoService,
-    private toastService: HotToastService
+    private toastService: HotToastService,
+    private router: Router
   ){}
 
   readonly dialog = inject(MatDialog)
@@ -49,7 +50,8 @@ export class HistorialViewComponent implements AfterViewInit, OnInit {
   estados:any = {
     Iniciado: 'bg-yellow-500',
     Finalizado: 'bg-blue-500',
-    Cancelado: 'bg-red-500'
+    Cancelado: 'bg-red-500',
+    Programado: 'bg-purple-500'
   }
 
   formFiltro = new FormGroup({
@@ -284,6 +286,42 @@ export class HistorialViewComponent implements AfterViewInit, OnInit {
       }
     })
 
+  }
+
+  continuarReunion(codigo: string) {
+    this.router.navigate(['/reunion', codigo]);
+  }
+
+  async iniciarReunion(id: number): Promise<any> {
+
+    try {
+      await this.reunionService.iniciarReunion(id).subscribe({
+        next: response => {
+          this.continuarReunion(response.codigo)
+        },
+        error: err => {
+          this.toastService.error('Ocurrio un error al iniciar la reunión: ' + err.error.error, {
+            position: 'bottom-right',
+            duration: 3000
+          });
+        }
+      })
+    } catch (e) {
+      console.error(e)
+    }
+
+
+  }
+
+  programadaParaHoy(fechaReunion: Date): boolean {
+
+    const nuevaFechaReunion = fechaReunion.toString().substring(0,10)
+    const fechaActual = new Date().toISOString().substring(0,10)
+
+    if(fechaActual === nuevaFechaReunion){
+      return true;
+    }
+    return false;
   }
 
 }
