@@ -3,7 +3,7 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { MatTableDataSource, MatTableModule } from '@angular/material/table';
 import {MatTooltipModule} from '@angular/material/tooltip';
-import { RouterLink } from '@angular/router';
+import { Router, RouterLink } from '@angular/router';
 import { ProyectoService } from '../../../services/proyecto.service';
 import { MatDialog } from '@angular/material/dialog';
 import { FormProyectosComponent } from './components/form-proyectos/form-proyectos.component';
@@ -13,7 +13,6 @@ import { FormControl, ReactiveFormsModule } from '@angular/forms';
 import { MatPaginator, MatPaginatorModule, PageEvent } from '@angular/material/paginator';
 import { EliminarProyectoComponent } from './components/eliminar-proyecto/eliminar-proyecto.component';
 import { jwtDecode } from 'jwt-decode';
-
 
 
 @Component({
@@ -29,7 +28,8 @@ import { jwtDecode } from 'jwt-decode';
 export class ProyectosViewComponent implements AfterViewInit{
 
   constructor(
-    private proyectoService: ProyectoService
+    private proyectoService: ProyectoService,
+    private router: Router
   ){}
 
   // Data del usuario
@@ -85,6 +85,9 @@ export class ProyectosViewComponent implements AfterViewInit{
     this.dataSource.filter = filterValue.trim().toLowerCase();
   }
 
+  fusionarProyectos(): void {
+    this.router.navigate(['proyectos/consolidar-proyectos']);
+  }
 
   mostrarModal(proyecto?: any): void {
 

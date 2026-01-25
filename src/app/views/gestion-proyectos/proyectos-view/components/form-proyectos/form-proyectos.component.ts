@@ -7,11 +7,12 @@ import { MatInputModule } from '@angular/material/input';
 import { jwtDecode } from 'jwt-decode';
 import { ProyectoService } from '../../../../../services/proyecto.service';
 import { HotToastService } from '@ngxpert/hot-toast';
+import { MatIconModule } from '@angular/material/icon';
 
 @Component({
   selector: 'app-form-proyectos',
   imports: [
-    ReactiveFormsModule, MatFormFieldModule, MatInputModule, MatButtonModule
+    ReactiveFormsModule, MatFormFieldModule, MatInputModule, MatButtonModule, MatIconModule
   ],
   templateUrl: './form-proyectos.component.html',
   styleUrl: './form-proyectos.component.css'

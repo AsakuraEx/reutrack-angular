@@ -2,12 +2,19 @@
 
     <h1 class="text-2xl text-purple-700 font-black">Proyectos registrados</h1>
     
-    <div class="text-end w-full mt-8">
+    <div class="text-end w-full mt-8 space-x-2">
         <button 
             mat-flat-button
             (click)="mostrarModal()">
             <mat-icon>add</mat-icon>
             Agregar nuevo proyecto
+        </button>
+
+        <button
+            mat-stroked-button
+            (click)="fusionarProyectos()">
+            <mat-icon>merge</mat-icon>
+            Consolidar proyectos
         </button>
     </div>
 

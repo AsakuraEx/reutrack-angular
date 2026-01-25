@@ -1,0 +1,106 @@
+<div class="p-4">
+    <h1 class="font-bold text-purple-700">
+        Versiones afectadas
+    </h1>
+    
+    
+    <table mat-table [dataSource]="versiones">
+    
+        <ng-container matColumnDef="version">
+            <th mat-header-cell *matHeaderCellDef class="text-purple-700">Versión</th>
+            <td mat-cell *matCellDef="let version">
+                <p class="text-ellipsis py-2">
+                    {{ version.nombre }}
+                </p>
+            </td>
+        </ng-container>
+    
+        <ng-container matColumnDef="descripcion">
+            <th mat-header-cell *matHeaderCellDef class="text-purple-700">Descripción</th>
+            <td mat-cell *matCellDef="let version">
+                <p class="text-ellipsis max-w-80 py-2">
+                    @if(version.descripcion){
+                        {{ version.descripcion }}
+                    } @else {
+                        <p class="font-light text-gray-700">La descripción no fue especificada</p>
+                    }
+                </p>
+            </td>
+        </ng-container>
+    
+        <ng-container matColumnDef="estado_requerimiento">
+            <th mat-header-cell *matHeaderCellDef class="text-purple-700">Estado de requerimiento</th>
+            <td mat-cell *matCellDef="let version">
+                <p class="text-ellipsis py-2">
+                    @if(version.estado_requerimiento){
+                        {{ version.estado_requerimiento.nombre }}
+                    } @else {
+                        <p class="font-light text-gray-700">No definido</p>
+                    }
+                </p>
+            </td>
+        </ng-container>
+    
+        <ng-container matColumnDef="estado">
+            <th mat-header-cell *matHeaderCellDef class="text-purple-700">Estado</th>
+            <td mat-cell *matCellDef="let version">
+                <div>
+                    {{ version.estado.nombre }}
+                </div>
+            </td>
+        </ng-container>
+    
+        <ng-container matColumnDef="acta">
+            <th mat-header-cell *matHeaderCellDef class="text-purple-700">Acta de Aceptación</th>
+            <td mat-cell *matCellDef="let version">
+    
+                    @if(version.acta_aceptacion){
+                        <p class="text-ellipsis py-2 font-medium text-green-700">
+                            Aprobada
+                        </p>
+                    } @else {
+                        <p class="text-ellipsis py-2 font-light text-gray-700">
+                            No disponible
+                        </p>
+                    }
+                
+            </td>
+        </ng-container>
+    
+        <ng-container matColumnDef="usuario">
+            <th mat-header-cell *matHeaderCellDef class="text-purple-700 w-40">Usuario que registra</th>
+            <td mat-cell *matCellDef="let version">
+                <p class="text-ellipsis">
+                    {{ version.usuario['nombre'] }}
+                </p>
+            </td>
+        </ng-container>
+    
+        <ng-container matColumnDef="fecha">
+            <th mat-header-cell *matHeaderCellDef class="text-purple-700 w-40">Fecha de creación</th>
+            <td mat-cell *matCellDef="let version">
+                <p class="text-ellipsis">
+                    {{ transformarFecha(version.createdAt) }}
+                </p>
+            </td>
+        </ng-container>
+    
+        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+        <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+    
+        <tr class="mat-row" *matNoDataRow>
+            <td class="mat-cell" colspan="7">
+                <p class="font-italic py-4 px-4 text-center">
+                    No hay proyectos registrados.
+                </p>
+            </td>
+        </tr>
+    
+    </table>
+    
+    <mat-paginator
+        [length]="totalRecords"
+        [pageSize]="pageSize"
+        [pageIndex]="currentPage"
+    ></mat-paginator>
+</div>

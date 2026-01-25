@@ -1,0 +1,71 @@
+<form [formGroup]="fusionForm" (submit)="onSubmit()">
+
+    <div class="flex items-start justify-between gap-4">
+        <mat-form-field class="w-5/12">
+            <mat-label>Proyecto A</mat-label>
+            <input type="text"
+                placeholder="Selecciona el proyecto al que se consolidará"
+                aria-label="Proyecto"
+                matInput
+                formControlName="id_proyecto_a"
+                [matAutocomplete]="auto"
+            >
+            <mat-autocomplete 
+                #auto="matAutocomplete" 
+                [displayWith]="displayProyectoNombreA"
+            >
+                @for (proyectoA of proyectosFiltradosA | async ; track $index) {
+                    <mat-option [value]="proyectoA">{{ proyectoA.nombre }}</mat-option>
+                }
+            </mat-autocomplete>
+            <mat-error>Selecciona el proyecto al que se consolidará</mat-error>
+        </mat-form-field>
+    
+        <div class="rotate-180 mt-2 text-purple-500 scale-175">
+            <mat-icon>forward</mat-icon>
+        </div>
+
+        <mat-form-field class="w-5/12">
+            <mat-label>Proyecto B</mat-label>
+            <input type="text"
+                placeholder="Selecciona el proyecto que se eliminará"
+                aria-label="Proyecto"
+                matInput
+                formControlName="id_proyecto_b"
+                [matAutocomplete]="auto2"
+            >
+            <mat-autocomplete 
+                #auto2="matAutocomplete" 
+                [displayWith]="displayProyectoNombreB"
+                (optionSelected)="obtenerInformacion()"
+            >
+                @for (proyectoB of proyectosFiltradosB | async ; track $index) {
+                    <mat-option [value]="proyectoB">{{ proyectoB.nombre }}</mat-option>
+                }
+            </mat-autocomplete>
+            <mat-error>Selecciona el proyecto que se eliminará</mat-error>
+        </mat-form-field>
+
+        <div class="flex gap-0.5">
+            <button 
+                mat-flat-button
+                class="mt-3 w-full"
+                type="submit"
+            >
+                <mat-icon>add</mat-icon>
+                Consolidar
+            </button>
+
+            <button 
+                mat-stroked-button
+                class="mt-3 w-full"
+                type="reset"
+            >
+                limpiar
+            </button>
+
+
+        </div>
+    </div>
+
+</form>

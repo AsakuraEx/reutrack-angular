@@ -52,6 +52,11 @@ export const routes: Routes = [
         canActivate: [AuthGuard, primerInicioGuard]
     },
     {
+        path: 'proyectos/consolidar-proyectos',
+        loadComponent: () => import('./views/gestion-proyectos/fusionar-proyectos-view/fusionar-proyectos-view.component').then(m => m.FusionarProyectosViewComponent),
+        canActivate: [AuthGuard, primerInicioGuard]
+    },
+    {
         path: 'proyectos/seguimiento/:id_proyecto',
         loadComponent: () => import('./views/gestion-proyectos/seguimiento-view/seguimiento-view.component').then(m => m.SeguimientoViewComponent),
         canActivate: [AuthGuard, primerInicioGuard]

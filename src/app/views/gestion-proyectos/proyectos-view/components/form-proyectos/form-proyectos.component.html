@@ -7,6 +7,20 @@
         }
     </h1>
 
+
+    @if(!data) {
+        <div class="bg-sky-100 mt-4 p-4 text-sky-700 shadow rounded">
+            <h4 class="flex items-center gap-1 font-bold">
+                <mat-icon>info</mat-icon>
+                ATENCIÓN
+            </h4>
+
+            <p>
+                Recuerda siempre validar que el proyecto no ha sido creado por alguien más, recuerda que antes de tí, alguien más pudo llevar el requerimiento.
+            </p>
+        </div>
+    }
+
     <form class="mt-8" [formGroup]="formProyectos" (submit)="onSubmit()">
 
         <mat-form-field class="w-full">

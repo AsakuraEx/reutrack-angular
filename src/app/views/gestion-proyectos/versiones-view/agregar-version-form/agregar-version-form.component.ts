@@ -12,7 +12,7 @@ import { MatSelectModule } from '@angular/material/select';
 @Component({
   selector: 'app-agregar-version-form',
   imports: [
-    ReactiveFormsModule, MatButtonModule, MatFormFieldModule, MatInputModule, MatIconModule, MatSelectModule
+    ReactiveFormsModule, MatButtonModule, MatFormFieldModule, MatInputModule, MatIconModule, MatSelectModule, MatIconModule
   ],
   templateUrl: './agregar-version-form.component.html',
   styleUrl: './agregar-version-form.component.css'
@@ -35,7 +35,8 @@ export class AgregarVersionFormComponent implements OnInit{
     id_proyecto: new FormControl<number|null>(this.data?.proyecto?.id ?? null),
     id_usuario: new FormControl<number|null>(this.data?.usuario?.id ?? null),
     id_estado: new FormControl<number>(this.data?.estado?.id ?? 1, [Validators.required]),
-    id_estado_req: new FormControl<number>(this.data?.id_estado_req ?? 9, [Validators.required])
+    id_estado_req: new FormControl<number>(this.data?.id_estado_req ?? 0, [Validators.required]),
+    updatedby: new FormControl<number>(0, [Validators.required])
   })
 
   ngOnInit(): void {
@@ -44,15 +45,16 @@ export class AgregarVersionFormComponent implements OnInit{
 
   onSubmit(): void {
 
-    if(!this.data.id){
+    const token = localStorage.getItem('token');
+    if(!token) return;
 
-      const token = localStorage.getItem('token');
-      if(!token) return;
-  
-      const decoded:any = jwtDecode(token);
+    const decoded:any = jwtDecode(token);
+    
+    if(!this.data.id){
 
       this.formVersion.controls['id_proyecto'].setValue(this.data)
       this.formVersion.controls['id_usuario'].setValue(decoded.id)
+      this.formVersion.controls['updatedby'].setValue(decoded.id)
 
       if(this.formVersion.valid){
         this.proyectoService.crearVersion(this.formVersion.value).subscribe({
@@ -66,15 +68,18 @@ export class AgregarVersionFormComponent implements OnInit{
       }
 
     } else {
+      this.formVersion.controls['updatedby'].setValue(decoded.id)
 
-      this.proyectoService.actualizarVersion(this.formVersion.value).subscribe({
-        next: () => {
-          this.cerrarModal(true)
-        },
-        error: e => {
-          console.error(e)
-        }
-      })
+      if(this.formVersion.valid){
+        this.proyectoService.actualizarVersion(this.formVersion.value).subscribe({
+          next: () => {
+            this.cerrarModal(true)
+          },
+          error: e => {
+            console.error(e)
+          }
+        })
+      }
 
     }
   }

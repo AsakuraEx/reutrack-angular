@@ -1,0 +1,60 @@
+<main class="container mx-auto mt-4">
+
+    <div class="flex justify-between">
+        <h1 class="text-3xl font-bold text-purple-700 mb-4">
+            Consolidación de proyectos
+        </h1>
+
+        <button 
+            mat-flat-button
+            class="btn-secondary"
+            routerLink="/proyectos"
+            >
+            <mat-icon>list</mat-icon>
+            Listado de proyectos
+        </button>
+    </div>
+
+    <div class="bg-sky-100 mt-4 p-4 text-sky-700 shadow rounded">
+        <h4 class="flex items-center gap-1 font-bold">
+            <mat-icon>info</mat-icon>
+            INFORMACIÓN
+        </h4>
+
+        <p>
+            La consolidación de proyectos, es una herramienta para corregir proyectos duplicados, que ya poseen versiones registradas y posiblemente reuniones registradas a esa versión. Al realizar
+            la consolidación de dos proyectos, estos se almacenarán en una bitácora donde quedará registrada la fecha, hora y usuario que realiza la consolidación, además de todos los registros que han sido alterados.
+        </p>
+
+        <span class="text-lg font-bold mt-4 block underline">Consideraciones importantes al consolidar un proyecto</span>
+
+        <ul class="mt-2">
+            <li>Para consolidar proyectos, deberá tomar el <b>proyecto A</b> el cual será el proyecto que quede disponible, mientras que el <b>proyecto B</b> será el proyecto a eliminar</li>
+            <li>Todas las versiones pasarán a formar parte del proyecto A</li>
+            <li>Todas las reuniones pasarán a formar parte del proyecto A</li>
+            <li>Se almacenará los datos del usuario que consolide los proyectos</li>
+        </ul>
+
+    </div>
+
+    <div class="p-4 bg-purple-100 mt-6 shadow-lg rounded">
+
+        <app-fusion-form
+            (reuniones)="recibirReuniones($event)" 
+            (versiones)="recibirVersiones($event)">
+        </app-fusion-form>
+
+    </div>
+
+    @if(reunionesRecibidas.length > 0 || versionesRecibidas.length > 0){
+        <div class="p-4 border border-purple-500 shadow-lg mt-6 rounded">
+    
+            <h1 class="text-xl font-bold text-purple-700">Alcance de la Consolidación</h1>
+    
+            <app-fusion-detalle [versiones]="versionesRecibidas" [reuniones]="reunionesRecibidas"></app-fusion-detalle>
+    
+        </div>
+    }
+
+
+</main>

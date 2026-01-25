@@ -24,10 +24,10 @@
                     mat-flat-button 
                     (click)="finalizarActaAceptacion()" 
                     [disabled]="cantidadFuncionalidadesAprobadas === 0 || cantidadUsuariosAprobados === 0">
-                    Aprobar acta de aceptación
+                    Finalizar versión
                 </button>
             }
-            @if(acta_aceptacion.estado.id === 7){
+
                 <button mat-flat-button (click)="generarPdf()" [disabled]="isSubmitting">
                     @if(isSubmitting){
                         <mat-progress-spinner diameter="20" mode="indeterminate"></mat-progress-spinner>
@@ -38,7 +38,6 @@
                         </div>
                     }
                 </button>
-            }
 
             <button class="btn-secondary" mat-flat-button (click)="irAtras()">
                 <mat-icon>list</mat-icon>

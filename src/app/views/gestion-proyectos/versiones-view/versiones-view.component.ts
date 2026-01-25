@@ -65,6 +65,9 @@ export class VersionesViewComponent implements AfterViewInit{
   }
 
   mostrarAgregarVersion(): void {
+
+    this.obtenerVersiones(this.id_proyecto);
+
     const dialogRef = this.dialog.open(AgregarVersionFormComponent, {
       data: this.id_proyecto
     });
