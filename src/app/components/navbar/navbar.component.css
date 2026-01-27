@@ -9,25 +9,36 @@ a.active {
 }
 
 .btn-tertiary {
-  color: var(--mat-sys-tertiary) !important;
+  color: #673AB7 !important;
 }
 
 .btn-tertiary:hover {
-  background-color: #F5C6FF !important;
+  background-color: #ddd1f1 !important;
+  color: #673AB7 !important;
+}
+
+.btn-secondary {
   color: var(--mat-sys-tertiary) !important;
 }
+
+.btn-secondary:hover {
+  background-color: #f5d6fc !important;
+  color: var(--mat-sys-tertiary) !important;
+}
+
+
 
 .mat-mdc-button,
 .mat-mdc-raised-button,
 .mat-mdc-flat-button {
   justify-content: flex-start !important; /* texto a la izquierda */
-  padding-left: calc(var(--spacing) * 6) !important; 
+  padding-left: calc(var(--spacing) * 4) !important; 
 }
 
 button.mat-mdc-button.btn-tertiary:hover,
 button.mat-mdc-raised-button.btn-tertiary:hover {
-  background-color: rgb(255, 215, 255) !important;
-  color: var(--mat-sys-tertiary) !important;
+  background-color: #ddd1f1 !important;
+  color: #673AB7 !important;
 }
 
 

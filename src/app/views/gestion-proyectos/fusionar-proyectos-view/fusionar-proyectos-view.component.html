@@ -39,19 +39,18 @@
 
     <div class="p-4 bg-purple-100 mt-6 shadow-lg rounded">
 
-        <app-fusion-form
-            (reuniones)="recibirReuniones($event)" 
+        <app-fusion-form 
             (versiones)="recibirVersiones($event)">
         </app-fusion-form>
 
     </div>
 
-    @if(reunionesRecibidas.length > 0 || versionesRecibidas.length > 0){
+    @if(versionesRecibidas.length > 0){
         <div class="p-4 border border-purple-500 shadow-lg mt-6 rounded">
     
-            <h1 class="text-xl font-bold text-purple-700">Alcance de la Consolidación</h1>
+            <h1 class="text-xl font-bold text-purple-700">Versiones afectadas por la consolidación</h1>
     
-            <app-fusion-detalle [versiones]="versionesRecibidas" [reuniones]="reunionesRecibidas"></app-fusion-detalle>
+            <app-fusion-detalle [versiones]="versionesRecibidas"></app-fusion-detalle>
     
         </div>
     }

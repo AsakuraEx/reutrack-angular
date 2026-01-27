@@ -15,17 +15,10 @@ import { FusionDetalleComponent } from './components/fusion-detalle/fusion-detal
 })
 export class FusionarProyectosViewComponent {
 
-  reunionesRecibidas: any[] = [];
   versionesRecibidas: any[] = [];
-
-  recibirReuniones(event: any[]): void {
-    this.reunionesRecibidas = event
-    console.log(event)
-  }
 
   recibirVersiones(event: any[]): void {
     this.versionesRecibidas = event
-    console.log(event)
   }
 
 }

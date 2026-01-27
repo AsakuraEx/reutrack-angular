@@ -122,4 +122,9 @@ export class ProyectoService {
     })
   }
 
+  fusionarProyectos(data: any): Observable<any> {
+    const url = this.BaseURL + '/proyectos/fusion';
+    return this.http.post(url, data);
+  }
+
 }

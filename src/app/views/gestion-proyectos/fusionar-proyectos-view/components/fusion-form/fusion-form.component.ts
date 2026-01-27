@@ -1,8 +1,8 @@
-import { Component, EventEmitter, Output } from '@angular/core';
+import { Component, EventEmitter, Output, ViewChild } from '@angular/core';
 import { ProyectoService } from '../../../../../services/proyecto.service';
 import { Proyecto } from '../../../../../models/proyecto.model';
 import { map, Observable, startWith } from 'rxjs';
-import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
+import { FormControl, FormGroup, FormGroupDirective, ReactiveFormsModule, Validators } from '@angular/forms';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { MatInputModule } from '@angular/material/input';
 import { MatFormFieldModule } from '@angular/material/form-field';
@@ -10,7 +10,7 @@ import { AsyncPipe } from '@angular/common';
 import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
 import { jwtDecode } from 'jwt-decode';
-import { ReunionService } from '../../../../../services/reunion.service';
+import { HotToastService } from '@ngxpert/hot-toast';
 
 @Component({
   selector: 'app-fusion-form',
@@ -24,13 +24,14 @@ export class FusionFormComponent {
 
   constructor(
     private proyectoService: ProyectoService,
-    private reunionService: ReunionService
+    private toastService: HotToastService
   ) {}
 
   isSubmitting = false;
 
-  @Output() reuniones = new EventEmitter<any[]>;
   @Output() versiones = new EventEmitter<any[]>;
+
+  @ViewChild(FormGroupDirective) formGroupDirective!: FormGroupDirective
 
   proyectosA: Proyecto[] = [];
   proyectosFiltradosA!: Observable<Proyecto[]>;
@@ -73,6 +74,16 @@ export class FusionFormComponent {
     if(this.fusionForm.valid) {
       const proyecto_a: number = this.fusionForm.controls['id_proyecto_a'].value?.id;
       const proyecto_b: number = this.fusionForm.controls['id_proyecto_b'].value?.id;
+
+      if(proyecto_a === proyecto_b) {
+        
+        this.toastService.error('Los proyectos seleccionados no pueden ser iguales.',{
+          position: 'top-right',
+          duration: 3000
+        });
+        return;
+
+      }
   
   
       const data = {
@@ -80,7 +91,24 @@ export class FusionFormComponent {
         id_proyecto_b: proyecto_b,
         id_usuario: usuario
       }
-      console.log(data)
+      
+      this.proyectoService.fusionarProyectos(data).subscribe({
+        next: response => {
+          this.toastService.success('Los proyectos se han fusionado correctamente.', {
+            position: 'top-right',
+            duration: 3000
+          });
+          
+          this.versiones.emit([]);
+          this.formGroupDirective.resetForm();
+          this.fusionForm.reset();
+          this.isSubmitting = false;
+        },
+        error: err => {
+          console.error(err);
+          this.isSubmitting = false;
+        }
+      });
 
       this.isSubmitting = false;
     }
@@ -90,35 +118,40 @@ export class FusionFormComponent {
 
   obtenerInformacion(): void {
 
-      const proyecto_b: number = this.fusionForm.controls['id_proyecto_b'].value?.id;
-  
-      if(proyecto_b < 1) return;
+    const proyecto_b: number = this.fusionForm.controls['id_proyecto_b'].value?.id;
+    const proyecto_a: number = this.fusionForm.controls['id_proyecto_a'].value?.id;
 
-      console.log("proyecto: " + proyecto_b)
-      this.obtenerReuniones(proyecto_b)
-      this.obtenerVersiones(proyecto_b)
+    if(proyecto_b < 1) {
+      this.toastService.error('Selecciona una proyecto a eliminar válido.', {
+        position: 'top-right',
+        duration: 3000
+      })
+      return;
+    } 
+
+    if(!proyecto_a){
+      this.toastService.error('Primero seleccione el proyecto al que se consolidará.', {
+        position: 'top-right',
+        duration: 3000
+      })
+      this.fusionForm.controls['id_proyecto_b'].setValue(null);
+      return;
+    }
+
+    if(proyecto_a === proyecto_b) {
+      this.toastService.error('Los proyectos seleccionados no pueden ser iguales.', {
+        position: 'top-right',
+        duration: 3000
+      })
+      this.fusionForm.controls['id_proyecto_b'].setValue(null);
+      this.versiones.emit([]);
+      return;
+    }
+
+    this.obtenerVersiones(proyecto_b)
 
 
   }
-    
-  // OBTENIENDO DATOS DE CONSOLIDACION
-  obtenerReuniones(id_proyecto: number): void {
-
-    if(!id_proyecto) return;
-
-    this.reunionService.obtenerReuniones(null, null, null, id_proyecto, null, 1, null, null).subscribe({
-      next: response => {
-        this.reuniones.emit(response.data);
-        
-      },
-      error: err => {
-        console.error(err)
-      }
-      
-    })
-
-  }
-
 
   obtenerVersiones(id_proyecto: number): void {
     
@@ -142,9 +175,7 @@ export class FusionFormComponent {
       next: (response) => {
         
         response.data.forEach((proyecto: any) => {
-          if (proyecto.cantidad_versiones > 0) {
-            this.proyectosA.push(proyecto)
-          }
+          this.proyectosA.push(proyecto)
         });
         
         this.configurarAutocompleteA();
@@ -186,9 +217,7 @@ export class FusionFormComponent {
       next: (response) => {
         
         response.data.forEach((proyecto: any) => {
-          if (proyecto.cantidad_versiones > 0) {
-            this.proyectosB.push(proyecto)
-          }
+          this.proyectosB.push(proyecto)
         });
         
         this.configurarAutocompleteB();
@@ -207,6 +236,9 @@ export class FusionFormComponent {
   private _filterNombresB(name: string): any[] {
     const filterValue = name.toLowerCase();
     
+    const valorA = this.fusionForm.controls['id_proyecto_a'].value;
+    const idProyectoA = (valorA && typeof valorA === 'object') ? valorA.id : null;
+
     return this.proyectosB.filter(option => option.nombre.toLowerCase().includes(filterValue));
   }
   

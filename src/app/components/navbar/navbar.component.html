@@ -1,5 +1,5 @@
 @if(usuario) {
-  <div class="bg-purple-100 h-full border-r border-purple-300 overflow-y-hidden py-6 px-2">
+  <div class="bg-purple-100 h-full border-r border-purple-300 overflow-y-auto py-6 px-2">
 
     <div class="flex flex-col justify-between h-full">
 
@@ -16,7 +16,7 @@
                 (click)="toggleDropDown(option.id)"
               >
     
-                <div class="flex justify-start items-center py-2 px-4 rounded-full hover:bg-purple-200 cursor-pointer gap-2">
+                <div class="flex justify-start items-center py-2 px-3 rounded-full hover:bg-purple-200 cursor-pointer gap-2">
                   <mat-icon 
                     style="color: #7D00FA; font-size: 18px; height: auto;">
                     {{ option.icon }}
@@ -28,7 +28,7 @@
                   </mat-icon>
                 </div>
     
-                <div class="w-full rounded py-2 px-8">
+                <div class="w-full rounded py-2 px-2">
                   @for(item of option.opciones; track item){
 
                     <!-- sub-submenu del navbar -->
@@ -40,7 +40,7 @@
                         (click)="toggleDropDown(item.id, $event)"
                       >
             
-                        <div class="flex justify-start items-center btn-tertiary py-2 px-6 rounded-full cursor-pointer gap-2">
+                        <div class="flex justify-start items-center btn-tertiary py-2 px-4 rounded-full cursor-pointer gap-2">
                           <h1 class="text-sm font-medium">{{ item.name }}</h1>
                           <mat-icon 
                             style="font-size: 18px; height: auto;">
@@ -48,7 +48,7 @@
                           </mat-icon>
                         </div>
             
-                        <div class="w-full rounded py-2 px-8">
+                        <div class="w-full rounded py-2 px-1">
                           @for(submenu of item.opciones; track $index){
 
                             @for(permiso of submenu.permiso; track $index){
@@ -59,7 +59,7 @@
                                   routerLinkActive="active" 
                                   [routerLinkActiveOptions]="{ exact: true }" 
                                   ariaCurrentWhenActive="page"
-                                  class="w-full btn-tertiary"
+                                  class="w-full btn-secondary"
                                 >
                                   <!-- <mat-icon>{{ item.icon }}</mat-icon> -->
                                   {{ submenu.name }}

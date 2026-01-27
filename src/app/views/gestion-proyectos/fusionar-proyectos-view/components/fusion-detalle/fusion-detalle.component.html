@@ -1,10 +1,10 @@
 <div class="p-4">
-    <h1 class="font-bold text-purple-700">
-        Versiones afectadas
+    <h1 class="font-light text-purple-700">
+        Todas las reuniones registradas a estas versiones, pasarán a formar parte del proyecto consolidado.
     </h1>
     
     
-    <table mat-table [dataSource]="versiones">
+    <table mat-table [dataSource]="dataSourceVersiones">
     
         <ng-container matColumnDef="version">
             <th mat-header-cell *matHeaderCellDef class="text-purple-700">Versión</th>
@@ -99,8 +99,7 @@
     </table>
     
     <mat-paginator
-        [length]="totalRecords"
-        [pageSize]="pageSize"
-        [pageIndex]="currentPage"
+        pageSize="10"
+        showFirstLastButtons
     ></mat-paginator>
 </div>

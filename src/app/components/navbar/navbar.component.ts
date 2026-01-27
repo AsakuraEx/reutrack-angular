@@ -17,7 +17,7 @@ export class NavbarComponent implements OnInit {
 
   usuario!:any;
   navbarVisible = false;
-  menuOptions = options;
+  menuOptions!:any;
 
   readonly dialog = inject(MatDialog);
 
@@ -45,7 +45,7 @@ export class NavbarComponent implements OnInit {
     if(!dropdown) return;
 
     dropdown.classList.toggle('max-h-10');
-    dropdown.classList.toggle('max-h-96');
+    dropdown.classList.toggle('max-h-[650px]');
   }
 
   ngOnInit(): void {
@@ -54,6 +54,7 @@ export class NavbarComponent implements OnInit {
       const decoded = jwtDecode(token);
       this.usuario = decoded;
     }
+    this.menuOptions = options
   }
 
 }

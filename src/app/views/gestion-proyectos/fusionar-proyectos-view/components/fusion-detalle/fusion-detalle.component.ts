@@ -1,6 +1,6 @@
-import { AfterViewInit, Component, Input, ViewChild } from '@angular/core';
-import { MatPaginator, MatPaginatorModule, PageEvent } from '@angular/material/paginator';
-import { MatTableModule } from '@angular/material/table';
+import { AfterViewInit, Component, Input, OnChanges, SimpleChanges, ViewChild } from '@angular/core';
+import { MatPaginator, MatPaginatorModule } from '@angular/material/paginator';
+import { MatTableDataSource, MatTableModule } from '@angular/material/table';
 
 @Component({
   selector: 'app-fusion-detalle',
@@ -10,36 +10,21 @@ import { MatTableModule } from '@angular/material/table';
   templateUrl: './fusion-detalle.component.html',
   styleUrl: './fusion-detalle.component.css'
 })
-export class FusionDetalleComponent implements AfterViewInit{
+export class FusionDetalleComponent implements OnChanges{
 
-  @Input() versiones!: any[];
-  @Input() reuniones!: any[];
+  @Input() versiones: any[] = [];
 
   displayedColumns: string[] = ['version', 'descripcion', 'estado_requerimiento', 'estado', 'acta', 'usuario', 'fecha'];
 
-  pageSize = 10;
-  currentPage = 0;
-  totalRecords = 0;
-
+  dataSourceVersiones= new MatTableDataSource<any>([]);
   @ViewChild(MatPaginator) paginator!: MatPaginator
 
-  ngAfterViewInit(): void {
+  ngOnChanges(changes: SimpleChanges): void {
 
-    
-    this.paginator.page.subscribe(pageEvent => {
-      this.onPageEvent(pageEvent)
-    })
-
-    
-  }
-
-  onPageEvent(pageEvent: PageEvent): void{
-
-    this.totalRecords = pageEvent.length;
-    this.pageSize = pageEvent.pageSize;
-    this.currentPage = pageEvent.pageIndex;
-
-
+    if(changes['versiones'] && this.versiones.length > 0){
+      this.dataSourceVersiones.data = this.versiones;
+      this.dataSourceVersiones.paginator = this.paginator;
+    }
   }
 
 

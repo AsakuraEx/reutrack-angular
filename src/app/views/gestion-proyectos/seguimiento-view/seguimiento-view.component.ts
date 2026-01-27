@@ -60,7 +60,8 @@ export class SeguimientoViewComponent implements OnInit {
   estados:any = {
       Iniciado: 'bg-yellow-500',
       Finalizado: 'bg-blue-500',
-      Cancelado: 'bg-red-500'
+      Cancelado: 'bg-red-500',
+      Programado: 'bg-purple-500'
   }
 
   claseEstado(estado: string) :string{
