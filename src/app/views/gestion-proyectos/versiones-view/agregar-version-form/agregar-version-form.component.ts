@@ -8,6 +8,7 @@ import { MatInputModule } from '@angular/material/input';
 import { jwtDecode } from 'jwt-decode';
 import { ProyectoService } from '../../../../services/proyecto.service';
 import { MatSelectModule } from '@angular/material/select';
+import { HotToastService } from '@ngxpert/hot-toast';
 
 @Component({
   selector: 'app-agregar-version-form',
@@ -20,7 +21,8 @@ import { MatSelectModule } from '@angular/material/select';
 export class AgregarVersionFormComponent implements OnInit{
 
   constructor(
-    private proyectoService: ProyectoService
+    private proyectoService: ProyectoService,
+    private toastService: HotToastService
   ) {}
 
   estados: any[] = [];
@@ -35,7 +37,7 @@ export class AgregarVersionFormComponent implements OnInit{
     id_proyecto: new FormControl<number|null>(this.data?.proyecto?.id ?? null),
     id_usuario: new FormControl<number|null>(this.data?.usuario?.id ?? null),
     id_estado: new FormControl<number>(this.data?.estado?.id ?? 1, [Validators.required]),
-    id_estado_req: new FormControl<number>(this.data?.id_estado_req ?? 0, [Validators.required]),
+    id_estado_req: new FormControl<number | null>(this.data?.id_estado_req ?? null, [Validators.required]),
     updatedby: new FormControl<number>(0, [Validators.required])
   })
 
@@ -59,10 +61,18 @@ export class AgregarVersionFormComponent implements OnInit{
       if(this.formVersion.valid){
         this.proyectoService.crearVersion(this.formVersion.value).subscribe({
           next: () => {
+            this.toastService.success('Versión creada con éxito', {
+              position: 'top-right',
+              duration: 3000
+            });
             this.cerrarModal(true)
           },
           error: e => {
             console.error(e)
+            this.toastService.error('La versión no pudo crearse, ' + e, {
+              position: 'top-right',
+              duration: 3000
+            });
           }
         })
       }
@@ -73,6 +83,10 @@ export class AgregarVersionFormComponent implements OnInit{
       if(this.formVersion.valid){
         this.proyectoService.actualizarVersion(this.formVersion.value).subscribe({
           next: () => {
+            this.toastService.success('Versión actualizada con éxito', {
+              position: 'top-right',
+              duration: 3000
+            });
             this.cerrarModal(true)
           },
           error: e => {

@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Output, ViewChild } from '@angular/core';
+import { Component, EventEmitter, inject, Output, ViewChild } from '@angular/core';
 import { ProyectoService } from '../../../../../services/proyecto.service';
 import { Proyecto } from '../../../../../models/proyecto.model';
 import { map, Observable, startWith } from 'rxjs';
@@ -11,11 +11,14 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
 import { jwtDecode } from 'jwt-decode';
 import { HotToastService } from '@ngxpert/hot-toast';
+import { MatDialog } from '@angular/material/dialog';
+import { FusionModalComponent } from '../fusion-modal/fusion-modal.component';
 
 @Component({
   selector: 'app-fusion-form',
   imports: [
-    MatAutocompleteModule, MatInputModule, MatFormFieldModule, AsyncPipe, ReactiveFormsModule, MatIconModule, MatButtonModule
+    MatAutocompleteModule, MatInputModule, MatFormFieldModule, AsyncPipe, ReactiveFormsModule,
+     MatIconModule, MatButtonModule
   ],
   templateUrl: './fusion-form.component.html',
   styleUrl: './fusion-form.component.css'
@@ -43,6 +46,8 @@ export class FusionFormComponent {
     id_proyecto_b: new FormControl<number | any>(0, [Validators.required]),
     id_usuario: new FormControl<number>(0, [Validators.required])
   })
+
+  readonly dialogFusion = inject(MatDialog);
 
   ngOnInit(): void {
     this.obtenerProyectosA();
@@ -84,36 +89,36 @@ export class FusionFormComponent {
         return;
 
       }
-  
-  
+    
       const data = {
         id_proyecto_a: proyecto_a,
         id_proyecto_b: proyecto_b,
         id_usuario: usuario
       }
-      
-      this.proyectoService.fusionarProyectos(data).subscribe({
-        next: response => {
+
+      const dialogRef =this.dialogFusion.open(FusionModalComponent, {
+        data: {
+          form: data,
+          event: this.versiones
+        }
+      });
+
+      dialogRef.afterClosed().subscribe(result => {
+        if(result === true) {
           this.toastService.success('Los proyectos se han fusionado correctamente.', {
             position: 'top-right',
             duration: 3000
           });
-          
-          this.versiones.emit([]);
           this.formGroupDirective.resetForm();
           this.fusionForm.reset();
           this.isSubmitting = false;
-        },
-        error: err => {
-          console.error(err);
-          this.isSubmitting = false;
         }
-      });
+      })
 
       this.isSubmitting = false;
+
     }
 
-    this.isSubmitting = false;
   }
 
   obtenerInformacion(): void {

@@ -27,7 +27,12 @@
                             formControlName="nombre"
                             type="text" 
                             placeholder="Ingresa un punto de reunión...">
-                            <mat-error>El punto de la reunión es requerido</mat-error>
+                            @if(puntosForm.controls['nombre'].hasError('required') && puntosForm.controls['nombre'].touched){
+                                <mat-error>El punto de la reunión es requerido</mat-error>
+                            }
+                            @if(puntosForm.controls['nombre'].hasError('maxlength') && puntosForm.controls['nombre'].touched){
+                                <mat-error>El punto de la reunión debe poseer un máximo de 256 carácteres</mat-error>
+                            }
                     </mat-form-field>
         
                     <button type="submit" mat-flat-button class="w-full md:w-32">

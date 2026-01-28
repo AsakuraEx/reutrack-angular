@@ -10,7 +10,7 @@ import { MatTableDataSource, MatTableModule } from '@angular/material/table';
   templateUrl: './fusion-detalle.component.html',
   styleUrl: './fusion-detalle.component.css'
 })
-export class FusionDetalleComponent implements OnChanges{
+export class FusionDetalleComponent implements OnChanges, AfterViewInit{
 
   @Input() versiones: any[] = [];
 
@@ -18,6 +18,11 @@ export class FusionDetalleComponent implements OnChanges{
 
   dataSourceVersiones= new MatTableDataSource<any>([]);
   @ViewChild(MatPaginator) paginator!: MatPaginator
+
+  ngAfterViewInit(): void {
+    this.dataSourceVersiones.data = this.versiones;
+    this.dataSourceVersiones.paginator = this.paginator;
+  }
 
   ngOnChanges(changes: SimpleChanges): void {
 

@@ -107,6 +107,20 @@ export class HistorialViewComponent implements AfterViewInit, OnInit {
     }
   }
 
+  reset(): void {
+    this.formFiltro.reset();
+    const token = localStorage.getItem('token');
+    if(token){
+      const decoded:any = jwtDecode(token);
+
+      if(decoded.id_rol && decoded.id){
+        this.obtenerReuniones(decoded.id_rol, decoded.id, false)
+        
+      }
+
+    } 
+  }
+
   onPageEvent(decoded:any, event: PageEvent):void {
     this.totalRecords = event.length;
     this.pageSize = event.pageSize;

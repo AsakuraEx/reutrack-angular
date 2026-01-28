@@ -291,8 +291,10 @@ export class ReunionesViewComponent implements OnInit, OnDestroy, AfterViewInit 
 
     const isVirtual: number = this.reunionForm.controls['virtual'].value ? 1 : 0;
 
+    let texto = this.reunionForm.controls['contenido'].value?.toString().replace(/(<([^>]+)>)/ig, '')
+
     const data = {
-      minuta: this.reunionForm.controls['contenido'].value,
+      minuta: texto,
       id_reunion: this.reunionActualDetails.id,
       id_motivo: this.reunionForm.controls['motivo'].value,
       virtual: isVirtual
@@ -429,9 +431,9 @@ export class ReunionesViewComponent implements OnInit, OnDestroy, AfterViewInit 
       return texto.length
   }
 
-  transformarFecha(): string  {
+  transformarFecha(fecha?: string): string  {
       
-      const nuevaFecha = new Date()
+      const nuevaFecha = new Date(fecha ? fecha : new Date());
 
       const fechaFormateada = nuevaFecha.toLocaleString('es-ES', {
           day: '2-digit',
@@ -445,6 +447,7 @@ export class ReunionesViewComponent implements OnInit, OnDestroy, AfterViewInit 
 
       return fechaFormateada
   }
+
 
   abrirModalActualizarVersion(): void {
     const dialogRef = this.dialog.open(ActualizarModalComponent, {

@@ -27,7 +27,12 @@
                             formControlName="nombre"
                             type="text" 
                             placeholder="Ingresa un acuerdo de reunión...">
-                            <mat-error>El acuerdo de la reunión es requerido</mat-error>
+                            @if(acuerdoForm.controls['nombre'].hasError('required') && acuerdoForm.controls['nombre'].touched){
+                                <mat-error>El acuerdo de la reunión es requerido</mat-error>
+                            }
+                            @if(acuerdoForm.controls['nombre'].hasError('maxlength') && acuerdoForm.controls['nombre'].touched){
+                                <mat-error>El acuerdo posee un máximo de 256 carácteres</mat-error>
+                            }
                     </mat-form-field>
         
                     <button mat-flat-button class="w-full md:w-32" type="submit">

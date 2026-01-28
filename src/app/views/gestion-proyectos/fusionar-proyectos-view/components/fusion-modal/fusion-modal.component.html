@@ -1,0 +1,30 @@
+<div class="m-2">
+    <div class="p-4 bg-sky-100 rounded-full">
+        <h2 class="text-xl font-bold text-sky-700 flex gap-2 items-center">
+            <mat-icon>info</mat-icon>
+            Confirmar consolidación de proyectos
+        </h2>
+    </div>
+    
+    <p class="p-4 text-sky-700">
+        ¿Estás seguro que deseas consolidar los proyectos seleccionados? Esta acción es irreversible y no se puede deshacer.
+    </p>
+
+    <div class="flex justify-end items-center p-4 gap-2">
+
+        <button
+            (click)="onConfirm()"
+            class="bg-sky-700 px-4 py-2 rounded-full hover:bg-sky-900 text-white transition-colors duration-300 cursor-pointer active:scale-95">
+            Confirmar
+        </button>
+
+        <button 
+            (click)="onCancel()"
+            class="border border-sky-700 bg-white text-sky-700 px-4 py-2 rounded-full hover:bg-sky-700 hover:text-white transition-colors duration-300 cursor-pointer active:scale-95">
+            Cancelar
+        </button>
+
+    </div>
+
+</div>
+

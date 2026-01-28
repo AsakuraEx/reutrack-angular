@@ -141,4 +141,21 @@ export class DetalleViewComponent implements OnInit{
     }
   }
 
+  transformarFecha(fecha: string): string  {
+      
+      const nuevaFecha = new Date(fecha)
+
+      const fechaFormateada = nuevaFecha.toLocaleString('es-ES', {
+          day: '2-digit',
+          month: '2-digit',
+          year: 'numeric',
+          hour: '2-digit',   // Hora en formato de dos dígitos
+          minute: '2-digit', // Minutos en formato de dos dígitos
+          second: '2-digit', // Segundos en formato de dos dígitos
+          hour12: true
+      });
+
+      return fechaFormateada
+  }
+
 }

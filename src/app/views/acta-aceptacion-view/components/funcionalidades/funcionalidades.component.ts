@@ -7,7 +7,7 @@ import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { ListaFuncionalidadesComponent } from '../lista-funcionalidades/lista-funcionalidades.component';
 import { ActivatedRoute } from '@angular/router';
 import { ActaAceptacionService } from '../../../../services/acta-aceptacion.service';
-import { FormBuilder, FormControl, FormGroup, FormGroupDirective, ReactiveFormsModule, Validators } from '@angular/forms';
+import { FormControl, FormGroup, FormGroupDirective, ReactiveFormsModule, Validators } from '@angular/forms';
 import { HotToastService } from '@ngxpert/hot-toast';
 
 @Component({
@@ -42,11 +42,11 @@ export class FuncionalidadesComponent {
     id: new FormControl<number | null>(null),
     descripcion: new FormControl('', {
       updateOn: 'blur',
-      validators: [Validators.required]
+      validators: [Validators.required, Validators.maxLength(200)]
     }),
     aprobado: new FormControl(false),
     id_acta: new FormControl(this.id_acta, [Validators.required]),
-    cambio_solicitado: new FormControl('')
+    cambio_solicitado: new FormControl('', [Validators.maxLength(200)])
   })
 
   ngOnInit(): void {

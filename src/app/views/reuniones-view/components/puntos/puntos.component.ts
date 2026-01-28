@@ -31,11 +31,11 @@ export class PuntosComponent implements OnInit{
   puntosForm = new FormGroup({
     id_reunion: new FormControl<number | null>(null, {
       updateOn: 'blur',
-      validators: [Validators.required, Validators.maxLength(256)],
+      validators: [Validators.required],
     }),
     nombre: new FormControl('', {
       updateOn: 'blur',
-      validators: [Validators.required] 
+      validators: [Validators.required, Validators.maxLength(256)] 
     })
   })
 

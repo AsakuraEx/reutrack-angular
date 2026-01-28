@@ -122,10 +122,12 @@ export class NuevaReunionComponent implements OnInit{
       if(!this.programacion){
         this.reunionService.crearNuevaReunion(this.reunionForm.value).subscribe({
           next: (response) => {
-            this.agregarEncargadoInicial(response.codigo)
-            this.router.navigate(['/reunion/'+response.codigo])
-            this.isSubmitting = false;
-            this.dialogRef.close(true)
+            setTimeout(()=>{
+              this.agregarEncargadoInicial(response.id)
+              this.router.navigate(['/reunion/'+response.codigo])
+              this.isSubmitting = false;
+              this.dialogRef.close(true)
+            }, 500)
           },
           error: (err) => {
             console.error('El error: ', err);

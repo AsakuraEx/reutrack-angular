@@ -105,6 +105,11 @@ export class ProgramacionViewComponent implements OnInit {
       this.cargarReuniones();
   }
 
+  reset(): void {
+    this.filtroForm.reset();
+    this.cargarReuniones();
+  }
+
   programarReunion(): void {
     const dialogRef = this.dialog.open(NuevaReunionComponent, {
         data: {
@@ -166,12 +171,6 @@ export class ProgramacionViewComponent implements OnInit {
     let eventosFiltrados = eventos.filter(evento => {
       return evento.startStr.substring(0, 10) === arg.dateStr.substring(0, 10);
     })
-
-    // eventosFiltrados.forEach(evento => {
-      
-    //   console.log(`Evento ID: ${evento.id}, Título: ${evento.title}, Fecha: ${evento.startStr.substring(0,10)}`);
-
-    // })
 
     const dialogRef =this.dialog.open(ListaEventosModalComponent, {
       data: {
