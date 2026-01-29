@@ -291,10 +291,8 @@ export class ReunionesViewComponent implements OnInit, OnDestroy, AfterViewInit 
 
     const isVirtual: number = this.reunionForm.controls['virtual'].value ? 1 : 0;
 
-    let texto = this.reunionForm.controls['contenido'].value?.toString().replace(/(<([^>]+)>)/ig, '')
-
     const data = {
-      minuta: texto,
+      minuta: this.reunionForm.controls['contenido'].value,
       id_reunion: this.reunionActualDetails.id,
       id_motivo: this.reunionForm.controls['motivo'].value,
       virtual: isVirtual
