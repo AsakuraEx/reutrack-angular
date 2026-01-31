@@ -1,5 +1,5 @@
 import { AsyncPipe } from '@angular/common';
-import { ChangeDetectionStrategy, Component, inject, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, inject, OnInit } from '@angular/core';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { FormControl, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
 import { ReunionService } from '../../../../services/reunion.service';
@@ -19,12 +19,14 @@ import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import {MatTimepickerModule} from '@angular/material/timepicker';
 import { provideNativeDateAdapter} from '@angular/material/core';
+import { EncargadosProgramadosComponent } from '../encargados-programados/encargados-programados.component';
+import { HotToastService } from '@ngxpert/hot-toast';
 
 @Component({
   selector: 'app-nueva-reunion',
   imports: [
     MatFormFieldModule, MatInputModule, MatSelectModule, MatButtonModule, MatSlideToggleModule, MatTimepickerModule,
-    MatIconModule, ReactiveFormsModule, MatProgressSpinner, MatAutocompleteModule, AsyncPipe, MatDatepickerModule
+    MatIconModule, ReactiveFormsModule, MatProgressSpinner, MatAutocompleteModule, AsyncPipe, MatDatepickerModule, EncargadosProgramadosComponent
   ],
   providers: [
     provideNativeDateAdapter()
@@ -38,8 +40,14 @@ export class NuevaReunionComponent implements OnInit{
   constructor(
     private reunionService: ReunionService,
     private proyectoService: ProyectoService,
-    private router: Router
+    private router: Router,
+    private toastService: HotToastService
   ) {}
+
+  cdr = inject(ChangeDetectorRef)
+
+  reunionCreada: boolean = false;
+  reunionDetalle!: any;
 
   isSubmitting = false;
 
@@ -68,6 +76,8 @@ export class NuevaReunionComponent implements OnInit{
     id_estado: new FormControl(1),
   })
 
+  listadoReuniones: any[] = [];
+
   programacion: boolean = false;
   maxDate!: Date;
   minDate!: Date;
@@ -88,7 +98,6 @@ export class NuevaReunionComponent implements OnInit{
 
       this.reunionForm.controls['fecha'].addValidators([Validators.required]);
       this.reunionForm.controls['hora'].addValidators([Validators.required]);
-
 
     }
   }
@@ -154,26 +163,22 @@ export class NuevaReunionComponent implements OnInit{
         this.reunionService.crearNuevaReunion(this.reunionForm.value).subscribe({
           next: (response) => {
 
-            console.log(response)
-
+            this.reunionDetalle = response;
+            this.isSubmitting = false;
             try {
-              setTimeout(()=>{
-                this.agregarEncargadoInicial(response.id)
-                this.isSubmitting = false;
-                this.dialogRef.close(response.codigo)
-              }, 500)
-
-            }catch (e) {
-              console.error(e)
+              this.agregarEncargadoInicial(response.id)
+            } catch (error) {
+              console.log(error)
             }
-
+            this.reunionCreada = true;
+            this.cdr.detectChanges();
           },
           error: (err) => {
-            console.error('El error: ', err);
             this.isSubmitting = false;
+            this.reunionCreada = false;
+            console.error('El error: ', err);
           }
         })
- 
 
       }
     }
@@ -196,7 +201,7 @@ export class NuevaReunionComponent implements OnInit{
 
       this.reunionService.agregarResponsables(data).subscribe({
         next: (res) => {
-          console.log(res)
+          console.log('responsable inicial agregado')
         },
         error: (err) => {
           console.log(err)
@@ -288,8 +293,6 @@ export class NuevaReunionComponent implements OnInit{
       })
     );
   }
-
-
 
   obtenerMotivoReunion(): void {
     this.reunionService.obtenerMotivosReunion().subscribe({

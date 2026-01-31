@@ -124,6 +124,30 @@
 
             <app-acuerdos [id_reunion]="reunionActualDetails.id" [esUsuarioLector]="esUsuarioLector"></app-acuerdos>
 
+            <div class="mt-6 p-4 bg-blue-100 text-blue-800 font-bold">
+                <p class="flex gap-2">
+                    <mat-icon>info</mat-icon>
+                    Puedes actualizar el nombre de la reunión en el siguiente apartado, si no necesita modificación puedes ignorar el campo
+                </p>
+            </div>
+
+            <div class="mt-6 px-4 pt-4 border border-purple-700 rounded-lg shadow-md flex flex-col gap-2">
+                <h1 class="text-xl font-bold text-purple-700 w-2/12">Datos de la reunión:</h1>
+
+                <form [formGroup]="reunionForm" class="w-full">
+                    <mat-form-field class="w-full">
+                        <mat-label>Nombre de la reunión</mat-label>
+                        <input matInput type="text" formControlName="nombre_reunion">
+                    </mat-form-field>
+
+                    <mat-form-field class="w-full">
+                        <mat-label>Lugar de la reunión</mat-label>
+                        <input matInput type="text" formControlName="lugar_reunion">
+                    </mat-form-field>
+
+                </form>
+            </div>
+
             @if(!esUsuarioLector) {
                 <div class="mt-4 flex flew-wrap justify-between items-center gap-2 border border-purple-700 rounded-md p-4 bg-purple-100">                
                     <button 

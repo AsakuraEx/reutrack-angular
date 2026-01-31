@@ -1,0 +1,18 @@
+<div class="p-4">
+    <h1 class="text-xl font-bold text-red-700">Motivo de cancelación de la reunión:</h1>
+
+    <p class="text-justify mt-4">
+        @if(data.justificacion_cancelar){
+            {{ data.justificacion_cancelar }}
+        } @else {
+            No se ha proporcionado información de la cancelación de la reunión
+        }
+    </p>
+
+
+    <p class="text-sm mt-8">
+        <span class="text-red-700 font-medium">Usuario que cancela:</span>
+        {{ usuario?.nombre || 'No existen datos de la persona que cancela la reunión' }}
+    </p>
+
+</div>

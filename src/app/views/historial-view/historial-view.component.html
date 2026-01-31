@@ -76,7 +76,7 @@
                                             <mat-icon>flag</mat-icon>
                                         </button>
                                     }
-
+                                    
                                     <!-- Continuar Reunión  -->
                                      @if(reunion.estado.nombre === 'Iniciado'){
                                          <button 
@@ -86,6 +86,17 @@
                                              [routerLink]="['/reunion', reunion.codigo]"
                                              class="btn-continuar">
                                              <mat-icon>edit</mat-icon>
+                                         </button>
+                                     }
+
+                                    <!-- Ver motivo de cancelación  -->
+                                     @if(reunion.estado.nombre === 'Cancelado'){
+                                         <button 
+                                             mat-icon-button 
+                                             matTooltip="Motivo de cancelación"
+                                             (click)="mostrarModalMotivoCancelacion(reunion)"
+                                             style="color:red;">
+                                             <mat-icon>visibility</mat-icon>
                                          </button>
                                      }
 

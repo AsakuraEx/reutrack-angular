@@ -12,6 +12,11 @@ export class UsuarioService {
 
   readonly BaseUrl = environment.apiURL;
 
+  obtenerUsuario(id_usuario: number): Observable<any> {
+    let url = this.BaseUrl + '/usuarios/' + id_usuario;
+    return this.http.get(url);
+  }
+
   obtenerUsuarios(estado: any, limit: any, page: number): Observable<any> {
 
     let url = this.BaseUrl + '/usuarios?';

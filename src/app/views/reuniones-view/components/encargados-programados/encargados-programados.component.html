@@ -1,0 +1,74 @@
+<div class="px-4 pb-8">
+    @if(verEncargados) {
+        <div class="bg-blue-100 text-blue-700 p-4 rounded">
+            <p class="flex gap-2">
+                <mat-icon>info</mat-icon>
+                Puedes modificar los responsables que estarán a cargo de la reunión programada
+            </p>
+        </div>
+    }
+    
+    <div class="mt-4">
+        <form [formGroup]="responsableForm" (ngSubmit)="onSubmit()">
+            <div 
+                class="flex flex-col md:flex-row gap-4 mt-4 items-center justify-center">
+                <mat-form-field class="w-10/12">
+                    <mat-label>Responsable de la reunión</mat-label>
+                    <input type="text"
+                        formControlName="id_usuario"
+                        placeholder="Selecciona un responsable de la reunión..."
+                        aria-label="Responsable"
+                        matInput
+                        [matAutocomplete]="auto">
+                    <mat-autocomplete autoActiveFirstOption #auto="matAutocomplete" [displayWith]="displayNombre">
+                    @for (option of filteredOptions | async ; track option) {
+                        <mat-option [value]="option">{{option.nombre}}</mat-option>
+                    }
+                    </mat-autocomplete>
+                    <mat-error>El responsable de la reunión es obligatorio para agregarlo a la lista</mat-error>
+                </mat-form-field>
+    
+                <button mat-flat-button type="submit" class="w-32">
+                    <mat-icon>add</mat-icon>
+                    Agregar
+                </button>
+            </div>
+        </form>
+    </div>
+    
+    <table class="w-full mt-4">
+        <tr class="p-4 text-purple-700 font-bold border-b border-black">
+            <td class="py-2">Nombre</td>
+            <td>Acción</td>
+        </tr>
+        <tbody>
+            @for (encargado of encargados; track $index) {
+                <tr class="border-b border-b-gray-300">
+                    <td 
+                        [class]="encargado.id_usuario === reunionProgramada.id_usuario ? 'font-bold text-gray-700' : ''"
+                        class="py-2">
+                        {{ encargado.usuario.nombre || 'Sin datos' }}
+                    </td>
+                    <td>
+                        @if(encargado.id_usuario !== reunionProgramada.id_usuario) {
+                            <button mat-icon-button color="warn" (click)="eliminarResponsable(encargado.id)">
+                                <mat-icon style="color: red">delete</mat-icon>
+                            </button>
+                        }
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+    
+    @if (verEncargados) {
+    
+        <div class="mt-8 text-center">
+            <button mat-stroked-button (click)="regresarLista()">
+                <mat-icon>keyboard_return</mat-icon>
+                Regresar a la lista
+            </button>
+        </div>
+    
+    }
+</div>
