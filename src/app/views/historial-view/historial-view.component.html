@@ -50,9 +50,14 @@
     
                                     <div class="flex flex-col items-center justify-center">
                                         <div 
-                                            class="p-1 rounded text-white font-medium w-24 text-center"
+                                            class="p-1 rounded text-white font-medium w-28 text-center"
                                             [class]="claseEstado(reunion.estado.nombre)">
-                                            {{ reunion.estado.nombre }}
+
+                                            @if(reunion.reprogramado === true){
+                                                Reprogramado
+                                            } @else {
+                                                {{ reunion.estado.nombre }}
+                                            }
                                         </div>
 
                                         @if(reunion.virtual){

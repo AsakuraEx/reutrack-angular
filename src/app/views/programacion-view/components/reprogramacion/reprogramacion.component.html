@@ -8,7 +8,7 @@
 </div>
 
 <div class="px-4">
-    <form [formGroup]="reprogramarForm">
+    <form [formGroup]="reprogramarForm" (submit)="onSubmit()">
         <div class="flex flex-row gap-2">
             <mat-form-field class="w-6/12">
                 <mat-label>Fecha de reunión</mat-label>
@@ -16,6 +16,7 @@
                 <mat-hint>MM/DD/YYYY</mat-hint>
                 <mat-datepicker-toggle matIconSuffix [for]="fechaPicker"></mat-datepicker-toggle>
                 <mat-datepicker #fechaPicker></mat-datepicker>
+                <mat-error>La fecha de reprogramación es requerida</mat-error>
             </mat-form-field>
         
             <mat-form-field class="w-6/12">
@@ -23,6 +24,7 @@
                 <input matInput [matTimepicker]="horaPicker" formControlName="hora">
                 <mat-timepicker-toggle matIconSuffix [for]="horaPicker"/>
                 <mat-timepicker #horaPicker/>
+                <mat-error>La hora de reprogramación es requerida</mat-error>
             </mat-form-field>
         </div>
 

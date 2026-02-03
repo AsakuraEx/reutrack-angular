@@ -123,6 +123,11 @@ export class ReunionService {
     return this.http.patch(url, data)
   }
 
+  reprogramarReunion(data: any): Observable<any> {
+    const url = this.BaseUrl+'/reuniones/reprogramar';
+    return this.http.patch(url, data)
+  }
+
 
   // ---------------------------------------------------------------------
   // Responsables
