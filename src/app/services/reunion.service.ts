@@ -25,7 +25,6 @@ export class ReunionService {
     if (page) params.push(`page=${encodeURIComponent(page)}`);
     if (desde) params.push(`desde=${encodeURIComponent(desde)}`);
     if (hasta) params.push(`hasta=${encodeURIComponent(hasta)}`);
-
     // Solo agregar '?' si hay parámetros
     if (params.length > 0) {
       url += params.join('&');
@@ -109,9 +108,9 @@ export class ReunionService {
     return this.http.get(url)
   }
 
-  cancelarReunion(id_reunion: number): Observable<any> {
-    const url = `${this.BaseUrl}/reuniones/cancelar/${id_reunion}`;
-    return this.http.patch(url, {})
+  cancelarReunion(reunion: any): Observable<any> {
+    const url = `${this.BaseUrl}/reuniones/cancelar`;
+    return this.http.patch(url, reunion)
   }
 
   iniciarReunion(id_reunion: number): Observable<any> {
@@ -121,6 +120,11 @@ export class ReunionService {
 
   reactivarReunion(data: any): Observable<any> {
     const url = `${this.BaseUrl}/reuniones/reactivar`;
+    return this.http.patch(url, data)
+  }
+
+  reprogramarReunion(data: any): Observable<any> {
+    const url = this.BaseUrl+'/reuniones/reprogramar';
     return this.http.patch(url, data)
   }
 

@@ -1,20 +1,20 @@
 .btn-aceptar {
-    background-color: oklch(50.5% 0.213 27.518);
+    background-color: oklch(49.6% 0.265 301.924);
 }
 
 .btn-aceptar:hover {
-    background-color: oklch(45.765% 0.18729 28.372);
+    background-color: oklch(49.6% 0.265 301.924);
     transition: background-color 150ms ease-in;
 }
 
 .btn-cancelar {
     background-color: #fef2f2;
-    color: oklch(50.5% 0.213 27.518);
-    border-color: oklch(50.5% 0.213 27.518);
+    color: oklch(49.6% 0.265 301.924);;
+    border-color: oklch(49.6% 0.265 301.924);;
     border: 1px solid;
 }
 
 .btn-cancelar:hover {
-    background-color: #eecbcb;
+    background-color: oklch(85.029% 0.09197 311.79);;
     transition: background-color 150ms ease-in;
 }

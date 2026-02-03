@@ -8,115 +8,153 @@
 
 <div class="p-4 flex items-center justify-center">
 
-    @if(data.eventosFiltrados.length === 0) {
-        <div class="bg-purple-200 py-4 rounded w-full">
-            <p class="text-center text-purple-900">
-                No hay reuniones programadas para esta fecha.
-            </p>
-        </div>
-    }
-
-    @else {
-        <div class="overflow-y-auto w-full max-h-[75vh]">        
-            <table class="w-full">
-                <thead>
-                    <tr class="bg-purple-700 text-white">
-                        <th class="px-2 py-1">Fecha</th>
-                        <th class="px-2 py-1">Reunión</th>
-                        <th class="px-2 py-1">Responsable</th>
-                        <th class="px-2 py-1">Estado</th>
-                        <th class="px-2 py-1">Acción</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    @for (item of data.eventosFiltrados; track $index) {
-                    <tr class="border-b border-b-gray-400 text-sm h-24">
-                            <!--item.id es para acceder al id de la reunión -->
-                            <td class="px-3 py-2 max-w-28 text-center">
-                                {{transformarFecha(item.startStr)}}
-                            </td>
-                            <td class="px-3 py-2 max-w-72">
-                                <p>
-                                    {{item.title}}
-                                </p>
-        
-                                <p class="text-xs text-purple-500 truncate">
-                                    {{ item._def.extendedProps.proyecto}}
-                                </p>
-        
-                                <p class="text-xs text-purple-500 truncate">
-                                    {{ item._def.extendedProps.version}}
-                                </p>
-                            </td>
-                            <td class="px-3 py-2 max-w-32 text-center">
-                                {{item._def.extendedProps.programa}}
-                            </td>
-                            <td class="px-3 py-2 flex flex-col justify-center items-center h-24">
-                                <div 
-                                    class="p-1 rounded text-white font-medium w-24 text-center scale-75"
-                                    [class]="claseEstado(item._def.extendedProps.estado)">
-                                    {{item._def.extendedProps.estado}}
-                                </div>
-                                @if(item._def.extendedProps.virtual === true){
-                                    <div class="flex">
-                                        <div class="text-sm text-white bg-pink-500 text-center px-2 py-1 rounded scale-75">
-                                            Reunión virtual
-                                        </div>
-                                    </div>
-                                }
-                            </td>
-                            <td class="px-3 py-2">
+    @if(!verEncargados && !verReprogramacion) {
+        @if(data.eventosFiltrados.length === 0) {
+            <div class="bg-purple-200 py-4 rounded w-full">
+                <p class="text-center text-purple-900">
+                    No hay reuniones programadas para esta fecha.
+                </p>
+            </div>
+        }
     
-                                    <div>
-
-                                        <!-- Iniciar Reunión  -->
-                                         @if(item._def.extendedProps.estado === 'Programado' && programadaParaHoy(item.startStr)){
-                                             <button 
-                                                 mat-icon-button 
-                                                 matTooltip="Iniciar Reunión"
-                                                 [disabled]="item._def.extendedProps.estado === 'Finalizado'"
-                                                 (click)="iniciarReunion(item.id)"
-                                                 class="btn-continuar">
-                                                 <mat-icon>flag</mat-icon>
-                                             </button>
-                                         }
-
-                                        <!-- Continuar Reunión  -->
-                                         @if(item._def.extendedProps.estado === 'Iniciado'){
-                                             <button 
-                                                 mat-icon-button 
-                                                 matTooltip="Continuar Reunión"
-                                                 [disabled]="item._def.extendedProps.estado === 'Finalizado'"
-                                                 (click)="continuarReunion(item._def.extendedProps.codigo)"
-                                                 class="btn-continuar">
-                                                 <mat-icon>edit</mat-icon>
-                                             </button>
-                                         }
-    
-                                        <!-- Ver Reunión  -->
-                                         @if(item._def.extendedProps.estado === 'Finalizado'){
-                                             <button 
-                                                 mat-icon-button 
-                                                 matTooltip="Ver Detalle de Reunión"
-                                                 [disabled]="item._def.extendedProps.estado === 'Iniciado' || item._def.extendedProps.estado === 'Cancelado'"
-                                                 (click)="verReunion(item.id)"
-                                                 class="btn-ver">
-                                                 <mat-icon>visibility</mat-icon>
-                                             </button>
-                                         }
-    
-                                    </div>
-    
-                            </td>
+        @else {
+            <div class="overflow-y-auto w-full max-h-[75vh]">        
+                <table class="w-full">
+                    <thead>
+                        <tr class="bg-purple-700 text-white">
+                            <th class="px-2 py-1">Fecha</th>
+                            <th class="px-2 py-1">Reunión</th>
+                            <th class="px-2 py-1">Programado por</th>
+                            <th class="px-2 py-1">Estado</th>
+                            <th class="px-2 py-1">Acción</th>
                         </tr>
-                    }
-                </tbody>
+                    </thead>
+                    <tbody>
+                        @for (item of data.eventosFiltrados; track $index) {
+                        <tr class="border-b border-b-gray-400 text-sm h-24">
+                                <!--item.id es para acceder al id de la reunión -->
+                                <td class="px-3 py-2 max-w-28 text-center">
+                                    {{transformarFecha(item.startStr)}}
+                                </td>
+                                <td class="px-3 py-2 max-w-70">
+                                    <p>
+                                        {{item.title}}
+                                    </p>
+            
+                                    <p class="text-xs text-purple-500 truncate">
+                                        {{ item._def.extendedProps.proyecto}}
+                                    </p>
+            
+                                    <p class="text-xs text-purple-500 truncate">
+                                        {{ item._def.extendedProps.version}}
+                                    </p>
+                                </td>
+                                <td class="px-3 py-2 max-w-32 text-center">
+                                    {{item._def.extendedProps.programa}}
+                                </td>
+                                <td class="px-3 py-2 flex flex-col justify-center items-center h-24">
+                                    <div 
+                                        class="p-1 rounded text-white font-medium w-26 text-center scale-75"
+                                        [class]="claseEstado(item._def.extendedProps.estado)">
+                                        @if(item._def.extendedProps.reprogramado){
+                                            Reprogramado
+                                        } @else {
+                                            {{item._def.extendedProps.estado}}
+                                        }
+                                    </div>
+                                    @if(item._def.extendedProps.virtual === true){
+                                        <div class="flex">
+                                            <div class="text-sm text-white bg-pink-500 text-center px-2 py-1 rounded scale-75">
+                                                Reunión virtual
+                                            </div>
+                                        </div>
+                                    }
+                                </td>
+                                <td class="px-3 py-2">
         
-            </table>
-        </div>
+                                        <div class="w-full flex justify-between items-center">
+    
+                                            <!-- Modificar encargados programados -->
+                                            @if(item._def.extendedProps.estado === 'Programado'){
+                                                <button
+                                                    mat-icon-button
+                                                    (click)="modificarEncargados(item)"
+                                                    matTooltip="Modificar encargados">
+                                                    <mat-icon>
+                                                        edit
+                                                    </mat-icon>
+                                                </button>
+                                            }
+
+                                            @if(item._def.extendedProps.estado === 'Programado'){
+                                                <button
+                                                    mat-icon-button
+                                                    (click)="mostrarReprogramacion(item)"
+                                                    matTooltip="Reprogramar">
+                                                    <mat-icon>
+                                                        av_timer
+                                                    </mat-icon>
+                                                </button>
+                                            }
+                                            
+                                            <!-- Iniciar Reunión  -->
+                                             @if(item._def.extendedProps.estado === 'Programado' && programadaParaHoy(item.startStr)){
+                                                 <button 
+                                                     mat-icon-button 
+                                                     matTooltip="Iniciar Reunión"
+                                                     [disabled]="item._def.extendedProps.estado === 'Finalizado'"
+                                                     (click)="iniciarReunion(item.id)">
+                                                     <mat-icon>flag</mat-icon>
+                                                 </button>
+                                             }
+    
+                                            <!-- Continuar Reunión  -->
+                                             @if(item._def.extendedProps.estado === 'Iniciado'){
+                                                 <button 
+                                                     mat-icon-button 
+                                                     matTooltip="Continuar Reunión"
+                                                     [disabled]="item._def.extendedProps.estado === 'Finalizado'"
+                                                     (click)="continuarReunion(item._def.extendedProps.codigo)"
+                                                     class="btn-continuar">
+                                                     <mat-icon>edit</mat-icon>
+                                                 </button>
+                                             }
+        
+                                            <!-- Ver Reunión  -->
+                                             @if(item._def.extendedProps.estado === 'Finalizado'){
+                                                 <button 
+                                                     mat-icon-button 
+                                                     matTooltip="Ver Detalle de Reunión"
+                                                     [disabled]="item._def.extendedProps.estado === 'Iniciado' || item._def.extendedProps.estado === 'Cancelado'"
+                                                     (click)="verReunion(item.id)"
+                                                     class="btn-ver">
+                                                     <mat-icon>visibility</mat-icon>
+                                                 </button>
+                                             }
+        
+                                        </div>
+        
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+            
+                </table>
+            </div>
+        }
     }
 
-
-
-
+    
+    
+    
+    
 </div>
+@if(verReprogramacion){
+    <app-reprogramacion (verLista)="ocultarEncargados($event)" [reunion]="reunionProgramada"></app-reprogramacion>
+}
+
+@if(verEncargados) {
+
+    <app-encargados-programados (verLista)="ocultarEncargados($event)"  [reunionProgramada]="reunionProgramada" [verEncargados]="verEncargados"></app-encargados-programados>
+
+}

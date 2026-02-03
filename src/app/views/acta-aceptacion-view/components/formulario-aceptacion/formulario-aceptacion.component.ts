@@ -95,8 +95,8 @@ export class FormularioAceptacionComponent {
     const id_acta:number = Number(this.route.snapshot.paramMap.get('id_acta'));
     this.formAceptacion.controls['id_acta'].setValue(id_acta)
 
-    if(!this.formAceptacion.controls['documento_identidad'].value || !this.formAceptacion.controls['documento_institucional'].value) {
-      this.toastService.error('Debe agregar la foto del documento de identidad y el documento de su institución', {
+    if(!this.formAceptacion.controls['documento_identidad'].value) {
+      this.toastService.error('Debe agregar al menos la foto de su rostro para comprobar su identidad.', {
         position: 'top-right',
         duration: 3000
       })

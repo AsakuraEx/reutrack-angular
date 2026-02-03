@@ -6,12 +6,13 @@ import { MatTooltipModule } from '@angular/material/tooltip';
 import { Router } from '@angular/router';
 import { ReunionService } from '../../../../services/reunion.service';
 import { HotToastService } from '@ngxpert/hot-toast';
-import { jwtDecode } from 'jwt-decode';
+import { EncargadosProgramadosComponent } from '../../../reuniones-view/components/encargados-programados/encargados-programados.component';
+import { ReprogramacionComponent } from '../reprogramacion/reprogramacion.component';
 
 @Component({
   selector: 'app-lista-eventos-modal',
   imports: [
-    MatButtonModule, MatIconModule, MatTooltipModule
+    MatButtonModule, MatIconModule, MatTooltipModule, EncargadosProgramadosComponent, ReprogramacionComponent
   ],
   templateUrl: './lista-eventos-modal.component.html',
   styleUrl: './lista-eventos-modal.component.css'
@@ -22,9 +23,7 @@ export class ListaEventosModalComponent{
     private router: Router, 
     private reunionService: ReunionService,
     private toastService: HotToastService
-  ) {
-    console.log(this.data)
-  }
+  ) {}
 
   readonly dialogRef = inject(MatDialogRef<ListaEventosModalComponent>);
 
@@ -36,6 +35,10 @@ export class ListaEventosModalComponent{
     Cancelado: 'bg-red-500',
     Programado: 'bg-purple-500'
   }
+
+  reunionProgramada: any = {}
+  verEncargados: boolean = false;
+  verReprogramacion: boolean = false;
 
   async iniciarReunion(id: number): Promise<any> {
 
@@ -117,5 +120,23 @@ export class ListaEventosModalComponent{
     }
     return false;
   }
+
+  modificarEncargados(reunion: any): void {
+
+    this.reunionProgramada = reunion;
+    this.verEncargados = true;
+
+  }
+
+  ocultarEncargados(event: any): void {
+    this.verEncargados = event;
+    this.verReprogramacion = event;
+  }
+
+  mostrarReprogramacion(reunion:any): void {
+    this.verReprogramacion = true
+    this.reunionProgramada = reunion
+  }
+
 
 }

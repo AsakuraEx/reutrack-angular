@@ -22,6 +22,7 @@ import { CancelarReunionModalComponent } from '../../components/cancelar-reunion
 import { ReactivarReunionModalComponent } from '../../components/reactivar-reunion-modal/reactivar-reunion-modal.component';
 import { MatSelectModule } from '@angular/material/select';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+import { MotivoCancelacionModalComponent } from '../../components/motivo-cancelacion-modal/motivo-cancelacion-modal.component';
 
 @Component({
   selector: 'app-historial-view',
@@ -184,6 +185,7 @@ export class HistorialViewComponent implements AfterViewInit, OnInit {
           this.reuniones = response.data
           this.totalRecords = response.totalRecords
           this.loadingReuniones = false;
+          console.log(this.reuniones)
         },
         error: err => {
           console.log(err)
@@ -273,6 +275,18 @@ export class HistorialViewComponent implements AfterViewInit, OnInit {
 
       }
     })
+
+  }
+
+  mostrarModalMotivoCancelacion(reunion: any): void {
+
+      const dialogRef = this.dialog.open(MotivoCancelacionModalComponent, {
+        data: reunion
+      })
+
+      dialogRef.afterClosed().subscribe(result => {
+        // Algo que ocurre cuando cierro el modal
+      })
 
   }
 

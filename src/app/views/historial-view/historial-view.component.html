@@ -50,9 +50,14 @@
     
                                     <div class="flex flex-col items-center justify-center">
                                         <div 
-                                            class="p-1 rounded text-white font-medium w-24 text-center"
+                                            class="p-1 rounded text-white font-medium w-28 text-center"
                                             [class]="claseEstado(reunion.estado.nombre)">
-                                            {{ reunion.estado.nombre }}
+
+                                            @if(reunion.reprogramado === true){
+                                                Reprogramado
+                                            } @else {
+                                                {{ reunion.estado.nombre }}
+                                            }
                                         </div>
 
                                         @if(reunion.virtual){
@@ -76,7 +81,7 @@
                                             <mat-icon>flag</mat-icon>
                                         </button>
                                     }
-
+                                    
                                     <!-- Continuar Reunión  -->
                                      @if(reunion.estado.nombre === 'Iniciado'){
                                          <button 
@@ -86,6 +91,17 @@
                                              [routerLink]="['/reunion', reunion.codigo]"
                                              class="btn-continuar">
                                              <mat-icon>edit</mat-icon>
+                                         </button>
+                                     }
+
+                                    <!-- Ver motivo de cancelación  -->
+                                     @if(reunion.estado.nombre === 'Cancelado'){
+                                         <button 
+                                             mat-icon-button 
+                                             matTooltip="Motivo de cancelación"
+                                             (click)="mostrarModalMotivoCancelacion(reunion)"
+                                             style="color:red;">
+                                             <mat-icon>visibility</mat-icon>
                                          </button>
                                      }
 

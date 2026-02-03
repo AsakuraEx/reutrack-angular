@@ -59,8 +59,9 @@ export class ReunionesViewComponent implements OnInit, OnDestroy, AfterViewInit 
   reunionForm = new FormGroup({
     contenido: new FormControl('', [Validators.required, Validators.minLength(20)]),
     motivo: new FormControl<number | null>(null, [Validators.required]),
-    virtual: new FormControl<boolean>(false)
-
+    virtual: new FormControl<boolean>(false),
+    nombre_reunion: new FormControl(''),
+    lugar_reunion: new FormControl('')
   })
 
   editorConfig: AngularEditorConfig = {
@@ -78,11 +79,11 @@ export class ReunionesViewComponent implements OnInit, OnDestroy, AfterViewInit 
 
   ngOnInit(): void {
     this.obtenerMotivoReunion();
-    
   }
   
   ngAfterViewInit(): void {
     this.recuperarReunionActual()
+
     // Crea el intervalo de 30 segundos para ejecutar el guardado de información
     this.autoguardadoInterval = setInterval(() => {
       this.autoguardado();
@@ -207,6 +208,9 @@ export class ReunionesViewComponent implements OnInit, OnDestroy, AfterViewInit 
           this.reunionForm.controls['motivo'].setValue(response.id_motivo);
         }
         
+        this.reunionForm.controls['nombre_reunion'].setValue(this.reunionActualDetails.nombre);
+        this.reunionForm.controls['lugar_reunion'].setValue(this.reunionActualDetails.lugar);
+
         this.reunionForm.controls['virtual'].setValue(this.reunionActualDetails.virtual);
 
       },
@@ -295,7 +299,9 @@ export class ReunionesViewComponent implements OnInit, OnDestroy, AfterViewInit 
       minuta: this.reunionForm.controls['contenido'].value,
       id_reunion: this.reunionActualDetails.id,
       id_motivo: this.reunionForm.controls['motivo'].value,
-      virtual: isVirtual
+      virtual: isVirtual,
+      nombre_reunion: this.reunionForm.controls['nombre_reunion'].value,
+      lugar_reunion: this.reunionForm.controls['lugar_reunion'].value
     }
 
     if(!this.minutaReunion){

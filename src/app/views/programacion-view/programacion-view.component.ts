@@ -182,7 +182,9 @@ export class ProgramacionViewComponent implements OnInit {
     })
 
     dialogRef.afterClosed().subscribe(result=>{
-      // Acción a realizar despues de cerrar el modal
+      if(result === true) {
+        this.cargarReuniones();
+      }
     })
 
   }
@@ -222,6 +224,7 @@ export class ProgramacionViewComponent implements OnInit {
           version: reuniones.version.nombre,
           codigo: reuniones.codigo,
           virtual: reuniones.virtual,
+          reprogramado: reuniones.reprogramado,
           color: this.obtenerColorEvento(reuniones.estado.nombre) || 'oklch(49.6% 0.265 301.924)'
         }));
       },

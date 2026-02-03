@@ -1,12 +1,21 @@
-<div class="w-full h-full bg-red-50">
+<div class="w-full h-full">
     <div class="p-4">
-        <h3 class="text-red-700 font-bold text-xl inline-flex items-center gap-2 mb-4">
+        <h3 class="text-purple-700 font-bold text-xl inline-flex items-center gap-2 mb-4">
             <mat-icon class="flex-shrink-0">warning</mat-icon>
             ¿Realmente deseas cancelar la reunión {{ data.nombre }}?
         </h3>
-        <p class="text-red-700 text-justify">
-            Si confirma esta acción perderá todo el progreso de la reunión, esta acción no se puede deshacer.
+        <p class="text-black text-justify">
+            Para cancelar la reunión, deberás indicar una justificación a continuación.
         </p>
+
+        <form [formGroup]="cancelarForm" class="mt-2">
+            <mat-form-field class="w-full">
+                <mat-label>Justificación</mat-label>
+                <textarea matInput formControlName="justificacion"></textarea>
+                <mat-error>La justificación es obligatoria y debe poseer al menos 20 carácteres</mat-error>
+            </mat-form-field>
+        </form>
+
 
         <div class="text-end space-x-2 mt-4">
             <button 
