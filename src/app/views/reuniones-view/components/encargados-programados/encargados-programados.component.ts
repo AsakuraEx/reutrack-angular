@@ -56,7 +56,6 @@ export class EncargadosProgramadosComponent implements OnInit {
 
       next: (response) => {
         this.encargados = response;
-        console.log(this.encargados);
         this.cdk.detectChanges();
       }
 
@@ -126,7 +125,6 @@ export class EncargadosProgramadosComponent implements OnInit {
     this.responsableForm.controls['visitante'].setValue(false);
 
     if(this.responsableForm.valid) {
-      console.log(this.responsableForm.value)
       this.reunionService.agregarResponsables(this.responsableForm.value).subscribe({
         next: (response) => {
           this.obtenerEncargados();

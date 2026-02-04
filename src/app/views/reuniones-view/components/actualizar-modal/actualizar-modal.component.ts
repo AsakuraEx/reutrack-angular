@@ -34,7 +34,6 @@ export class ActualizarModalComponent implements OnInit{
   constructor(private proyectoService: ProyectoService) {}
 
   ngOnInit(): void {
-    console.log(this.data)
     this.obtenerEstados() 
   }
 

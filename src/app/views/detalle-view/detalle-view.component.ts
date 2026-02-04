@@ -98,7 +98,6 @@ export class DetalleViewComponent implements OnInit{
       asistentes: correos
     }
 
-    console.log(data)
     this.reunionService.enviarPDF(data).subscribe({
       next: () => {
         this.toastService.success('Se envio el documento a los remitentes', {

@@ -21,7 +21,6 @@ export class MotivoCancelacionModalComponent implements OnInit {
     if(this.data.usuario_cancela){
       this.usuarioService.obtenerUsuario(this.data.usuario_cancela).subscribe({
         next: response => {
-          console.log(response)
           this.usuario = response;
         },
         error: err => {

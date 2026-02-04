@@ -185,7 +185,6 @@ export class HistorialViewComponent implements AfterViewInit, OnInit {
           this.reuniones = response.data
           this.totalRecords = response.totalRecords
           this.loadingReuniones = false;
-          console.log(this.reuniones)
         },
         error: err => {
           console.log(err)
