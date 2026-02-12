@@ -237,4 +237,11 @@ export class ReunionService {
     return this.http.get(url)
   }
 
+  obtenerReunionesPorVersion(id_proyecto?: number|null, id_estado?: number|null): Observable<any> {
+    let url = this.BaseUrl + '/reuniones/reunion-version?';
+    if(id_proyecto) url = url + 'id_proyecto=' + id_proyecto + '&';
+    if(id_estado) url = url + 'id_estado=' + id_estado + '&';
+    return this.http.get(url)
+  }
+
 }

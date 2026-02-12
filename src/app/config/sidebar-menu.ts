@@ -25,44 +25,6 @@ export const options = [
         permiso: [1,2],
         opciones: [
             {
-                id: 'requerimientos',
-                desplegable: true,
-                name: 'Requerimientos',
-                permiso: [1,2],
-                opciones: [
-                    {
-                        path: '/reportes/requerimientos/estado-requerimientos',
-                        name: 'Estado de requerimientos',
-                        permiso: [1, 2]
-                    },
-                    {
-                        path: '/reportes/requerimientos/tiempos-requerimientos',
-                        name: 'Tiempo promedio de requerimientos',
-                        permiso: [1, 2]
-                    },
-
-                ]
-            },
-            {
-                id: 'reuniones',
-                desplegable: true,
-                name: 'Reuniones',
-                permiso: [1,2],
-                opciones: [
-                    {
-                        path: '/reportes/reuniones/reuniones-realizadas',
-                        name: 'Reuniones realizadas',
-                        permiso: [1, 2]
-                    },
-                    {
-                        path: '/reportes/reuniones/reuniones-motivo',
-                        name: 'Reuniones por motivo',
-                        permiso: [1, 2]
-                    },
-
-                ]
-            },
-            {
                 id: 'actas_aceptacion',
                 desplegable: true,
                 name: 'Actas de aceptación',
@@ -100,6 +62,45 @@ export const options = [
 
                 ]
             },
+            {
+                id: 'requerimientos',
+                desplegable: true,
+                name: 'Requerimientos',
+                permiso: [1,2],
+                opciones: [
+                    {
+                        path: '/reportes/requerimientos/estado-requerimientos',
+                        name: 'Estado de requerimientos',
+                        permiso: [1, 2]
+                    },
+                    {
+                        path: '/reportes/requerimientos/tiempos-requerimientos',
+                        name: 'Tiempo promedio de requerimientos',
+                        permiso: [1, 2]
+                    },
+
+                ]
+            },
+            {
+                id: 'reuniones',
+                desplegable: true,
+                name: 'Reuniones',
+                permiso: [1,2],
+                opciones: [
+                    {
+                        path: '/reportes/reuniones/reuniones-realizadas',
+                        name: 'Reuniones realizadas',
+                        permiso: [1, 2]
+                    },
+                    {
+                        path: '/reportes/reuniones/reuniones-motivo',
+                        name: 'Reuniones por motivo',
+                        permiso: [1, 2]
+                    },
+
+                ]
+            },
+
 
         ]
     },
