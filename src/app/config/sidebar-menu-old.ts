@@ -25,61 +25,9 @@ export const options = [
         permiso: [1,2],
         opciones: [
             {
-                id: 'requerimientos',
-                desplegable: true,
-                name: 'Requerimientos',
-                permiso: [1,2],
-                opciones: [
-                    {
-                        path: '/',
-                        name: 'Estado de requerimientos',
-                        permiso: [1, 2]
-                    },
-                    {
-                        path: '/',
-                        name: 'Tiempo promedio de requerimientos',
-                        permiso: [1, 2]
-                    },
-
-                ]
-            },
-            {
-                id: 'reuniones',
-                desplegable: true,
-                name: 'Reuniones',
-                permiso: [1,2],
-                opciones: [
-                    {
-                        path: '/',
-                        name: 'Reuniones realizadas',
-                        permiso: [1, 2]
-                    },
-                    {
-                        path: '/',
-                        name: 'Reuniones por motivo',
-                        permiso: [1, 2]
-                    },
-
-                ]
-            },
-            {
-                id: 'actas_aceptacion',
-                desplegable: true,
+                path: 'reportes/actas-de-aceptacion',
                 name: 'Actas de aceptación',
-                permiso: [1,2],
-                opciones: [
-                    {
-                        path: 'reportes/actas-de-aceptacion',
-                        name: 'Estado de actas de aceptación',
-                        permiso: [1,2]
-                    },
-                    {
-                        path: '/',
-                        name: 'Aceptación de funcionalidades',
-                        permiso: [1, 2]
-                    },
-
-                ]
+                permiso: [1,2]
             },
             {
                 id: 'bitacora',

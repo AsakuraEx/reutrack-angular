@@ -74,7 +74,7 @@ export class ProyectoService {
   // -----------------------------------------------------------------------------------------------------------
   // VERSIONES -------------------------------------------------------------------------------------------------
 
-  obtenerVersiones(id_proyecto: number, estado: any, limit: any, page: number): Observable<any>  {
+  obtenerVersiones(id_proyecto: any, estado: any, limit: any, page: number, id_req?: number): Observable<any>  {
 
     let url = `${this.BaseURL}/versiones?`;
     const params: string[] = [];
@@ -83,6 +83,7 @@ export class ProyectoService {
     if(estado) params.push(`id_estado=${encodeURIComponent(estado)}`);
     if(limit) params.push(`limit=${encodeURIComponent(limit)}`);
     if(page) params.push(`page=${encodeURIComponent(page)}`);
+    if(id_req) params.push(`id_req=${encodeURIComponent(id_req)}`);
 
     if(params.length > 0) {
       url += params.join('&');
@@ -125,6 +126,11 @@ export class ProyectoService {
   fusionarProyectos(data: any): Observable<any> {
     const url = this.BaseURL + '/proyectos/fusion';
     return this.http.post(url, data);
+  }
+
+  obtenerBitacoraVersion(id_version: number): Observable<any> {
+    const url = this.BaseURL + '/versiones/bitacora-estados/'+ id_version;
+    return this.http.get(url);
   }
 
 }

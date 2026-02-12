@@ -102,6 +102,26 @@ export const routes: Routes = [
         canActivate: [AuthGuard, primerInicioGuard]
     },
     {
+        path: 'reportes/requerimientos/estado-requerimientos',
+        loadComponent: () => import('./views/reportes-view/requerimientos/estado-requerimientos/estado-requerimientos.component').then(m => m.EstadoRequerimientosComponent),
+        canActivate: [AuthGuard, primerInicioGuard]
+    },
+    {
+        path: 'reportes/requerimientos/tiempos-requerimientos',
+        loadComponent: () => import('./views/reportes-view/requerimientos/tiempos-requerimientos/tiempos-requerimientos.component').then(m => m.TiemposRequerimientosComponent),
+        canActivate: [AuthGuard, primerInicioGuard]
+    },
+    {
+        path: 'reportes/reuniones/reuniones-realizadas',
+        loadComponent: () => import('./views/reportes-view/reuniones/reuniones-realizadas/reuniones-realizadas.component').then(m => m.ReunionesRealizadasComponent),
+        canActivate: [AuthGuard, primerInicioGuard]
+    },
+    {
+        path: 'reportes/reuniones/reuniones-motivo',
+        loadComponent: () => import('./views/reportes-view/reuniones/reuniones-motivo/reuniones-motivo.component').then(m => m.ReunionesMotivoComponent),
+        canActivate: [AuthGuard, primerInicioGuard]
+    },
+    {
         path: 'reportes/actas-de-aceptacion',
         loadComponent: () => import('./views/reportes-view/actas-de-aceptacion/actas-de-aceptacion.component').then(m => m.ActasDeAceptacionComponent),
         canActivate: [AuthGuard, primerInicioGuard]
