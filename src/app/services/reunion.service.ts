@@ -244,4 +244,19 @@ export class ReunionService {
     return this.http.get(url)
   }
 
+  obtenerReunionesPorMotivo(id_motivo?: number, limit?: number | null, page?: number) {
+    let url = this.BaseUrl + '/reuniones/motivo';
+    let pagina = 1;
+    let limite = 10;
+    
+    if(page) pagina = page;
+    if(limit) limite = limit;
+
+    if(id_motivo) {
+      return this.http.get(url, { params: { id_motivo: id_motivo, limit: limite, page: pagina } })
+    }else {
+      return this.http.get(url, { params: { limit: limite, page: pagina } });
+    }
+  }
+
 }

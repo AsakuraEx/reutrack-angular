@@ -1,1 +1,108 @@
-<p>reuniones-motivo works!</p>
+<div class="container mx-auto">
+
+    <div class="mt-6 pt-6 border border-purple-700 rounded-lg p-2 mx-auto">
+        <div class="flex items-center justify-center gap-3 text-purple-700 text-2xl font-medium mb-4">
+            <mat-icon>timeline</mat-icon>
+            <h1>Reuniones por motivo de reunión</h1>
+        </div>
+        
+        <form class="flex flex-col" [formGroup]="filtroForm" (submit)="onSubmit()">
+            <div class="w-4/12 mx-auto">
+   
+                <mat-form-field class="w-full">
+                    <mat-label>Motivo de reunión</mat-label>
+                    <mat-select formControlName="id_motivo">
+                                @for (motivo of motivosReunion; track $index) {
+                                    <mat-option [value]="motivo.id">{{ motivo.nombre }}</mat-option>
+                                }
+                    </mat-select>                        
+                </mat-form-field>
+
+                <!-- <mat-form-field class="w-full">
+                    <mat-label>Rango de fechas</mat-label>
+                    <mat-date-range-input [rangePicker]="picker">
+                        <input 
+                            matStartDate 
+                            [max]=""
+                            placeholder="Fecha inicio" 
+                            formControlName="fechaInicio">
+                        <input matEndDate placeholder="Fecha fin" formControlName="fechaFin">
+                    </mat-date-range-input>
+
+                    <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
+                    <mat-date-range-picker #picker></mat-date-range-picker>
+                </mat-form-field> -->
+
+                <div class="space-x-2 pb-4">
+                    <button type="submit" mat-flat-button>Buscar</button>
+                    <button (click)="reset()" class="btn-secondary" type="button" mat-flat-button>Limpiar</button>
+                </div>
+            </div>
+
+        </form>
+
+    </div>
+
+    <!-- TABLA DE DATOS -->
+    <div class="mt-12">
+
+        <table mat-table [dataSource]="reuniones">
+
+            <ng-container matColumnDef="fecha_programada">
+                <th mat-header-cell *matHeaderCellDef class="text-purple-700 text-md">Fecha de reunión</th>
+                <td mat-cell *matCellDef="let element">{{ element.createdAt }}</td>
+            </ng-container>
+            <ng-container matColumnDef="nombre">
+                <th mat-header-cell *matHeaderCellDef class="text-purple-700 text-md">Reunión</th>
+                <td mat-cell *matCellDef="let element">
+                    <div class="py-2">
+                        <p class="text-md font-medium">
+                            {{ element.nombre }}
+                        </p>
+                        @if(element.virtual){
+                            <span class="bg-pink-200 p-1 block w-fit rounded text-pink-700 text-xs">Reunión virtual</span>
+                        }
+                    </div>
+                </td>
+            </ng-container>
+            <ng-container matColumnDef="lugar">
+                <th mat-header-cell *matHeaderCellDef class="text-purple-700 text-md">Lugar</th>
+                <td mat-cell *matCellDef="let element">{{ element.lugar }}</td>
+            </ng-container>
+            <ng-container matColumnDef="proyecto">
+                <th mat-header-cell *matHeaderCellDef class="text-purple-700 text-md">Proyecto</th>
+                <td mat-cell *matCellDef="let element">{{ element.nombre }}</td>
+            </ng-container>
+            <ng-container matColumnDef="requerimiento">
+                <th mat-header-cell *matHeaderCellDef class="text-purple-700 text-md">Requerimiento</th>
+                <td mat-cell *matCellDef="let element">{{ element.version.nombre }}</td>
+            </ng-container>
+            <ng-container matColumnDef="motivo">
+                <th mat-header-cell *matHeaderCellDef class="text-purple-700 text-md">Motivo de reunión</th>
+                <td mat-cell *matCellDef="let element">
+                    @if(element.motivo){
+                        <p>
+                            {{ element.motivo?.nombre }}
+                        </p>
+                    } @else {
+                        <p class="text-red-700">
+                            {{ 'No especificado' }}
+                        </p>
+                    }
+                </td>
+            </ng-container>
+            
+            <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+            <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+
+        </table>
+
+        <mat-paginator
+            [length]="currentRows"
+            [pageIndex]="currentPage"
+            [pageSize]="pageSize"
+            [pageSizeOptions]="[10,20,50, 100]"
+        ></mat-paginator>
+
+    </div>
+</div>

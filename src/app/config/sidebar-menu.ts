@@ -35,12 +35,6 @@ export const options = [
                         name: 'Estado de actas de aceptación',
                         permiso: [1,2]
                     },
-                    {
-                        path: '/',
-                        name: 'Aceptación de funcionalidades',
-                        permiso: [1, 2]
-                    },
-
                 ]
             },
             {

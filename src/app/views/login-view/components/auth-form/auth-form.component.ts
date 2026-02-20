@@ -1,11 +1,11 @@
-import { Component, EventEmitter, Output } from '@angular/core';
+import { Component, EventEmitter, Output, ViewChild } from '@angular/core';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatButtonModule } from '@angular/material/button';
 import {MatProgressSpinnerModule} from '@angular/material/progress-spinner';
 import { AuthService } from '../../../../services/auth-service.service';
 import { HotToastService } from '@ngxpert/hot-toast';
-import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
+import { FormControl, FormGroup, FormGroupDirective, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 
 @Component({
@@ -29,6 +29,8 @@ export class AuthFormComponent {
     private toastService: HotToastService,
     private router: Router
   ){}
+
+  @ViewChild(FormGroupDirective) formDirective?: FormGroupDirective
 
   cancelar(): void {
     this.cancelarAutenticacion.emit(false)
@@ -72,10 +74,8 @@ export class AuthFormComponent {
 
   resetForm(): void {
     // Se reinicia el formulario completamente
+    this.formDirective?.resetForm();
     this.authForm.reset();  
-    this.authForm.markAsPristine();
-    this.authForm.markAsUntouched();
-    this.authForm.updateValueAndValidity();
   }
 
 }
