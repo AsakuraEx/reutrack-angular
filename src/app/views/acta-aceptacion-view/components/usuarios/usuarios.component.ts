@@ -52,6 +52,7 @@ export class UsuariosComponent implements OnInit{
   }
 
   eliminarUsuario(usuario: any): void {
+    console.log(usuario)
     this.actaAceptacionService.eliminarUsuarioActa(usuario).subscribe({
       next: () => {
         console.log('Usuario eliminado con éxito');
