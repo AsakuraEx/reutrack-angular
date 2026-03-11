@@ -35,8 +35,7 @@ export class AsistenciaViewComponent implements OnInit {
     participante: new FormControl('', [
       Validators.required,
       Validators.maxLength(200), 
-      Validators.minLength(3),
-      Validators.pattern('^[a-zA-ZÀ-ÿ]+(?:\\s[a-zA-ZÀ-ÿ]+)*$')
+      Validators.minLength(3)
     ]),
     institucion: new FormControl('', [
       Validators.required,
@@ -114,6 +113,26 @@ export class AsistenciaViewComponent implements OnInit {
     if(this.formAsistencia.invalid) {
       this.formAsistencia.markAllAsTouched();
       return; // corta ejecución si es inválido
+    }
+
+    const regexValidator: RegExp = /^[a-zA-ZáéíóúÁÉÍÓÚñÑüÜ]+(?:\s[a-zA-ZáéíóúÁÉÍÓÚñÑüÜ]+)*$/;
+
+    const participante: string = this.formAsistencia.controls['participante'].value?.trim() || '';
+
+    if(participante === '') {
+      this.toastService.error('El campo "Participante" no puede estar vacío.', {
+        duration: 3000,
+        position: 'top-right'
+      });
+      return;
+    }
+
+    if(!regexValidator.test(participante)){
+      this.toastService.error('El campo "Participante" solo puede contener letras y espacios.', {
+        duration: 3000,
+        position: 'top-right'
+      });
+      return;
     }
 
     if(this.formAsistencia.valid){

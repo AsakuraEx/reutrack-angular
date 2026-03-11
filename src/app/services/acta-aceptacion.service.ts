@@ -57,6 +57,11 @@ export class ActaAceptacionService {
     return this.http.get(url, { responseType: 'blob' })
   }
 
+  enviarActa(acta: number, usuarios: any[]): Observable<any> {
+    const url = this.baseUrl + '/acta_aceptacion/enviarPdf';
+    return this.http.post(url, { acta, usuarios})
+  }
+
   /* -------------------------------------------------------------------*/
 
   obtenerFuncionesPorActa(id_acta: number): Observable<any> {

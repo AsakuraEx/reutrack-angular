@@ -34,6 +34,7 @@ export class ActaAceptacionViewComponent  implements OnInit{
   cantidadFuncionalidadesAprobadas: number = 0;
   cantidadUsuariosAprobados: number = 0;
   isSubmitting:boolean = false;
+  isSubmitting2:boolean = false;
   acta_aceptacion!:any;
   readonly dialog = inject(MatDialog)
 
@@ -110,6 +111,36 @@ export class ActaAceptacionViewComponent  implements OnInit{
         this.isSubmitting = false;
       }
     })
+  } 
+
+  enviarPDF(): void {
+
+    this.isSubmitting2 = true;
+
+    const id_acta: number = Number(this.route.snapshot.paramMap.get('id_acta'));
+
+    let usuarios: any[] = [];
+
+    this.actaAceptacionService.obtenerUsuarioActa(id_acta).subscribe({
+      next: res => {
+        usuarios = res;
+
+        this.actaAceptacionService.enviarActa(id_acta, usuarios).subscribe({
+          next: () => {
+            this.toastService.success('PDF enviado correctamente', { duration: 3000, position: 'top-right' });
+            this.isSubmitting2 = false;
+          },
+          error: (e) => {
+            this.toastService.error('Error al enviar el PDF', { duration: 3000, position: 'top-right' });
+            this.isSubmitting2 = false;
+          }
+        })
+
+        this.isSubmitting2 = false;
+      }
+    })
+
+
   } 
 
   obtenerContadorFuncionalidades(event:number){

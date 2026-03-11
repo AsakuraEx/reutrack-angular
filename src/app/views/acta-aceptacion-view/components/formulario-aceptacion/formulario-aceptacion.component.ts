@@ -31,6 +31,7 @@ export class FormularioAceptacionComponent {
 
   formAceptacion = new FormGroup({
     id_acta: new FormControl<number|null>(null, [Validators.required]),
+    correo: new FormControl<string>('', [Validators.required, Validators.email]),
     nombre: new FormControl('', [Validators.required, Validators.maxLength(50), Validators.minLength(3)]),
     institucion: new FormControl('', [Validators.required, Validators.maxLength(50), Validators.minLength(3)]),
     cargo: new FormControl('', [Validators.required, Validators.maxLength(30), Validators.minLength(3)]),
@@ -112,6 +113,7 @@ export class FormularioAceptacionComponent {
       formData.append('nombre', this.formAceptacion.get('nombre')?.value!);
       formData.append('institucion', this.formAceptacion.get('institucion')?.value!);
       formData.append('cargo', this.formAceptacion.get('cargo')?.value!);
+      formData.append('correo', this.formAceptacion.get('correo')?.value!);
       formData.append('documento', this.formAceptacion.get('documento')?.value!);
   
       const identidadFile = this.formAceptacion.get('documento_identidad')?.value;

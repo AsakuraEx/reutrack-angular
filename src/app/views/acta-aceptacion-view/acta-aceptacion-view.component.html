@@ -28,16 +28,27 @@
                 </button>
             }
 
-                <button mat-flat-button (click)="generarPdf()" [disabled]="isSubmitting || cantidadFuncionalidadesAprobadas === 0 || cantidadUsuariosAprobados === 0">
-                    @if(isSubmitting){
-                        <mat-progress-spinner diameter="20" mode="indeterminate"></mat-progress-spinner>
-                    } @else {
-                        <div class="flex items-center gap-2">
-                            <mat-icon>picture_as_pdf</mat-icon>
-                            Generar PDF
-                        </div>
-                    }
-                </button>
+            <button mat-flat-button (click)="generarPdf()" [disabled]="isSubmitting || cantidadFuncionalidadesAprobadas === 0 || cantidadUsuariosAprobados === 0">
+                @if(isSubmitting){
+                    <mat-progress-spinner diameter="20" mode="indeterminate"></mat-progress-spinner>
+                } @else {
+                    <div class="flex items-center gap-2">
+                        <mat-icon>picture_as_pdf</mat-icon>
+                        Generar PDF
+                    </div>
+                }
+            </button>
+
+            <button mat-flat-button (click)="enviarPDF()" [disabled]="isSubmitting2 || cantidadFuncionalidadesAprobadas === 0 || cantidadUsuariosAprobados === 0">
+                @if(isSubmitting2){
+                    <mat-progress-spinner diameter="20" mode="indeterminate"></mat-progress-spinner>
+                } @else {
+                    <div class="flex items-center gap-2">
+                        <mat-icon>send</mat-icon>
+                        Enviar Acta
+                    </div>
+                }
+            </button>
 
             <button class="btn-secondary" mat-flat-button (click)="irAtras()">
                 <mat-icon>list</mat-icon>
