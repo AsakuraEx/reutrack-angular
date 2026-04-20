@@ -27,7 +27,7 @@ export class TablaUsuariosComponent implements OnChanges{
   @Input() totalRegistros:number = 0;
   @Output() actualizarUsuarios = new EventEmitter<void>();
 
-  displayedColumns: string[] = ['nombre', 'email', 'documento', 'telefono', 'rol', 'estado', 'acciones']
+  displayedColumns: string[] = ['nombre', 'email', 'cargo','documento', 'telefono', 'rol', 'estado', 'acciones']
   dataSource = new MatTableDataSource();
 
   @ViewChild(MatPaginator) paginator!: MatPaginator

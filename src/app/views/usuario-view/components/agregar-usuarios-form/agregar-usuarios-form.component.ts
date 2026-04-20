@@ -9,11 +9,12 @@ import { UsuarioService } from '../../../../services/usuario.service';
 import { HotToastService } from '@ngxpert/hot-toast';
 import { NgxMaskDirective } from 'ngx-mask';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+import { MatSelectModule } from '@angular/material/select';
 
 @Component({
   selector: 'app-agregar-usuarios-form',
   imports: [
-    MatButtonModule, MatFormFieldModule, MatInputModule, MatIconModule, ReactiveFormsModule, NgxMaskDirective, MatProgressSpinnerModule
+    MatButtonModule, MatFormFieldModule, MatInputModule, MatIconModule, ReactiveFormsModule, NgxMaskDirective, MatProgressSpinnerModule, MatSelectModule
   ],
   templateUrl: './agregar-usuarios-form.component.html',
   styleUrl: './agregar-usuarios-form.component.css'
@@ -25,6 +26,13 @@ export class AgregarUsuariosFormComponent {
     private toastService: HotToastService
   ){}
 
+  ngOnInit(): void {
+    this.obtenerCargos();
+    console.log(this.data)
+  }
+
+  cargos: any[] = [];
+
   isSubmitting: boolean = false;
 
   readonly dialogRef = inject(MatDialogRef<AgregarUsuariosFormComponent>)
@@ -34,6 +42,7 @@ export class AgregarUsuariosFormComponent {
     id: new FormControl<number|null>(this.data?.id ?? null),
     nombre: new FormControl(this.data?.nombre ?? '', [Validators.required, Validators.minLength(3), Validators.pattern('^[a-zA-ZáéíóúÁÉÍÓÚñÑüÜ\\s]+$')]),
     email: new FormControl(this.data?.email ?? '', [Validators.required, Validators.email]),
+    cargo: new FormControl(this.data?.cargo?.id ?? 0),
     documento: new FormControl(this.data?.documento ?? '', 
       [
         Validators.required, 
@@ -127,6 +136,17 @@ export class AgregarUsuariosFormComponent {
 
     }
 
+  }
+
+  obtenerCargos(): void {
+    this.usuarioService.obtenerCargos().subscribe({
+      next: res => {
+        this.cargos = res;
+      },
+      error: err => {
+        console.error('Error al obtener cargos: ', err)
+      }
+    });  
   }
 
 }

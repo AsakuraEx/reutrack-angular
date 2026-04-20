@@ -64,4 +64,9 @@ export class UsuarioService {
       first_session: data.sesion
     })
   }
+
+  obtenerCargos(): Observable<any> {
+    let url = this.BaseUrl + '/usuarios/cargos';
+    return this.http.get(url);
+  }
 }

@@ -29,6 +29,14 @@
                 </mat-error>
             }
         </mat-form-field>
+        
+        <mat-form-field class="w-full">
+            <mat-select formControlName="cargo" placeholder="Cargo en la institución">
+                @for (cargo of cargos; track $index) {
+                    <mat-option [value]="cargo.id">{{cargo.nombre}}</mat-option>
+                }
+            </mat-select>
+        </mat-form-field>
 
         <mat-form-field class="w-full">
             <mat-label>Número de DUI</mat-label>
