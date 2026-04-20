@@ -113,8 +113,19 @@
                             </mat-select>
                         </mat-form-field>
     
-                        <angular-editor #editorTexto formControlName="contenido" [config]="editorConfig"></angular-editor>
-                        
+                        <div (focusout)="guardarReunion()">
+                            @if(unUsuarioEscribiendo){
+                                <p class="text-sm text-gray-500 animate-bounce">
+                                    <span class="font-bold">[SOLO LECTURA]</span> {{ usuarioEscribiendo}} esta escribiendo...
+                                </p>
+                            }
+                            <angular-editor 
+                                #editorTexto 
+                                formControlName="contenido"
+                                (keyup)="notificarEscritura(reunion_id)"
+                                [config]="editorConfig">
+                            </angular-editor>
+                        </div>
                         
                     </div>
                 </form>

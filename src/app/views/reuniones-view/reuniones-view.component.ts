@@ -16,11 +16,12 @@ import { AngularEditorConfig } from '@kolkov/angular-editor';
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { HotToastService } from '@ngxpert/hot-toast';
 import { jwtDecode } from 'jwt-decode';
-import { firstValueFrom } from 'rxjs';
+import { firstValueFrom, Subscription } from 'rxjs';
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { MatSelectModule } from '@angular/material/select';
 import { MatDialog } from '@angular/material/dialog';
 import { ActualizarModalComponent } from './components/actualizar-modal/actualizar-modal.component';
+import { SocketService } from '../../services/socket.service';
 
 @Component({
   selector: 'app-reuniones-view',
@@ -34,13 +35,21 @@ import { ActualizarModalComponent } from './components/actualizar-modal/actualiz
 })
 export class ReunionesViewComponent implements OnInit, OnDestroy, AfterViewInit {
 
+  ultimoMensaje: any;
+  private socketSubscription!: Subscription;
+  private typingTimer: any;
+  unUsuarioEscribiendo: boolean = false;
+  usuarioEscribiendo: string = '';
+
   constructor(
     private router: Router,
     private route: ActivatedRoute,
     private reunionService: ReunionService,
     private proyectoService: ProyectoService,
     private toastService: HotToastService,
+    private socketService: SocketService
   ) {}
+
 
   esUsuarioLector: boolean = false;
 
@@ -52,6 +61,7 @@ export class ReunionesViewComponent implements OnInit, OnDestroy, AfterViewInit 
 
   showModal: boolean = false;
 
+  reunion_id!:number;
   minutaReunion:any = '';
 
   readonly dialog = inject(MatDialog)
@@ -85,9 +95,9 @@ export class ReunionesViewComponent implements OnInit, OnDestroy, AfterViewInit 
     this.recuperarReunionActual()
 
     // Crea el intervalo de 30 segundos para ejecutar el guardado de información
-    this.autoguardadoInterval = setInterval(() => {
-      this.autoguardado();
-    }, 10000);
+    // this.autoguardadoInterval = setInterval(() => {
+    //   this.autoguardado();
+    // }, 10000);
       
   }
 
@@ -95,6 +105,10 @@ export class ReunionesViewComponent implements OnInit, OnDestroy, AfterViewInit 
   ngOnDestroy(): void {
       clearInterval(this.autoguardadoInterval);
       sessionStorage.clear();
+
+      if(this.socketSubscription) {
+        this.socketSubscription.unsubscribe();
+      }
   }
 
   autoguardado(): void {
@@ -242,26 +256,71 @@ export class ReunionesViewComponent implements OnInit, OnDestroy, AfterViewInit 
 
         if(resp.length === 0){
           this.minutaReunion = null;
-          this.reunionForm.controls['contenido'].setValue('');
+          this.reunionForm.controls['contenido'].setValue('', { emitEvent: false });
           return;
         }
 
         const nuevaMinuta = resp[0].minuta;
         this.minutaReunion = nuevaMinuta;
-        this.reunionForm.controls['contenido'].setValue(this.minutaReunion);
-
+        this.reunionForm.controls['contenido'].setValue(this.minutaReunion, { emitEvent: false});
         
+        this.reunion_id = resp[0].id_reunion;
+        this.configurarSocket(this.reunion_id);
       
 
       },
       error: err => {
-        console.log(err)
+        console.log("Error al consultar minuta: " + err)
       }
     })
 
   }
 
+  configurarSocket(id_reunion: number): void {
+    this.socketService.emitirEvento('join-reunion', id_reunion);
+
+    if(this.socketSubscription) {
+      return;
+    }
+
+    this.socketSubscription = this.socketService.escucharEvento('ver-minuta').subscribe((data) => {
+      this.ultimoMensaje = data;
+
+      if (data && data.data) {
+        this.reunionForm.controls['contenido'].setValue(data.data, { emitEvent: false });
+        this.unUsuarioEscribiendo = false;
+      }
+    });
+
+    this.socketService.escucharEvento('estado_escritura').subscribe((payload: any) => {
+      this.unUsuarioEscribiendo = payload.escribiendo;
+      this.usuarioEscribiendo = payload.usuario;
+      this.editorConfig.editable = !payload.escribiendo;
+    });
+  }
+
+  notificarEscritura(id_reunion: number): void {
+
+    const token = localStorage.getItem('token');
+    const decoded:any = token ? jwtDecode(token) : null;
+
+    this.socketService.emitirEvento('escribiendo', { minutaId: id_reunion, escribiendo: true, usuario: decoded.nombre });
+
+    clearTimeout(this.typingTimer);
+    
+    // Si pasan 1.5 segundos sin teclear, enviamos false
+    this.typingTimer = setTimeout(() => {
+      this.socketService.emitirEvento('escribiendo', { minutaId: id_reunion, escribiendo: false, usuario: decoded.nombre });
+    }, 1500);
+
+  }
+
+
   async guardarReunion(): Promise<void> {
+
+    if(this.unUsuarioEscribiendo === true) {
+      return;
+    }
 
     this.validarUsuarioLector();
     const esLector = await this.validarUsuarioLector();
@@ -310,7 +369,7 @@ export class ReunionesViewComponent implements OnInit, OnDestroy, AfterViewInit 
 
       this.reunionService.guardarMinutaReunion(data).subscribe({
         next: () => {
-          this.toastService.success('La información se guardó hasta este punto' + this.transformarFecha(), {
+          this.toastService.success('La información se guardó hasta este punto ' + this.transformarFecha(), {
             position: 'top-right',
             duration: 3000
           })
