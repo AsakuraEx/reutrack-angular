@@ -113,6 +113,23 @@
                             </mat-select>
                         </mat-form-field>
     
+                        @if(fechaRecuperacionMinuta){
+                            <div class="flex items-center flex-row-reverse gap-4 mb-2">
+                                <button mat-button (click)="recuperarMinutaAnterior()">
+                                    <mat-icon>autorenew</mat-icon>
+                                    Restaurar minuta
+                                </button>
+                                <p class="text-gray-500 text-sm">
+                                    Autoguardado disponible para recuperar: {{ fechaRecuperacionMinuta }}
+                                </p>
+                            </div>
+                        } @else {
+                            <p class="text-gray-500 text-end text-sm mb-2">
+                                No existe una versión de autoguardado para restaurar
+                            </p>
+                        }
+
+
                         <angular-editor #editorTexto formControlName="contenido" [config]="editorConfig"></angular-editor>
                         
                         

@@ -45,6 +45,8 @@ export class ReunionesViewComponent implements OnInit, OnDestroy, AfterViewInit 
   esUsuarioLector: boolean = false;
 
   autoguardadoInterval: any;
+  recuperarMinuta: any;
+  fechaRecuperacionMinuta: string = '';
 
   expandReunionActualState = false;
   reunionActualDetails!: ReunionHeader;
@@ -79,6 +81,10 @@ export class ReunionesViewComponent implements OnInit, OnDestroy, AfterViewInit 
 
   ngOnInit(): void {
     this.obtenerMotivoReunion();
+    const fecha = sessionStorage.getItem('fechaRecuperacion');
+    if(fecha) {
+      this.fechaRecuperacionMinuta = fecha;
+    }
   }
   
   ngAfterViewInit(): void {
@@ -88,12 +94,27 @@ export class ReunionesViewComponent implements OnInit, OnDestroy, AfterViewInit 
     this.autoguardadoInterval = setInterval(() => {
       this.autoguardado();
     }, 10000);
+
+    this.recuperarMinuta = setInterval(()=>{
+      const minuta = this.reunionForm.controls['contenido'].value;
+
+      if(minuta) {
+        const contador = this.contarLetras(minuta);
+        if(contador>20){
+          sessionStorage.setItem('minutaRecuperada', minuta);
+          this.fechaRecuperacionMinuta = new Date().toISOString();
+          this.fechaRecuperacionMinuta = this.transformarFecha(this.fechaRecuperacionMinuta)
+          sessionStorage.setItem('fechaRecuperacion', String(this.fechaRecuperacionMinuta));
+        }
+      }
+    }, 300000);
       
   }
 
   // Cuando el componente desaparece, se elimina el intervalo
   ngOnDestroy(): void {
       clearInterval(this.autoguardadoInterval);
+      clearInterval(this.recuperarMinuta);
       sessionStorage.clear();
   }
 
@@ -148,6 +169,22 @@ export class ReunionesViewComponent implements OnInit, OnDestroy, AfterViewInit 
       return false;
     };
     
+  }
+
+  recuperarMinutaAnterior(): void {
+
+    const minuta = sessionStorage.getItem('minutaRecuperada');
+
+    if(!minuta){
+      this.toastService.error('La minuta de reunión está vacia', {
+        position: 'top-right',
+        duration: 3000
+      });
+      return;
+    }
+
+    this.reunionForm.controls['contenido'].setValue(minuta);
+
   }
 
   validarLector(esLector: boolean): void {
