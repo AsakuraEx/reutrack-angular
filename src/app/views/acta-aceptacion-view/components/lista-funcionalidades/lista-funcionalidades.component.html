@@ -8,6 +8,7 @@
                 <th class="py-2 px-4">Nombre de la funcionalidad</th>
                 <th class="py-2 px-4">Estado de aprobación</th>
                 <th class="py-2 px-4">Cambio solicitado</th>
+                <th class="py-2 px-4">Fecha registro</th>
                 @if(acta_aceptacion.estado.id === 6){
                     <th class="py-2 px-4">Acción</th>
                 }
@@ -21,6 +22,9 @@
                         </td>
                         <td class="py-4 px-4">
                             {{ funcion.cambio_solicitado }}
+                        </td>
+                        <td class="py-4 px-4">
+                            {{ transformarFecha(funcion.createdAt) }}
                         </td>
                         @if(!funcion.aprobado && acta_aceptacion.estado.id === 6){
                             <td class="py-2 px-4">

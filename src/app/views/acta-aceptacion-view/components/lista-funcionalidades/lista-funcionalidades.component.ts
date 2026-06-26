@@ -24,8 +24,9 @@ export class ListaFuncionalidadesComponent {
 
   constructor(
     private actaAceptacionService: ActaAceptacionService
-  ) {}
-
+  ) {
+  }
+  
   @Input() acta_aceptacion!: any;
 
   aprobarFuncionalidad(id_funcionalidad: number): void {
@@ -60,6 +61,23 @@ export class ListaFuncionalidadesComponent {
         console.error('Error al desaprobar la funcionalidad:', err);
       }
     })
+  }
+
+  transformarFecha(fecha?: string): string  {
+      
+      const nuevaFecha = new Date(fecha ? fecha : new Date());
+
+      const fechaFormateada = nuevaFecha.toLocaleString('es-ES', {
+          day: '2-digit',
+          month: '2-digit',
+          year: 'numeric',
+          hour: '2-digit',   // Hora en formato de dos dígitos
+          minute: '2-digit', // Minutos en formato de dos dígitos
+          second: '2-digit', // Segundos en formato de dos dígitos
+          hour12: true
+      });
+
+      return fechaFormateada
   }
 
 }

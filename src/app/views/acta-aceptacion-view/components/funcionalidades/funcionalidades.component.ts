@@ -59,6 +59,7 @@ export class FuncionalidadesComponent {
       this.funcionalidades = response
       this.contador = this.funcionalidades.filter(f => f.aprobado === true).length;
       this.ContadorEventEmitter.emit(this.contador);
+      console.log(this.funcionalidades)
     })
   }
 
