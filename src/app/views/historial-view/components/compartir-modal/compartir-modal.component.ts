@@ -76,7 +76,7 @@ export class CompartirModalComponent implements OnInit{
         })
       },
       error: err => {
-        this.toastService.success(err.error, {
+        this.toastService.error(err.error.error, {
           position: 'top-right',
           duration: 3000
         })
