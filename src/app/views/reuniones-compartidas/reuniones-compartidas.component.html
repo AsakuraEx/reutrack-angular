@@ -1,0 +1,155 @@
+<div class="container mx-auto">
+
+    <div class="mt-6 pt-6 border border-purple-700 rounded-lg p-2 mx-auto">
+        <div class="flex items-center justify-center gap-3 text-purple-700 text-2xl font-medium mb-4">
+            <mat-icon>shared</mat-icon>
+            <h1>Reuniones externas compartidas</h1>
+        </div>
+        
+        <form class="flex flex-col" [formGroup]="filtroForm" (submit)="onSubmit()">
+            <div class="w-4/12 mx-auto">
+   
+                <mat-form-field class="w-full">
+                    <mat-label>Remitente</mat-label>
+                    <input 
+                        matInput 
+                        type="text" 
+                        placeholder="Ingresa el nombre de la persona que compartío la reunión que buscas..."
+                        formControlName="remitente">
+                </mat-form-field>
+
+                <mat-form-field class="w-full">
+                    <mat-label>Rango de fechas</mat-label>
+                    <mat-date-range-input [rangePicker]="picker">
+                        <input 
+                            matStartDate 
+                            [max]=""
+                            placeholder="Fecha inicio" 
+                            formControlName="fechaInicio"
+                            >
+                        <input 
+                            matEndDate 
+                            placeholder="Fecha fin"
+                            formControlName="fechaFin"
+                            >
+                    </mat-date-range-input>
+                    <mat-hint>MM/DD/YYYY – MM/DD/YYYY</mat-hint>
+                    <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
+                    <mat-date-range-picker #picker></mat-date-range-picker>
+                </mat-form-field>
+
+                <mat-checkbox
+                    formControlName="soloAceptadas">
+                    Solo mostrar reuniones aceptadas
+                </mat-checkbox>
+
+                <div class="space-x-2 pb-4">
+                    <button 
+                        type="submit" 
+                        mat-flat-button
+                        >
+                        Buscar
+                    </button>
+                    <button 
+                        (click)="reset()" 
+                        class="btn-secondary" 
+                        type="button" 
+                        mat-flat-button
+                        >
+                        Limpiar
+                    </button>
+                </div>
+            </div>
+
+        </form>
+
+    </div>
+
+    <!-- TABLA DE DATOS -->
+    <div class="mt-12">
+
+        <table mat-table [dataSource]="reuniones">
+
+            <ng-container matColumnDef="fecha_envio">
+                <th mat-header-cell *matHeaderCellDef class="text-purple-700 text-md w-32">Fecha de envío</th>
+                <td mat-cell *matCellDef="let element">{{ transformarFecha(element.createdAt) }}</td>
+            </ng-container>
+            <ng-container matColumnDef="fecha_reunion">
+                <th mat-header-cell *matHeaderCellDef class="text-purple-700 text-md w-32">Fecha de reunión</th>
+                <td mat-cell *matCellDef="let element">{{ transformarFecha(element.reunion.reunion.createdAt) }}</td>
+            </ng-container>
+            <ng-container matColumnDef="remitente">
+                <th mat-header-cell *matHeaderCellDef class="text-purple-700 text-md w-48">Remitente</th>
+                <td mat-cell *matCellDef="let element">
+                    {{ element.enviado_por }}
+                </td>
+            </ng-container>
+            <ng-container matColumnDef="nombre_reunion">
+                <th mat-header-cell *matHeaderCellDef class="text-purple-700 text-md">Reunión</th>
+                <td mat-cell *matCellDef="let element">
+                    <div class="py-2 space-y-2">
+                        {{ element.reunion.reunion.nombre }}
+                        {{ element.reunion.reunion.lugar }}
+                        @if(element.reunion.reunion.virtual === true){
+                            <p class="text-xs text-white bg-pink-500 text-center px-2 py-1 rounded h-fit w-fit">
+                                Virtual
+                            </p>
+                        }
+                    </div>
+
+
+                </td>
+            </ng-container>
+            <ng-container matColumnDef="lugarReunion">
+                <th mat-header-cell *matHeaderCellDef class="text-purple-700 text-md w-48">Aceptado por</th>
+                <td mat-cell *matCellDef="let element">
+                    @if(element.aceptado_por) {
+                        {{ element.user.nombre }}
+                    } @else {
+                        -
+                    }
+                </td>
+            </ng-container>
+            <ng-container matColumnDef="origen">
+                <th mat-header-cell *matHeaderCellDef class="text-purple-700 text-md">Origen de envío</th>
+                <td mat-cell *matCellDef="let element">{{ element.instancia_origen }}</td>
+            </ng-container>
+            <ng-container matColumnDef="accion">
+                <th mat-header-cell *matHeaderCellDef class="text-purple-700 text-md w-32">Acción</th>
+                <td mat-cell *matCellDef="let element">
+                    <div class="flex gap-1">
+                        @if(!element.aceptado_por){
+                            <button 
+                                mat-icon-button 
+                                matTooltip="Aceptar Reunión" 
+                                style="color:green;"
+                                (click)="mostrarModalAceptar(element)">
+                                <mat-icon>check</mat-icon>
+                            </button>
+                            <button 
+                                mat-icon-button 
+                                matTooltip="Rechazar Reunión" 
+                                style="color:red;"
+                                (click)="mostrarModalRechazar(element.id)">
+                                <mat-icon>cancel</mat-icon>
+                            </button>
+                        }
+                        
+                    </div>
+                </td>
+            </ng-container>
+            
+            <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+            <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+
+        </table>
+
+        <mat-paginator
+            [length]="currentRows"
+            [pageSize]="pageSize"
+            [pageSizeOptions]="[5, 10, 25, 100]"
+            (page)="onPageEvent($event)"
+        ></mat-paginator>
+
+    </div>
+</div>

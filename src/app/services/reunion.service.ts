@@ -128,6 +128,36 @@ export class ReunionService {
     return this.http.patch(url, data)
   }
 
+  obtenerReunionesCompartidas(data?:any, limite: number = 10, pagina: number = 1): Observable<any> {
+  
+    let params: any = { 
+      limit: limite, 
+      page: pagina 
+    };
+
+    if(data) {
+      if (data.remitente) params.remitente = data.remitente;
+      if (data.fechaInicio) params.fechaInicio = data.fechaInicio.toISOString().split('T')[0];
+      if (data.fechaFin) params.fechaFin = data.fechaFin.toISOString().split('T')[0];
+      if (data.soloAceptadas) params.soloAceptadas = data.soloAceptadas;
+    }
+
+    let url = this.BaseUrl+'/reuniones/reuniones-recibidas';
+
+    return this.http.get(url, {params})
+      
+  }
+
+  aceptarReunionCompartida(data: any): Observable<any> {
+    const url = `${this.BaseUrl}/reuniones/aceptarReunion`
+    return this.http.post(url, data);
+  }
+
+  rechazarReunionCompartida(data: any): Observable<any> {
+    const url = `${this.BaseUrl}/reuniones/rechazarReunion`
+    return this.http.post(url, data);
+  }
+
 
   // ---------------------------------------------------------------------
   // Responsables

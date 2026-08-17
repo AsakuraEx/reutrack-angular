@@ -107,6 +107,18 @@
 
                                     <!-- Ver Reunión  -->
                                      @if(reunion.estado.nombre === 'Finalizado'){
+
+                                        @if(reunion.reunion_compartida === false){
+                                            <button 
+                                                mat-icon-button 
+                                                matTooltip="Compartir reunión"
+                                                (click)="mostrarCompartirModal(reunion)"
+                                                style="color:gray;">
+                                                <mat-icon>open_in_new</mat-icon>
+                                            </button>
+                                        }
+
+
                                          <button 
                                              mat-icon-button 
                                              matTooltip="Ver Detalle de Reunión"

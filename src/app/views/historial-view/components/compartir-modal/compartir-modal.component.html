@@ -1,0 +1,35 @@
+<mat-dialog-content class="p-4">
+    <div class="flex gap-2 items-center text-xl">
+        <mat-icon>verified_user</mat-icon>
+        <h1>Ten cuidado al compartir una reunión</h1>
+    </div>
+
+    <p class="bg-sky-200 text-sky-900 py-2 px-4 rounded-lg mt-3">Selecciona el destino de la reunión, la reunión puede enviarse una vez por cada destino.</p>
+
+    <div class="py-2 flex flex-col lg:flex-row flex-wrap gap-2 justify-center items-center">
+        @for (instancia of instancias; track $index) {
+
+            @if(instanciaActual !== instancia.backend_url) {
+                <button 
+                    [class]="id_instancia===instancia.id ? 'bg-purple-200':'bg-white'"
+                    class="border w-full lg:max-w-60 p-4 text-center rounded-xl border-gray-400 hover:bg-purple-100 
+                  active:bg-purple-200 active:shadow-inner transition-all cursor-pointer"
+                    (click)="seleccionarInstancia(instancia.id, instancia.backend_url)">
+                    <img src="/images/Logo-reutrack-fondo-blanco(2).svg" alt="reulito-instancia">
+                    <p class="truncate">
+                        {{ instancia.frontend_url }}
+                    </p>
+                </button>
+            }
+        }
+    </div>
+
+    <div class="space-x-2 mt-2 text-center">
+        <button 
+            mat-flat-button 
+            type="button" 
+            (click)="enviarReunion()"
+            [disabled]="!instanciaSeleccionada">Enviar Reunión</button>
+        <button mat-stroked-button (click)="onCancelar()">Cancelar</button>
+    </div>
+</mat-dialog-content>

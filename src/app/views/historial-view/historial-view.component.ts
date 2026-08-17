@@ -23,6 +23,7 @@ import { ReactivarReunionModalComponent } from '../../components/reactivar-reuni
 import { MatSelectModule } from '@angular/material/select';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MotivoCancelacionModalComponent } from '../../components/motivo-cancelacion-modal/motivo-cancelacion-modal.component';
+import { CompartirModalComponent } from './components/compartir-modal/compartir-modal.component';
 
 @Component({
   selector: 'app-historial-view',
@@ -349,6 +350,29 @@ export class HistorialViewComponent implements AfterViewInit, OnInit {
       return true;
     }
     return false;
+  }
+
+  mostrarCompartirModal(reunion: any): void {
+
+    const token = localStorage.getItem('token')
+    if(!token){
+      return;
+    }
+    
+    const decoded:any = jwtDecode(token)
+
+    const data = {
+      reunion,
+      usuario: decoded.nombre
+    }
+
+    const dialogRef = this.dialog.open(CompartirModalComponent, {
+      data: data,
+      minWidth: '650x',
+      autoFocus: false
+    })
+
+    dialogRef.afterClosed().subscribe();
   }
 
 }

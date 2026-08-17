@@ -18,6 +18,12 @@ export const options = [
         permiso: [1,2]
     },
     {
+        path: '/reuniones-compartidas',
+        name: 'Reuniones externas',
+        icon: 'share',
+        permiso: [1,2]
+    },
+    {
         id: 'reportes',
         desplegable: true,
         name: 'Reportes',

@@ -1,0 +1,28 @@
+<mat-dialog-content class="p-4">
+
+    <div class="text-red-800 flex gap-2">
+        <mat-icon>warning</mat-icon>
+        <h1 class="text-xl  font-medium">Atención</h1>
+    </div>
+
+    <p class="text-red-800 mt-4">
+        Estas a punto de rechazar la reunión, no podrás guardar la reunión despues de esto. ¿estás seguro de realizar esta acción?.
+    </p>
+
+    <div class="space-x-2 mt-4">
+        <button 
+            mat-flat-button
+            (click)="onSubmit(data)" 
+            class="btn-aceptar">
+            Si, Rechazar
+        </button>
+        <button 
+            mat-flat-button 
+            (click)="onCancelar()"
+            class="btn-cancelar">
+            No, Cancelar
+        </button>
+    </div>
+
+    
+</mat-dialog-content>

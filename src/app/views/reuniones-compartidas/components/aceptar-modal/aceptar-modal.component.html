@@ -1,0 +1,86 @@
+<mat-dialog-content class="p-4" [autofocus]="false">
+
+    <h1 class="text-xl text-purple-700 font-bold border-b border-gray-500 pb-4">
+        Aceptar una reunión externa
+    </h1>
+
+    <div class="p-4 mt-2 bg-sky-200 text-sky-900">
+        <p class="font-semibold">
+            Información
+        </p>
+        <p class="text-justify">
+            Para aceptar una reunión enviada desde otro Reutrack, deberás seleccionar a qué proyecto o versión de tu sistema corresponde. 
+            Una vez aceptada, se integrará a tu listado de reuniones en estado "Iniciado", lo que te permitirá modificarla antes de finalizarla
+        </p>
+    </div>
+
+    <form 
+        class="flex flex-col gap-2 py-4" 
+        [formGroup]="reunionForm"
+        (submit)="onSubmit()"
+        >
+        
+        <mat-form-field class="w-full">
+            <mat-label>Proyecto</mat-label>
+            <input type="text"
+                placeholder="Selecciona un proyecto"
+                aria-label="Proyecto"
+                matInput
+                formControlName="id_proyecto"
+                [matAutocomplete]="auto"
+            >
+            <mat-autocomplete 
+                #auto="matAutocomplete" 
+                [displayWith]="displayProyectoNombre"
+                (optionSelected)="ObtenerVersiones(
+                    reunionForm.controls['id_proyecto'].value?.id ?? 0
+                )"
+            >
+                @for (proyecto of proyectosFiltrados | async ; track $index) {
+                    <mat-option [value]="proyecto">{{ proyecto.nombre }}</mat-option>
+                }
+            </mat-autocomplete>
+            <mat-error>Debe seleccionar un proyecto de la lista</mat-error>
+        </mat-form-field>
+
+        @if(reunionForm.controls['id_proyecto'].value) {
+
+            <mat-form-field class="w-full">
+                <mat-label>Versión</mat-label>
+                <input type="text"
+                    placeholder="Selecciona una versión"
+                    aria-label="version"
+                    matInput
+                    formControlName="id_version"
+                    [matAutocomplete]="auto"
+                >
+                <mat-autocomplete 
+                    #auto="matAutocomplete" 
+                    [displayWith]="displayVersionNombre"
+                >
+                    @for (version of versionesFiltradas | async ; track $index) {
+                        <mat-option [value]="version">{{ version.nombre }}</mat-option>
+                    }
+                </mat-autocomplete>
+                <mat-error>Seleccione una versión, despues de haber seleccionado un proyecto</mat-error>
+            </mat-form-field>
+        
+        }
+
+        <div class="space-x-2 mx-auto">
+            <button 
+                [disabled]="!reunionForm.controls['id_version'].value"
+                mat-flat-button
+                type="submit">
+                Aceptar reunión
+            </button>
+            <button 
+                mat-stroked-button 
+                type="button" 
+                (click)="onCancelClick()">
+                Cancelar
+            </button>
+        </div>
+    </form>
+    
+</mat-dialog-content>

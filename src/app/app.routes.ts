@@ -47,6 +47,11 @@ export const routes: Routes = [
         canActivate: [AuthGuard, primerInicioGuard]
     },
     {
+        path: 'reuniones-compartidas',
+        loadComponent: () => import('./views/reuniones-compartidas/reuniones-compartidas.component').then(m => m.ReunionesCompartidasComponent),
+        canActivate: [AuthGuard, primerInicioGuard]
+    },
+    {
         path: 'proyectos',
         loadComponent: () => import('./views/gestion-proyectos/proyectos-view/proyectos-view.component').then(m => m.ProyectosViewComponent),
         canActivate: [AuthGuard, primerInicioGuard]
