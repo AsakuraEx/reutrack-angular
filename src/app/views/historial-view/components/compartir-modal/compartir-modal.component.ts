@@ -35,7 +35,6 @@ export class CompartirModalComponent implements OnInit{
     this.instanciaService.obtenerInstancias().subscribe({
       next: response => {
         this.instancias = response;
-        console.log(this.instancias)
       },
       error: err => {
         console.error(err)
