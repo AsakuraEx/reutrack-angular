@@ -31,11 +31,17 @@
                                 <mat-error>El punto de la reunión es requerido</mat-error>
                             }
                             @if(puntosForm.controls['nombre'].hasError('maxlength') && puntosForm.controls['nombre'].touched){
-                                <mat-error>El punto de la reunión debe poseer un máximo de 256 carácteres</mat-error>
+                                <mat-error>El punto de la reunión debe poseer un máximo de 1000 carácteres</mat-error>
                             }
+                            <mat-hint>Caracteres: {{caracteresIngresados}} / {{caracteresMaximos}}</mat-hint>
                     </mat-form-field>
         
-                    <button type="submit" mat-flat-button class="w-full md:w-32">
+                    <button 
+                        type="submit" 
+                        mat-flat-button 
+                        class="w-full md:w-32"
+                        [disabled]="caracteresIngresados > caracteresMaximos" 
+                    >
                         <mat-icon>add</mat-icon>
                         Agregar
                     </button>

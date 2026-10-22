@@ -23,6 +23,9 @@ export class PuntosComponent implements OnInit{
     private toastService: HotToastService
   ){}
 
+  caracteresMaximos: number = 1000;
+  caracteresIngresados: number = 0;
+
   @Input() id_reunion!: number;
   @Input() esUsuarioLector: boolean = false;
   expandirPanel = true;
@@ -30,12 +33,10 @@ export class PuntosComponent implements OnInit{
 
   puntosForm = new FormGroup({
     id_reunion: new FormControl<number | null>(null, {
-      updateOn: 'blur',
       validators: [Validators.required],
     }),
     nombre: new FormControl('', {
-      updateOn: 'blur',
-      validators: [Validators.required, Validators.maxLength(256)] 
+      validators: [Validators.required, Validators.maxLength(1000)] 
     })
   })
 
@@ -43,6 +44,10 @@ export class PuntosComponent implements OnInit{
 
   ngOnInit(): void {
     this.obtenerPuntosDeReunion()
+
+    this.puntosForm.get('nombre')?.valueChanges.subscribe(valor => {
+      this.caracteresIngresados = valor ? valor.length : 0;
+    });
   }
 
   expandirAcuerdos(): void {

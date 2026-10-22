@@ -31,19 +31,24 @@ export class AcuerdosComponent implements OnInit{
   dataSource: any[] = [];
   acuerdoForm = new FormGroup({
     nombre: new FormControl('', {
-      updateOn: 'blur',
-      validators: [Validators.required, Validators.maxLength(256)],
+      validators: [Validators.required, Validators.maxLength(1000)],
     }),
     id_reunion: new FormControl<number|null>(null, {
-      updateOn: 'blur',
       validators:[Validators.required]
     })
   })
+
+  caracteresMaximos: number = 1000;
+  caracteresIngresados: number = 0;
 
   @ViewChild(FormGroupDirective) formDirective?: FormGroupDirective
 
   ngOnInit(): void {
       this.obtenerAcuerdosDeReunion()
+
+      this.acuerdoForm.get('nombre')?.valueChanges.subscribe(valor => {
+        this.caracteresIngresados = valor ? valor.length : 0;
+      });
   }
 
   expandirAcuerdos(): void {
