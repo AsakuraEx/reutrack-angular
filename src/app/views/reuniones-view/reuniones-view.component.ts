@@ -54,6 +54,8 @@ export class ReunionesViewComponent implements OnInit, OnDestroy, AfterViewInit 
 
   showModal: boolean = false;
 
+  caracteresIngresados: number = 0;
+
   minutaReunion:any = '';
 
   readonly dialog = inject(MatDialog)
@@ -469,7 +471,8 @@ export class ReunionesViewComponent implements OnInit, OnDestroy, AfterViewInit 
 
   contarLetras(contenido: string): number {
       let texto = contenido.toString().replace(/(<([^>]+)>)/ig, '')
-      return texto.length
+      this.caracteresIngresados = texto.length;
+      return this.caracteresIngresados;
   }
 
   transformarFecha(fecha?: string): string  {
